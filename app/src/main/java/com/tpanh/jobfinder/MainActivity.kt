@@ -6,11 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.tpanh.jobfinder.navigation.JobFinderNavigation
+import com.tpanh.jobfinder.sreens.AddEducation
 import com.tpanh.jobfinder.ui.theme.JobFinderTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +21,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    JobFinderNavigation()
+//                    JobFinderNavigation()
+                    AddEducation()
                 }
             }
         }
