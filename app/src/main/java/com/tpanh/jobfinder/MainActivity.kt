@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.tpanh.jobfinder.navigation.JobFinderNavigation
 import com.tpanh.jobfinder.sreens.AddEducation
+import com.tpanh.jobfinder.sreens.EditProfile
 import com.tpanh.jobfinder.ui.theme.JobFinderTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,8 +22,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    EditProfile()
 //                    JobFinderNavigation()
-                    AddEducation()
                 }
             }
         }

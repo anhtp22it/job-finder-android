@@ -1,5 +1,7 @@
 package com.tpanh.jobfinder.sreens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -185,8 +187,14 @@ fun AddEducationContent() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     onClick = { isStartDatePickerVisible = true },
-                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = Color.White,
+                    ),
+                    border = BorderStroke(1.dp, Color.Transparent),
                 ) {
                     Text(text = startDate)
                 }
@@ -227,7 +235,12 @@ fun AddEducationContent() {
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { isEndDatePickerVisible = true }
+                    onClick = { isEndDatePickerVisible = true },
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = Color.White,
+                    ),
+                    border = BorderStroke(1.dp, Color.Transparent),
                 ) {
                     Text(text = endDate)
                 }
@@ -313,6 +326,7 @@ fun AddEducationContent() {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
+                shape = RoundedCornerShape(5.dp),
                 onClick = { /*TODO*/ }
             ) {
                 Text(

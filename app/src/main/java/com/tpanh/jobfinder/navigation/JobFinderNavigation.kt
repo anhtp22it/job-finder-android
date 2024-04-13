@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.tpanh.jobfinder.sreens.AddEducation
 import com.tpanh.jobfinder.sreens.HomeScreen
 import com.tpanh.jobfinder.sreens.OnBoardingScreen
 
@@ -22,6 +23,10 @@ fun JobFinderNavigation(
         }
         composable(JobFinderScreen.OnBoarding.name) {
             OnBoardingScreen()
+        }
+
+        composable(JobFinderScreen.AddEducation.name) {
+            AddEducation()
         }
     }
 }
