@@ -12,6 +12,7 @@ import com.tpanh.jobfinder.sreens.AddEducation
 import com.tpanh.jobfinder.sreens.AddResume
 import com.tpanh.jobfinder.sreens.AddSkill
 import com.tpanh.jobfinder.sreens.EditProfile
+import com.tpanh.jobfinder.sreens.LanguageScreen
 import com.tpanh.jobfinder.ui.theme.JobFinderTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,13 +20,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JobFinderTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AddResume()
-//                    JobFinderNavigation()
+                    JobFinderNavigation()
                 }
             }
         }
