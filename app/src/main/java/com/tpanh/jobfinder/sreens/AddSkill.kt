@@ -47,7 +47,9 @@ import androidx.compose.ui.unit.sp
 import com.tpanh.jobfinder.model.Skills
 
 @Composable
-fun AddSkillTopBar() {
+fun AddSkillTopBar(
+    onBackClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +57,7 @@ fun AddSkillTopBar() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = { onBackClick() }) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
                 contentDescription = "Back"
@@ -211,10 +213,14 @@ fun SkillItem(
 }
 
 @Composable
-fun AddSkill() {
+fun AddSkill(
+    onBackClick: () -> Unit = { }
+) {
     Scaffold(
         topBar = {
-            AddSkillTopBar()
+            AddSkillTopBar(
+                onBackClick = { onBackClick() }
+            )
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
