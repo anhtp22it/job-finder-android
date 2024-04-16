@@ -44,7 +44,9 @@ fun JobFinderNavigation(
         }
 
         composable(JobFinderScreen.EditProfile.name) {
-            EditProfile()
+            EditProfile(
+                navigateToSetting = { }
+            )
         }
 
         composable(JobFinderScreen.Language.name) {

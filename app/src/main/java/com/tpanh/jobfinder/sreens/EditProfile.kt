@@ -11,6 +11,7 @@ import androidx.activity.result.launch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -122,7 +123,6 @@ fun EditProfile(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
         ) {
             Image(
                 painter = painterResource(id = R.drawable.profile_background),
@@ -419,6 +419,9 @@ fun EditProfile(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.5f))
+                .clickable {
+                    isChooseImage = false
+                }
         ) {
             Column (
                 modifier = Modifier
