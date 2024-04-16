@@ -1,6 +1,5 @@
 package com.tpanh.jobfinder.sreens
 
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -12,7 +11,6 @@ import androidx.activity.result.launch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -68,22 +67,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfile() {
+fun EditProfile(
+    editProfileViewModel: EditProfileViewModel = viewModel(),
+    navigateToSetting: () -> Unit
+) {
 
-    var fullName by remember { mutableStateOf("Phước Anh") }
-    var gender by remember { mutableStateOf(1) }
-    var email by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("Da Nang, Viet Nam") }
+    val user by editProfileViewModel.uiState.collectAsState()
 
     val format = SimpleDateFormat("dd MMM yyyy")
-    var dateOfBirth by remember { mutableStateOf(format.format(System.currentTimeMillis())) }
     var isDateOfBirthPicker by remember { mutableStateOf(false) }
 
     var isChooseImage by remember { mutableStateOf(false) }
@@ -152,14 +151,14 @@ fun EditProfile() {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = fullName,
+                        text = user.fullName,
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.White,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = location,
+                        text = user.location,
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
                         fontSize = 12.sp
@@ -190,7 +189,7 @@ fun EditProfile() {
                         )
                     }
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navigateToSetting() }) {
                         Icon(
                             Icons.Outlined.Settings,
                             contentDescription = "Share",
@@ -215,8 +214,8 @@ fun EditProfile() {
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                value = fullName,
-                onValueChange = { fullName = it },
+                value = user.fullName,
+                onValueChange = { editProfileViewModel.updateFullName(it) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -247,7 +246,7 @@ fun EditProfile() {
                 shape = RoundedCornerShape(5.dp)
             ) {
                 Text(
-                    text = dateOfBirth,
+                    text = format.format(Date(user.dateOfBirth)),
                     textAlign = TextAlign.Left,
                     modifier = Modifier.fillMaxWidth(),
                     fontWeight = FontWeight.Normal
@@ -263,11 +262,11 @@ fun EditProfile() {
                         TextButton(
                             onClick = {
                                 isDateOfBirthPicker = false
-                                var date = "No Selection"
+                                var date = 0L
                                 if (datePickerState.selectedDateMillis != null) {
-                                    date = format.format(Date(datePickerState.selectedDateMillis!!))
+                                    date = datePickerState.selectedDateMillis!!
                                 }
-                                dateOfBirth = date
+                                editProfileViewModel.updateDateOfBirth(date)
                             },
                             enabled = confirmEnable.value
                         ) {
@@ -300,7 +299,7 @@ fun EditProfile() {
                         .background(Color.White),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = gender == 1, onClick = { gender = 1 })
+                    RadioButton(selected = user.gender == 1, onClick = { user.gender = 1 })
                     Text(
                         text = "Male",
                         style = MaterialTheme.typography.labelSmall,
@@ -314,7 +313,7 @@ fun EditProfile() {
                         .background(Color.White),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = gender == 0, onClick = { gender = 0 })
+                    RadioButton(selected = user.gender == 0, onClick = { user.gender = 0 })
                     Text(
                         text = "Female",
                         style = MaterialTheme.typography.labelSmall,
@@ -334,8 +333,8 @@ fun EditProfile() {
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email,
-                onValueChange = { email = it },
+                value = user.email,
+                onValueChange = { editProfileViewModel.updateEmail(it) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -356,8 +355,8 @@ fun EditProfile() {
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
+                value = user.phoneNumber,
+                onValueChange = { editProfileViewModel.updatePhoneNumber(it) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -378,8 +377,8 @@ fun EditProfile() {
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = location,
-                onValueChange = { location = it },
+                value = user.location,
+                onValueChange = { editProfileViewModel.updateLocation(it) },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = Color.Transparent,
@@ -495,6 +494,8 @@ fun EditProfilePreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        EditProfile()
+        EditProfile(
+            navigateToSetting = {  }
+        )
     }
 }
