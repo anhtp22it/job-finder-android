@@ -33,6 +33,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +47,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.extensions.dashedBorder
 import com.tpanh.jobfinder.utils.formatBytes
 import com.tpanh.jobfinder.utils.getFileName
 import com.tpanh.jobfinder.utils.getFileSize
+import com.tpanh.jobfinder.viewmodel.AddResumeViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -75,7 +78,10 @@ fun AddResumeTopBar(
 }
 
 @Composable
-fun AddResumeContent() {
+fun AddResumeContent(
+    addResumeViewModel: AddResumeViewModel = viewModel()
+) {
+    val uiState by addResumeViewModel.uiState.collectAsState()
 
     val contentResolver = LocalContext.current.contentResolver
 

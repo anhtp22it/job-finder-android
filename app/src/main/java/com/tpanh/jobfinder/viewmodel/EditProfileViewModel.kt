@@ -12,7 +12,7 @@ class EditProfileViewModel: ViewModel() {
     val uiState: StateFlow<User> = _uiState.asStateFlow()
 
     fun updateFullName(fullName: String) {
-        _uiState.update {currentState ->
+        _uiState.update { currentState ->
             currentState.copy(fullName = fullName)
         }
     }

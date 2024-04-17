@@ -8,4 +8,5 @@ data class User(
     var location: String = "",
     var dateOfBirth: Long = System.currentTimeMillis(),
     var avatar: String = "",
+    var resume: String = ""
 )
