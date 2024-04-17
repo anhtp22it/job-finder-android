@@ -7,4 +7,5 @@ data class User(
     var phoneNumber: String = "",
     var location: String = "",
     var dateOfBirth: Long = System.currentTimeMillis(),
+    var avatar: String = "",
 )

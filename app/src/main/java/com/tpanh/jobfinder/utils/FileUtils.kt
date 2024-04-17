@@ -1,10 +1,13 @@
 package com.tpanh.jobfinder.utils
 
 import android.content.ContentResolver
+import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.OpenableColumns
 import java.io.File
+import java.io.FileOutputStream
 
 fun getFileName(uri: Uri, contentResolver: ContentResolver): String? {
     return try {

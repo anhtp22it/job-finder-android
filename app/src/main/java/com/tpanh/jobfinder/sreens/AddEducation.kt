@@ -35,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +51,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.navigation.JobFinderNavigation
+import com.tpanh.jobfinder.viewmodel.AddEducationViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -74,20 +77,15 @@ fun AddEducationTopBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEducationContent() {
-
-    var levelOfEducation by remember { mutableStateOf("") }
-    var institutionName by remember { mutableStateOf("") }
-    var fieldOfStudy by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var isCurrentlyStudying by remember { mutableStateOf(false) }
+fun AddEducationContent(
+    addEducationViewModel: AddEducationViewModel = viewModel()
+) {
+    val uiState by addEducationViewModel.uiState.collectAsState()
 
     val format = SimpleDateFormat("dd MMM yyyy")
 
-    var startDate by remember { mutableStateOf(format.format(System.currentTimeMillis())) }
     var isStartDatePickerVisible by remember { mutableStateOf(false) }
 
-    var endDate by remember { mutableStateOf(format.format(System.currentTimeMillis())) }
     var isEndDatePickerVisible by remember { mutableStateOf(false) }
 
     Column (
@@ -116,8 +114,8 @@ fun AddEducationContent() {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
-            value = levelOfEducation,
-            onValueChange = { levelOfEducation = it },
+            value = uiState.levelOfEducation,
+            onValueChange = { addEducationViewModel.updateLevelOfEducation(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
@@ -138,8 +136,8 @@ fun AddEducationContent() {
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = institutionName,
-            onValueChange = { institutionName = it },
+            value = uiState.institutionName,
+            onValueChange = { addEducationViewModel.updateInstitutionName(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
@@ -160,8 +158,8 @@ fun AddEducationContent() {
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = fieldOfStudy,
-            onValueChange = { fieldOfStudy = it },
+            value = uiState.fieldOfStudy,
+            onValueChange = { addEducationViewModel.updateFieldOfStudy(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
@@ -196,7 +194,7 @@ fun AddEducationContent() {
                     ),
                     border = BorderStroke(1.dp, Color.Transparent),
                 ) {
-                    Text(text = startDate)
+                    Text(text = format.format(Date(uiState.startDate)))
                 }
                 if (isStartDatePickerVisible) {
                     val datePickerState = rememberDatePickerState()
@@ -207,11 +205,8 @@ fun AddEducationContent() {
                         confirmButton = {
                             TextButton(onClick = {
                                 isStartDatePickerVisible = false
-                                var date = "No Selection"
-                                if (datePickerState.selectedDateMillis != null) {
-                                    date = format.format(Date(datePickerState.selectedDateMillis!!))
-                                }
-                                startDate = date
+                                var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
+                                addEducationViewModel.updateStartDate(date)
                             },
                                 enabled = confirmEnable.value
                             ) {
@@ -242,7 +237,7 @@ fun AddEducationContent() {
                     ),
                     border = BorderStroke(1.dp, Color.Transparent),
                 ) {
-                    Text(text = endDate)
+                    Text(text = format.format(Date(uiState.endDate)))
                 }
                 if (isEndDatePickerVisible) {
                     val datePickerState = rememberDatePickerState()
@@ -254,11 +249,8 @@ fun AddEducationContent() {
                         confirmButton = {
                             TextButton(onClick = {
                                 isEndDatePickerVisible = false
-                                var date = "No Selection"
-                                if (datePickerState.selectedDateMillis != null) {
-                                    date = format.format(Date(datePickerState.selectedDateMillis!!))
-                                }
-                                endDate = date
+                                var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
+                                addEducationViewModel.updateEndDate(date)
                             },
                                 enabled = confirmEnable.value
                             ) {
@@ -279,8 +271,8 @@ fun AddEducationContent() {
             horizontalArrangement = Arrangement.Start,
         ) {
             Checkbox(
-                checked = isCurrentlyStudying,
-                onCheckedChange = { isCurrentlyStudying = it })
+                checked = uiState.isCurrentlyStudying,
+                onCheckedChange = { addEducationViewModel.updateIsCurrentlyStudying(it) })
             Text(text = "I am currently studying here", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -295,8 +287,8 @@ fun AddEducationContent() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(130.dp),
-            value = description,
-            onValueChange = { description = it },
+            value = uiState.description,
+            onValueChange = { addEducationViewModel.updateDescription(it) },
             singleLine = false,
             placeholder = {
                 Text(

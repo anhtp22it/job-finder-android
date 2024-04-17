@@ -69,6 +69,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import java.text.SimpleDateFormat
@@ -85,7 +87,6 @@ fun EditProfile(
 
     val format = SimpleDateFormat("dd MMM yyyy")
     var isDateOfBirthPicker by remember { mutableStateOf(false) }
-
     var isChooseImage by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -139,10 +140,22 @@ fun EditProfile(
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Image(
-                        bitmap = scaledBitmap.asImageBitmap(),
-                        contentDescription = "avatar",
-                        contentScale = ContentScale.Crop,
+//                    Image(
+//                        bitmap = scaledBitmap.asImageBitmap(),
+//                        contentDescription = "avatar",
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier
+//                            .width(60.dp)
+//                            .height(60.dp)
+//                            .clip(CircleShape)
+//                            .background(Color.White)
+//                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(user.avatar)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Avatar",
                         modifier = Modifier
                             .width(60.dp)
                             .height(60.dp)
@@ -262,10 +275,7 @@ fun EditProfile(
                         TextButton(
                             onClick = {
                                 isDateOfBirthPicker = false
-                                var date = 0L
-                                if (datePickerState.selectedDateMillis != null) {
-                                    date = datePickerState.selectedDateMillis!!
-                                }
+                                var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                                 editProfileViewModel.updateDateOfBirth(date)
                             },
                             enabled = confirmEnable.value
@@ -299,7 +309,7 @@ fun EditProfile(
                         .background(Color.White),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = user.gender == 1, onClick = { user.gender = 1 })
+                    RadioButton(selected = user.gender == 1, onClick = {  editProfileViewModel.updateGender(1) })
                     Text(
                         text = "Male",
                         style = MaterialTheme.typography.labelSmall,
@@ -313,7 +323,7 @@ fun EditProfile(
                         .background(Color.White),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = user.gender == 0, onClick = { user.gender = 0 })
+                    RadioButton(selected = user.gender == 0, onClick = { editProfileViewModel.updateGender(0) })
                     Text(
                         text = "Female",
                         style = MaterialTheme.typography.labelSmall,
