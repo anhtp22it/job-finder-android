@@ -69,12 +69,12 @@ import java.util.Date
 
 @Composable
 fun Filter() {
-    Scaffold (
+    Scaffold(
         topBar = {
             FilterTop()
         }
     ) { innerPadding ->
-        Column (modifier = Modifier.padding(innerPadding)) {
+        Column(modifier = Modifier.padding(innerPadding)) {
             FilterContent()
         }
     }
@@ -83,7 +83,7 @@ fun Filter() {
 
 @Composable
 fun FilterTop() {
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -92,7 +92,7 @@ fun FilterTop() {
     ) {
         IconButton(onClick = { /*TODO*/ }) {
             Icon(
-                imageVector = Icons.Filled .ArrowBack,
+                imageVector = Icons.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }
@@ -107,116 +107,101 @@ fun FilterContent() {
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = "Filter",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontSize = 30.sp
-
-        )
-    }
-
-//
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp)
-            .fillMaxWidth(),
-    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Filter",
+                fontWeight = FontWeight.Bold,
+                fontSize = 28.sp
+            )
+        }
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Category",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 18.sp,
-            modifier = Modifier.padding(start = 14.dp)
-
         )
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "Design",
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 14.sp,
-            modifier = Modifier.padding(start = 44.dp, top = 34.dp)
+            modifier = Modifier.padding(start = 32.dp)
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
             text = "Sub Category",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 18.sp,
-            modifier = Modifier.padding(start = 14.dp)
-
         )
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = "UX/UI Design",
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 14.sp,
-            modifier = Modifier.padding(start = 44.dp, top = 34.dp)
+            modifier = Modifier.padding(start = 32.dp)
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
             text = "Location",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 18.sp,
-            modifier = Modifier.padding(start = 14.dp)
-
         )
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
-            text = "Califonia",
+            text = "California",
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 14.sp,
-            modifier = Modifier.padding(start = 44.dp, top = 34.dp)
+            modifier = Modifier.padding(start = 32.dp)
         )
-    }
 
+        Spacer(modifier = Modifier.height(40.dp))
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
-    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "Minimum Salary",
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+            )
+            Text(
+                text = "Maximum Salary",
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Salary",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 14.dp)
+            fontSize = 18.sp
 
         )
-        Row() {
-            Text(
-                text = "Min: 5k",
-                fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 44.dp, top = 34.dp)
-            )
-            Text(
-                text = "Max: 50k",
-                fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(start = 205.dp, top = 34.dp)
-            )
-        }
-
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         )
         {
-
             RangeSlider(
                 value = sliderPosition,
                 steps = 5,
@@ -224,63 +209,85 @@ fun FilterContent() {
                 valueRange = 5f..50f,
                 onValueChangeFinished = {
                 },
-                modifier = Modifier.width(300.dp)
+                modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = sliderPosition.toString())
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = "$${sliderPosition.start.toInt()}k",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Text(
+                    text = "$${sliderPosition.endInclusive.toInt()}k",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
         }
-    }
-
-
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start,
-    ) {
+        Spacer(modifier = Modifier.height(32.dp))
         Divider(color = Color.Gray, thickness = 0.5.dp)
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Job Type",
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 14.dp)
+            fontSize = 18.sp
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 onClick = {},
-
-            )
-             {
-                Text ("Full Time")
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
+                ),
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    "Full Time",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
 
-            Button(onClick = {}) {
-                Text ("Part Time")
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
+                ),
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    "Part Time",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
 
-            Button(onClick = {}) {
-                Text ("Remote")
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
+                ),
+                shape = RoundedCornerShape(5.dp)
+            ) {
+                Text(
+                    "Remote",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         }
-
-    }
-
-    Column(
-        modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        Spacer(modifier = Modifier.height(40.dp))
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -292,12 +299,12 @@ fun FilterContent() {
             shape = RoundedCornerShape(5.dp),
             onClick = { /*TODO*/ }
         ) {
-            Text("APPLY NOW",
+            Text(
+                "APPLY NOW",
                 letterSpacing = 2.sp,
-                )
+            )
         }
     }
-
 }
 
 @Preview
