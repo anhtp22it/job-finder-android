@@ -32,10 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,7 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tpanh.jobfinder.model.Skills
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.viewmodel.AddSkillViewModel
 
 @Composable
 fun AddSkillTopBar(
@@ -68,16 +67,11 @@ fun AddSkillTopBar(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun AddSkillContent() {
-    var skills by remember { mutableStateOf(Skills.skills.toTypedArray()) }
-    var search by remember { mutableStateOf("") }
-
-    val skillSearch = Skills.skillSearch.filterNot {
-        it in skills
-    }.filter {
-        it.name.contains(search, ignoreCase = true)
-
-    }
+fun AddSkillContent(
+    addSkillViewModel: AddSkillViewModel = viewModel()
+) {
+    val mySkill by addSkillViewModel.mySkills.collectAsState()
+    val searchSkill by addSkillViewModel.searchResults.collectAsState()
 
     Column(
         modifier = Modifier
@@ -97,9 +91,9 @@ fun AddSkillContent() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(5.dp)),
-            value = search,
+            value = addSkillViewModel.search,
             onValueChange = {
-                search = it
+                addSkillViewModel.onSearchChange(it)
             },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
@@ -111,10 +105,10 @@ fun AddSkillContent() {
             placeholder = { Text("Search skills", fontSize = 12.sp) },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
             trailingIcon = {
-                if (search.isNotEmpty()) {
+                if (searchSkill.isNotEmpty()) {
                     IconButton(
                         onClick = {
-                            search = ""
+                            addSkillViewModel.onSearchChange("")
                         }
                     ) {
                         Icon(
@@ -126,14 +120,13 @@ fun AddSkillContent() {
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        if (search.isEmpty()) {
-            FlowRow(
-            ) {
-                skills.forEach { skill ->
+        if (searchSkill.isEmpty()) {
+            FlowRow() {
+                mySkill.forEach { skill ->
                     SkillItem(
                         skill.name,
                         onClick = {
-                            skills = skills.filterNot { it == skill }.toTypedArray()
+                            addSkillViewModel.deleteSkill(skill)
                         }
                     )
                 }
@@ -157,14 +150,14 @@ fun AddSkillContent() {
             }
         } else {
             Column {
-                skillSearch.forEach { skill  ->
+                searchSkill.forEach { skill  ->
                     Text(
                         text =skill.name,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 14.sp,
                         modifier = Modifier.clickable {
-                            skills += skill
-                            search = ""
+                            addSkillViewModel.addSkill(skill)
+                            addSkillViewModel.onSearchChange("")
                         }
                     )
                     Spacer(modifier =  Modifier.height(32.dp))

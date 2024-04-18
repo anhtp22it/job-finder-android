@@ -24,10 +24,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    EditProfile(
-                        navigateToSetting = { }
-                    )
-//                    JobFinderNavigation()
+//                    EditProfile(
+//                        navigateToSetting = { }
+//                    )
+                    JobFinderNavigation()
                 }
             }
         }
