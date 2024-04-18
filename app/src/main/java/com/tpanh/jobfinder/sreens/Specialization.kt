@@ -110,33 +110,33 @@ fun SpecializationTop() {
 fun SpecializationContent() {
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Box(
             modifier = Modifier
-                .background(Color.LightGray, shape)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.Start,
         ) {
-            TextField(
-                value = query,
-                onValueChange = { query = it },
-                placeholder = { Text(text = "Search...") },
+        Row() {
+            OutlinedTextField(
+                value = "",
+                onValueChange = { },
+                label = { Text("Search") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search"
+                    )
+                },
                 modifier = Modifier.fillMaxWidth()
-            )
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-                modifier = Modifier.padding(12.dp),
-                tint = Color.Gray
             )
         }
 
+        }
 
-    }
+        Spacer(modifier = Modifier.width(8.dp))
+
+
+
 
 
 
