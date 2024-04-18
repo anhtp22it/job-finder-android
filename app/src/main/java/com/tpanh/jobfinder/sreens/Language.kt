@@ -28,9 +28,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.model.Language
-import com.tpanh.jobfinder.model.Languages
+import com.tpanh.jobfinder.viewmodel.LanguageViewModel
 
 @Composable
 fun LanguageTopBar() {
@@ -63,11 +63,10 @@ fun LanguageTopBar() {
 
 @Composable
 fun LanguageContent(
-    initialLanguages: List<Language>,
-    navigateToAddLanguageScreen: () -> Unit
+    navigateToAddLanguageScreen: () -> Unit,
+    languageViewModel: LanguageViewModel = viewModel()
 ) {
-
-    var languages by remember { mutableStateOf(initialLanguages) }
+    val uiState by languageViewModel.myLanguages.collectAsState()
 
     Row (
         modifier = Modifier
@@ -117,11 +116,11 @@ fun LanguageContent(
             .fillMaxSize()
             .padding(vertical = 8.dp, horizontal = 32.dp)
     ) {
-        items(languages) { language ->
+        items(uiState) { language ->
             LanguageItem(
                 language,
                 deleteItem = {
-                    languages = languages.filterNot { it == language }.toList()
+                    languageViewModel.deleteLanguage(language)
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -150,7 +149,7 @@ fun LanguageItem(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "${language.name["common"]}",
+                text = "${language.name}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -178,8 +177,7 @@ fun LanguageScreen(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             LanguageContent(
-                Languages.myLanguages,
-                navigateToAddLanguageScreen
+                navigateToAddLanguageScreen = navigateToAddLanguageScreen
             )
         }
     }

@@ -1,11 +1,12 @@
 package com.tpanh.jobfinder.model
 
 data class Education(
-    var levelOfEducation: String = "",
-    var institutionName: String = "",
-    var fieldOfStudy: String = "",
-    var description: String = "",
-    var isCurrentlyStudying: Boolean = false,
-    var startDate: Long = System.currentTimeMillis(),
-    var endDate: Long = System.currentTimeMillis(),
+    val id: Int,
+    val levelOfEducation: String = "",
+    val institutionName: String = "",
+    val fieldOfStudy: String = "",
+    val description: String = "",
+    val isCurrentlyStudying: Boolean = false,
+    val startDate: Long = System.currentTimeMillis(),
+    val endDate: Long = System.currentTimeMillis(),
 )

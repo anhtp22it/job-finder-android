@@ -1,12 +1,13 @@
 package com.tpanh.jobfinder.model
 
 data class User(
-    var fullName: String = "",
-    var gender: Int = 1,
-    var email: String = "",
-    var phoneNumber: String = "",
-    var location: String = "",
-    var dateOfBirth: Long = System.currentTimeMillis(),
-    var avatar: String = "",
-    var resume: String = ""
+    val id: Int,
+    val fullName: String = "",
+    val gender: Int = 1,
+    val email: String = "",
+    val phoneNumber: String = "",
+    val location: String = "",
+    val dateOfBirth: Long = System.currentTimeMillis(),
+    val avatar: String = "",
+    val resume: String = ""
 )

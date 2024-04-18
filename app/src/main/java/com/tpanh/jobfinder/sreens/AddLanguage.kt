@@ -1,5 +1,7 @@
 package com.tpanh.jobfinder.sreens
 
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,11 +42,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tpanh.jobfinder.model.Languages
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.viewmodel.LanguageViewModel
 
 @Composable
 fun AddLanguageTopBar(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit = { }
 ) {
     Row(
         modifier = Modifier
@@ -62,10 +66,10 @@ fun AddLanguageTopBar(
 }
 
 @Composable
-fun AddLanguageContent() {
-    var languages by remember { mutableStateOf(Languages.myLanguages.toTypedArray()) }
-    var search by remember { mutableStateOf("") }
-    var languageSearch by remember { mutableStateOf(Languages.allLanguage) }
+fun AddLanguageContent(
+    languageViewModel: LanguageViewModel = viewModel()
+) {
+    val uiState by languageViewModel.searchResults.collectAsState()
 
     Column(
         modifier = Modifier
@@ -85,9 +89,9 @@ fun AddLanguageContent() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(5.dp)),
-            value = search,
+            value = languageViewModel.search,
             onValueChange = {
-                search = it
+                languageViewModel.onSearchChange(it)
             },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
@@ -99,10 +103,10 @@ fun AddLanguageContent() {
             placeholder = { Text("Search languages", fontSize = 12.sp) },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
             trailingIcon = {
-                if (search.isNotEmpty()) {
+                if (languageViewModel.search.isNotEmpty()) {
                     IconButton(
                         onClick = {
-                            search = ""
+                            languageViewModel.onSearchChange("")
                         }
                     ) {
                         Icon(
@@ -120,10 +124,14 @@ fun AddLanguageContent() {
             .fillMaxSize()
             .padding(vertical = 8.dp, horizontal = 32.dp)
     ) {
-        items(languageSearch) { language ->
+        items(uiState) { language ->
             Row (
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        languageViewModel.addLanguage(language)
+
+                    },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -133,7 +141,7 @@ fun AddLanguageContent() {
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "${language.name["common"]}",
+                    text = "${language.name}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -146,7 +154,7 @@ fun AddLanguageContent() {
 
 @Composable
 fun AddLanguage(
-    onBackClick: () -> Unit = { }
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -168,6 +176,6 @@ fun AddLanguagePreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddLanguage()
+        AddLanguage(onBackClick = { })
     }
 }
