@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.sreens
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -76,6 +77,7 @@ import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfile(
