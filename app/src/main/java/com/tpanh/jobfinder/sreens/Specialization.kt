@@ -109,6 +109,8 @@ fun SpecializationTop() {
 @Composable
 fun SpecializationContent() {
 
+    var query by remember { mutableStateOf("") }
+
     Column(
             modifier = Modifier
                 .fillMaxWidth()
