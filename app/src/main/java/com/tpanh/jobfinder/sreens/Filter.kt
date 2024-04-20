@@ -81,6 +81,7 @@ fun Filter() {
 }
 
 
+
 @Composable
 fun FilterTop() {
     Row(
@@ -101,6 +102,7 @@ fun FilterTop() {
 
 @Composable
 fun FilterContent() {
+
     var sliderPosition by remember { mutableStateOf(5f..50f) }
 
     Column(
@@ -211,7 +213,7 @@ fun FilterContent() {
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
