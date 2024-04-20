@@ -122,16 +122,6 @@ fun AddSkillContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (searchSkill.isEmpty()) {
             FlowRow() {
-//<<<<<<< HEAD
-////                mySkill.forEach { skill ->
-////                    SkillItem(
-////                        skill.name,
-////                        onClick = {
-////                            addSkillViewModel.deleteSkill(skill)
-////                        }
-////                    )
-////                }
-//=======
                 mySkill.skills.forEach { skill ->
                     SkillItem(
                         skill,
@@ -140,7 +130,6 @@ fun AddSkillContent(
                         }
                     )
                 }
->>>>>>> 917a93d40a61a282c692d216b43ad8c5ee1b1653
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(
@@ -162,17 +151,6 @@ fun AddSkillContent(
         } else {
             Column {
                 searchSkill.forEach { skill  ->
-<<<<<<< HEAD
-//                    Text(
-//                        text =skill.name,
-//                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-//                        fontSize = 14.sp,
-//                        modifier = Modifier.clickable {
-//                            addSkillViewModel.addSkill(skill)
-//                            addSkillViewModel.onSearchChange("")
-//                        }
-//                    )
-=======
                     Text(
                         text =skill,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -182,7 +160,6 @@ fun AddSkillContent(
                             addSkillViewModel.onSearchChange("")
                         }
                     )
->>>>>>> 917a93d40a61a282c692d216b43ad8c5ee1b1653
                     Spacer(modifier =  Modifier.height(32.dp))
                 }
             }
