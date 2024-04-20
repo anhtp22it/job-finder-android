@@ -1,7 +1,7 @@
 package com.tpanh.jobfinder.model
 
 data class User(
-    val id: Int,
+    val id: String = "",
     val fullName: String = "",
     val gender: Int = 1,
     val email: String = "",
@@ -9,5 +9,17 @@ data class User(
     val location: String = "",
     val dateOfBirth: Long = System.currentTimeMillis(),
     val avatar: String = "",
-    val resume: String = ""
+    val resume: String = "",
+    var password: String = "",
+    var about: String = "",
+    var createdAt: Long = System.currentTimeMillis(),
+    var emailVerifyToken: String = "",
+    var forgotPasswordToken: String = "",
+    var verify: UserVerifyStatus = UserVerifyStatus.NOT_VERIFY,
+    var jobs: List<Job> = emptyList(),
+    var applies: List<Job> = emptyList(),
+    var saveJobs: List<Job> = emptyList(),
+    var educations: List<Education> = emptyList(),
+    var skills: Set<String> = emptySet(),
+    var languages: Set<Language> = emptySet(),
 )
