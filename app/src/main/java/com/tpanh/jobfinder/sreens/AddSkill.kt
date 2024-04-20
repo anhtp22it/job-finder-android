@@ -122,9 +122,9 @@ fun AddSkillContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (searchSkill.isEmpty()) {
             FlowRow() {
-                mySkill.forEach { skill ->
+                mySkill.skills.forEach { skill ->
                     SkillItem(
-                        skill.name,
+                        skill,
                         onClick = {
                             addSkillViewModel.deleteSkill(skill)
                         }
@@ -152,7 +152,7 @@ fun AddSkillContent(
             Column {
                 searchSkill.forEach { skill  ->
                     Text(
-                        text =skill.name,
+                        text =skill,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 14.sp,
                         modifier = Modifier.clickable {
