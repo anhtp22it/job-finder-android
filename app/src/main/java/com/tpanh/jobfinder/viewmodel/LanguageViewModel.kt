@@ -29,7 +29,7 @@ class LanguageViewModel: ViewModel() {
     }
 
     fun deleteLanguage(language: Language) {
-        _myLanguages.value = _myLanguages.value.filterNot { it.id == language.id }
+        _myLanguages.value = _myLanguages.value.filterNot { it == language }
     }
 
     fun addLanguage(language: Language) {
@@ -50,9 +50,9 @@ class LanguageViewModel: ViewModel() {
     private fun getMyLanguages() {
         viewModelScope.launch {
             val response = listOf(
-                Language(1, "English", "🇬🇧"),
-                Language(2, "Vietnamese", "🇻🇳"),
-                Language(3, "Japanese", "🇯🇵"),
+                Language("English", "🇬🇧"),
+                Language("Vietnamese", "🇻🇳"),
+                Language("Japanese", "🇯🇵"),
             )
             _myLanguages.value = response
         }
@@ -61,25 +61,25 @@ class LanguageViewModel: ViewModel() {
     private fun getAllLanguages() {
         viewModelScope.launch {
             val response = listOf(
-                Language(1, mapOf("common" to "English"), "🇬🇧"),
-                Language(2, mapOf("common" to "Vietnamese"), "🇻🇳"),
-                Language(3, mapOf("common" to "Japanese"), "🇯🇵"),
-                Language(4, mapOf("common" to "Chinese"), "🇨🇳"),
-                Language(5, mapOf("common" to "Korean"), "🇰🇷"),
-                Language(6, mapOf("common" to "French"), "🇫🇷"),
-                Language(7, mapOf("common" to "German"), "🇩🇪"),
-                Language(8, mapOf("common" to "Spanish"), "🇪🇸"),
-                Language(9, mapOf("common" to "Italian"), "🇮🇹"),
-                Language(10, mapOf("common" to "Russian"), "🇷🇺"),
-                Language(11, mapOf("common" to "Portuguese"), "🇵🇹"),
-                Language(12, mapOf("common" to "Arabic"), "🇸🇦"),
-                Language(13, mapOf("common" to "Hindi"), "🇮🇳"),
-                Language(14, mapOf("common" to "Bengali"), "🇧🇩"),
-                Language(15, mapOf("common" to "Urdu"), "🇵🇰"),
-                Language(16, mapOf("common" to "Turkish"), "🇹🇷"),
-                Language(17, mapOf("common" to "Thai"), "🇹🇭"),
-                Language(18, mapOf("common" to "Indonesian"), "🇮🇩"),
-                Language(19, mapOf("common" to "Malay"), "🇲🇾"),
+                Language(mapOf("common" to "English"), "🇬🇧"),
+                Language(mapOf("common" to "Vietnamese"), "🇻🇳"),
+                Language(mapOf("common" to "Japanese"), "🇯🇵"),
+                Language(mapOf("common" to "Chinese"), "🇨🇳"),
+                Language(mapOf("common" to "Korean"), "🇰🇷"),
+                Language(mapOf("common" to "French"), "🇫🇷"),
+                Language(mapOf("common" to "German"), "🇩🇪"),
+                Language(mapOf("common" to "Spanish"), "🇪🇸"),
+                Language(mapOf("common" to "Italian"), "🇮🇹"),
+                Language(mapOf("common" to "Russian"), "🇷🇺"),
+                Language(mapOf("common" to "Portuguese"), "🇵🇹"),
+                Language(mapOf("common" to "Arabic"), "🇸🇦"),
+                Language(mapOf("common" to "Hindi"), "🇮🇳"),
+                Language(mapOf("common" to "Bengali"), "🇧🇩"),
+                Language(mapOf("common" to "Urdu"), "🇵🇰"),
+                Language(mapOf("common" to "Turkish"), "🇹🇷"),
+                Language(mapOf("common" to "Thai"), "🇹🇭"),
+                Language(mapOf("common" to "Indonesian"), "🇮🇩"),
+                Language(mapOf("common" to "Malay"), "🇲🇾"),
             )
             _allLanguages.value = response
             _searchResults.value = response

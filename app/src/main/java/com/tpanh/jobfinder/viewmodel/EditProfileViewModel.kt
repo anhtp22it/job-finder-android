@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class EditProfileViewModel: ViewModel() {
-    private val _uiState = MutableStateFlow(User(1, avatar = "https://img.freepik.com/premium-photo/people-generating-images-using-artificial-intelligence-laptop_23-2150794312.jpg?w=1480"))
+    private val _uiState = MutableStateFlow(User(avatar = "https://img.freepik.com/premium-photo/people-generating-images-using-artificial-intelligence-laptop_23-2150794312.jpg?w=1480"))
     val uiState: StateFlow<User> = _uiState.asStateFlow()
 
     fun updateFullName(fullName: String) {
