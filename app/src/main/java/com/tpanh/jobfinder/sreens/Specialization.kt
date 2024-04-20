@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.sreens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,7 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -36,6 +42,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -76,6 +84,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.model.CategoryData
 import com.tpanh.jobfinder.navigation.JobFinderNavigation
 import com.tpanh.jobfinder.ui.theme.md_theme_light_background
 import com.tpanh.jobfinder.viewmodel.AddEducationViewModel
@@ -84,12 +93,12 @@ import java.util.Date
 
 @Composable
 fun Specialization() {
-    Scaffold (
+    Scaffold(
         topBar = {
             SpecializationTop()
         }
     ) { innerPadding ->
-        Column (modifier = Modifier.padding(innerPadding)) {
+        Column(modifier = Modifier.padding(innerPadding)) {
             SpecializationContent()
         }
     }
@@ -98,7 +107,7 @@ fun Specialization() {
 
 @Composable
 fun SpecializationTop() {
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
@@ -107,7 +116,7 @@ fun SpecializationTop() {
     ) {
         IconButton(onClick = { /*TODO*/ }) {
             Icon(
-                imageVector = Icons.Filled .ArrowBack,
+                imageVector = Icons.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }
@@ -119,25 +128,24 @@ fun SpecializationTop() {
 fun SpecializationContent() {
 
     var query by remember { mutableStateOf("") }
-    var isPressed by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.Start,
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-
-
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = { },
+                value = query,
+                onValueChange = { query = it },
                 label = { Text("Search") },
                 leadingIcon = {
                     Icon(
@@ -145,380 +153,125 @@ fun SpecializationContent() {
                         contentDescription = "Search"
                     )
                 },
-                modifier = Modifier.weight(1f)
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedLabelColor = Color.Black.copy(alpha = 0.4f),
+                    unfocusedLabelColor = Color.Black.copy(alpha = 0.4f),
+                    focusedLeadingIconColor = Color.Black.copy(alpha = 0.4f),
+                    unfocusedLeadingIconColor = Color.Black.copy(alpha = 0.4f),
+                    focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                ),
+                shape = RoundedCornerShape(5.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
-            IconButton(onClick = { /*TODO*/ }) {
-                Box(
-                    modifier = Modifier
-                        .size(50.dp)
-                        .background(Color(0xFFFFA500)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_setting),
-                        contentDescription = "Setting",
-                        modifier = Modifier.size(30.dp),
-                        tint = Color.White
-                    )
-                }
-
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFA500)
+                ),
+                contentPadding = PaddingValues(0.dp),
+                modifier = Modifier
+                    .size(50.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_setting),
+                    contentDescription = "Setting"
+                )
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "Specialization",
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-
+            fontSize = 18.sp,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column() {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.design),
-                                contentDescription = "Design",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Design",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "140 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_finance),
-                                contentDescription = "Finance",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Finance",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "250 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-        }
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_education),
-                                contentDescription = "Education",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Education",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "120 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_restaurant),
-                                contentDescription = "Restaurant",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Restaurant",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "85 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-        }
-
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_health),
-                                contentDescription = "Health",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Health",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "235 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .size(width = 165.dp, height = 185.dp)
-                    .shadow(10.dp, shape = RoundedCornerShape(30.dp))
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = { isPressed = !isPressed }
-                    )
-                    .scale(if (isPressed) 1.1f else 1f)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .background(Color(0xFFFFFFE0))
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_programmer),
-                                contentDescription = "Design",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(0xFFFFA500)
-                            )
-                        }
-                    }
-
-                    Text(text = "Programmer",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(text = "412 Jobs",
-                        textAlign = TextAlign.Center,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
-                }
-            }
-
-        }
-
-
-
     }
-
-
-
-
-
-
-
-
-
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxHeight()
+    ) {
+        items(CategoryData.categories) { item ->
+            CategoryComponent(
+                icon = item.image,
+                title = item.category,
+                job = item.subCategories.size
+            )
+        }
+    }
 }
 
+@Composable
+fun CategoryComponent(
+    @DrawableRes icon: Int,
+    title: String,
+    job: Int
+) {
 
+    var isPressed by remember { mutableStateOf(false) }
 
-
-
-
-
-
-
-
-
-
+    Button(
+        onClick = {},
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+        ),
+        shape = RoundedCornerShape(15.dp),
+        modifier = Modifier
+            .size(width = 165.dp, height = 185.dp)
+            .shadow(5.dp, shape = RoundedCornerShape(30.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { isPressed = !isPressed }
+            )
+            .scale(if (isPressed) 1.1f else 1f)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = Color(0xFFFFA500),
+                    containerColor = Color(0xFFFFA500).copy(alpha = 0.1f)
+                ),
+                modifier = Modifier
+                    .size(70.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = title,
+                    modifier = Modifier.size(40.dp),
+                )
+            }
+            Text(
+                text = title,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+            Text(
+                text = "${job} Jobs",
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                color = Color.Gray
+            )
+        }
+    }
+}
 
 @Preview
 @Composable
