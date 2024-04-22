@@ -1,4 +1,4 @@
-package com.tpanh.jobfinder.sreens
+package com.tpanh.jobfinder.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

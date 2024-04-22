@@ -7,14 +7,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.tpanh.jobfinder.sreens.AddEducation
-import com.tpanh.jobfinder.sreens.AddLanguage
-import com.tpanh.jobfinder.sreens.AddResume
-import com.tpanh.jobfinder.sreens.AddSkill
-import com.tpanh.jobfinder.sreens.EditProfile
-import com.tpanh.jobfinder.sreens.HomeScreen
-import com.tpanh.jobfinder.sreens.LanguageScreen
-import com.tpanh.jobfinder.sreens.OnBoardingScreen
+import com.tpanh.jobfinder.screens.AddEducation
+import com.tpanh.jobfinder.screens.AddLanguage
+import com.tpanh.jobfinder.screens.AddResume
+import com.tpanh.jobfinder.screens.AddSkill
+import com.tpanh.jobfinder.screens.EditProfile
+import com.tpanh.jobfinder.screens.HomeScreen
+import com.tpanh.jobfinder.screens.LanguageScreen
+import com.tpanh.jobfinder.screens.OnBoardingScreen
 
 @Composable
 fun JobFinderNavigation(
