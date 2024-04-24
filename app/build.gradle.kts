@@ -62,6 +62,7 @@ dependencies {
 //    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -74,5 +75,11 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    // Declare the dependency for the Firebase Authentication library
+    implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.firebase:firebase-firestore-ktx")
 
 }
