@@ -12,9 +12,10 @@ import com.tpanh.jobfinder.screens.AddLanguage
 import com.tpanh.jobfinder.screens.AddResume
 import com.tpanh.jobfinder.screens.AddSkill
 import com.tpanh.jobfinder.screens.EditProfile
-import com.tpanh.jobfinder.screens.HomeScreen
 import com.tpanh.jobfinder.screens.LanguageScreen
-import com.tpanh.jobfinder.screens.OnBoardingScreen
+import com.tpanh.jobfinder.screens.Login
+import com.tpanh.jobfinder.screens.OnBoarding
+import com.tpanh.jobfinder.screens.SignUp
 
 @Composable
 fun JobFinderNavigation(
@@ -25,36 +26,32 @@ fun JobFinderNavigation(
         backStackEntry?.destination?.route ?: JobFinderScreen.Home.name
     )
 
-    NavHost(navController = navController, startDestination = JobFinderScreen.Language.name) {
-        composable(JobFinderScreen.Home.name) {
-            HomeScreen(
-                onNavigateToOnBoarding = {
-                    navController.navigate(JobFinderScreen.OnBoarding.name)
+    NavHost(navController = navController, startDestination = JobFinderScreen.OnBoarding.name) {
+        composable(JobFinderScreen.OnBoarding.name) {
+            OnBoarding(
+                navigateToLoginScreen = {
+                    navController.navigate(JobFinderScreen.Login.name)
                 }
             )
         }
 
-//        composable(route = JobFinderScreen.Login.name) {
-//            SignInScreen(
-//                navigateToSignUp = {
-//                    navController.navigate(JobFinderScreen.SignUp.name)
-//                },
-//                navigateToHome = {
-////                    navController.navigate(HomeScreenDestination.route)
-//                }
-//            )
-//        }
-//
-//        composable(route = JobFinderScreen.SignUp.name) {
-//            SignUpScreen(
-//                navigateToSignIn = {
-//                    navController.navigate(JobFinderScreen.Login.name)
-//                }
-//            )
-//        }
+        composable(route = JobFinderScreen.Login.name) {
+            Login(
+                navigateToSignUp = {
+                    navController.navigate(JobFinderScreen.SignUp.name)
+                },
+                navigateToForgotPassword = {
 
-        composable(JobFinderScreen.OnBoarding.name) {
-            OnBoardingScreen()
+                }
+            )
+        }
+
+        composable(route = JobFinderScreen.SignUp.name) {
+            SignUp(
+                navigateToLogin = {
+                    navController.navigate(JobFinderScreen.Login.name)
+                }
+            )
         }
 
         composable(JobFinderScreen.AddEducation.name) {
