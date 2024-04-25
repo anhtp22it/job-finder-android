@@ -15,8 +15,6 @@ import com.tpanh.jobfinder.screens.EditProfile
 import com.tpanh.jobfinder.screens.HomeScreen
 import com.tpanh.jobfinder.screens.LanguageScreen
 import com.tpanh.jobfinder.screens.OnBoardingScreen
-import com.tpanh.jobfinder.screens.SignInScreen
-import com.tpanh.jobfinder.screens.SignUpScreen
 
 @Composable
 fun JobFinderNavigation(
@@ -36,24 +34,24 @@ fun JobFinderNavigation(
             )
         }
 
-        composable(route = JobFinderScreen.Login.name) {
-            SignInScreen(
-                navigateToSignUp = {
-                    navController.navigate(JobFinderScreen.SignUp.name)
-                },
-                navigateToHome = {
-//                    navController.navigate(HomeScreenDestination.route)
-                }
-            )
-        }
-
-        composable(route = JobFinderScreen.SignUp.name) {
-            SignUpScreen(
-                navigateToSignIn = {
-                    navController.navigate(JobFinderScreen.Login.name)
-                }
-            )
-        }
+//        composable(route = JobFinderScreen.Login.name) {
+//            SignInScreen(
+//                navigateToSignUp = {
+//                    navController.navigate(JobFinderScreen.SignUp.name)
+//                },
+//                navigateToHome = {
+////                    navController.navigate(HomeScreenDestination.route)
+//                }
+//            )
+//        }
+//
+//        composable(route = JobFinderScreen.SignUp.name) {
+//            SignUpScreen(
+//                navigateToSignIn = {
+//                    navController.navigate(JobFinderScreen.Login.name)
+//                }
+//            )
+//        }
 
         composable(JobFinderScreen.OnBoarding.name) {
             OnBoardingScreen()
