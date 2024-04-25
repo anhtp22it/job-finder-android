@@ -15,9 +15,7 @@ import com.tpanh.jobfinder.screens.EditProfile
 import com.tpanh.jobfinder.screens.HomeScreen
 import com.tpanh.jobfinder.screens.LanguageScreen
 import com.tpanh.jobfinder.screens.OnBoardingScreen
-import com.tpanh.jobfinder.screens.SignInDestination
 import com.tpanh.jobfinder.screens.SignInScreen
-import com.tpanh.jobfinder.screens.SignUpDestination
 import com.tpanh.jobfinder.screens.SignUpScreen
 
 @Composable

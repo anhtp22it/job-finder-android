@@ -34,15 +34,8 @@ import com.tpanh.jobfinder.component.DivideTextComponent
 import com.tpanh.jobfinder.component.MyPasswordTextField
 import com.tpanh.jobfinder.component.MyTextFieldWithIcon
 import com.tpanh.jobfinder.component.NormalTextComponent
-import com.tpanh.jobfinder.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
-object SignInDestination : NavigationDestination {
-    override val route: String = "sign_in"
-
-    override val titleRes: Int = R.string.sign_in
-
-}
 
 
 @Composable

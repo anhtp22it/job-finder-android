@@ -35,13 +35,8 @@ import com.tpanh.jobfinder.component.DivideTextComponent
 import com.tpanh.jobfinder.component.MyPasswordTextField
 import com.tpanh.jobfinder.component.MyTextFieldWithIcon
 import com.tpanh.jobfinder.component.NormalTextComponent
-import com.tpanh.jobfinder.navigation.NavigationDestination
 import kotlinx.coroutines.launch
 
-object SignUpDestination : NavigationDestination {
-    override val route: String = "sign_up"
-    override val titleRes: Int = R.string.sign_up
-}
 
 @Composable
 fun SignUpScreen(
