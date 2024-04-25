@@ -19,4 +19,8 @@ class ForgotPasswordViewModel: ViewModel() {
     fun resetPassword() {
 
     }
+
+    fun openYourEmail() {
+
+    }
 }

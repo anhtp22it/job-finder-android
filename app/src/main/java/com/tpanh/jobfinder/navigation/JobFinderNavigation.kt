@@ -17,6 +17,7 @@ import com.tpanh.jobfinder.screens.LanguageScreen
 import com.tpanh.jobfinder.screens.Login
 import com.tpanh.jobfinder.screens.OnBoarding
 import com.tpanh.jobfinder.screens.SignUp
+import com.tpanh.jobfinder.screens.Success
 
 @Composable
 fun JobFinderNavigation(
@@ -57,6 +58,14 @@ fun JobFinderNavigation(
 
         composable(JobFinderScreen.ForgotPassword.name) {
             ForgotPassword(
+                navigateToLogin = {
+                    navController.navigate(JobFinderScreen.Login.name)
+                }
+            )
+        }
+
+        composable(JobFinderScreen.Success.name) {
+            Success(
                 navigateToLogin = {
                     navController.navigate(JobFinderScreen.Login.name)
                 }

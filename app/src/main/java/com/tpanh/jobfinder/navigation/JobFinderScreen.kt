@@ -5,6 +5,7 @@ enum class JobFinderScreen {
     Login,
     SignUp,
     ForgotPassword,
+    Success,
     Home,
     AddEducation,
     AddSkill,
