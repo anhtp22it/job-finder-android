@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.ui.theme.Primary
 import com.tpanh.jobfinder.ui.theme.Secondary
+import com.tpanh.jobfinder.ui.theme.md_theme_light_onPrimaryContainer
 
 @Composable
 fun NormalTextComponent(value: String, modifier: Modifier = Modifier) {
@@ -153,13 +154,27 @@ fun CheckboxComponent(
 ) {
     Row(
         modifier = Modifier
+            .heightIn(56.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(checked = checkedState, onCheckedChange = onCheckedChange)
+
+        Text(text = privacyAndPolicy)
+    }
+}
+@Composable
+fun CheckboxRemember(
+    checkedState: Boolean, onCheckedChange: (Boolean) -> Unit, remember: String
+) {
+    Row(
+        modifier = Modifier
             .fillMaxWidth()
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = checkedState, onCheckedChange = onCheckedChange)
 
-        ClickableTextComponent(value = privacyAndPolicy)
+        Text(text = remember)
     }
 }
 
@@ -210,7 +225,7 @@ fun ButtonComponent(
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    Brush.horizontalGradient(listOf(Secondary, Primary)),
+                    Brush.horizontalGradient(listOf(md_theme_light_onPrimaryContainer, md_theme_light_onPrimaryContainer)),
                     shape = RoundedCornerShape(50.dp)
                 ), contentAlignment = Alignment.Center
 

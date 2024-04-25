@@ -2,7 +2,7 @@ package com.tpanh.jobfinder.ui.theme
 
 import androidx.compose.ui.graphics.Color
 val Primary = Color(0xFF92A3FD)
-val Secondary = Color(0xFF9DCEFF)
+val     Secondary = Color(0xFF9DCEFF)
 val md_theme_light_primary = Color(0xFF5A54A8)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFE3DFFF)
