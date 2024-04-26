@@ -31,6 +31,7 @@ import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 @Composable
 fun Success(
     navigateToLogin: () -> Unit = { },
+    navigateToHome: () -> Unit = { },
     forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
 ) {
     Column(
@@ -70,7 +71,7 @@ fun Success(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
             shape = RoundedCornerShape(5.dp),
-            onClick = { forgotPasswordViewModel.openYourEmail() }
+            onClick = { navigateToHome() }
         ) {
             Text(
                 text = "CONTINUE",

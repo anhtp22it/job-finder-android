@@ -16,7 +16,7 @@ class ForgotPasswordViewModel: ViewModel() {
         }
     }
 
-    fun resetPassword() {
+    fun sendEmailResetPassword() {
 
     }
 

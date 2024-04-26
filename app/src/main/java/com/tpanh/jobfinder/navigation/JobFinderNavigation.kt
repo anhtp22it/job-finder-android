@@ -18,6 +18,7 @@ import com.tpanh.jobfinder.screens.Login
 import com.tpanh.jobfinder.screens.OnBoarding
 import com.tpanh.jobfinder.screens.SignUp
 import com.tpanh.jobfinder.screens.Success
+import com.tpanh.jobfinder.screens.Verify
 
 @Composable
 fun JobFinderNavigation(
@@ -66,6 +67,17 @@ fun JobFinderNavigation(
 
         composable(JobFinderScreen.Success.name) {
             Success(
+                navigateToLogin = {
+                    navController.navigate(JobFinderScreen.Login.name)
+                },
+                navigateToHome = {
+                    navController.navigate(JobFinderScreen.Home.name)
+                }
+            )
+        }
+
+        composable(JobFinderScreen.Verify.name) {
+            Verify(
                 navigateToLogin = {
                     navController.navigate(JobFinderScreen.Login.name)
                 }
