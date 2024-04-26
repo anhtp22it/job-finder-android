@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "24430111920",
-    "firebase_url": "https://jobpostal-9355f-default-rtdb.firebaseio.com",
-    "project_id": "jobpostal-9355f",
-    "storage_bucket": "jobpostal-9355f.appspot.com"
+    "project_number": "689946969438",
+    "project_id": "jobfinder-4e0c0",
+    "storage_bucket": "jobfinder-4e0c0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:24430111920:android:a9d62478b4a55c734a1f75",
+        "mobilesdk_app_id": "1:689946969438:android:26ad6d3d8cbf06c0dbfbcf",
         "android_client_info": {
           "package_name": "com.tpanh.jobfinder"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB2lh9scnZa3EM3mmnNqW7KyXZe6LpJdcY"
+          "current_key": "AIzaSyDjsdBCa3jXsdz1fAQ_zjm3oSBjmZmaglw"
         }
       ],
       "services": {

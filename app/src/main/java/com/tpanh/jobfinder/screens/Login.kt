@@ -44,13 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.viewmodel.LoginViewModel
 
 @Composable
 fun Login(
     navigateToSignUp: () -> Unit = { },
     navigateToForgotPassword: () -> Unit = { },
-    loginViewModel: LoginViewModel = viewModel()
+    loginViewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToHome: () -> Unit = { }
 ) {
 
     val uiState by loginViewModel.uiState.collectAsState()
@@ -186,7 +188,7 @@ fun Login(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
             shape = RoundedCornerShape(5.dp),
-            onClick = { /*TODO*/ }
+            onClick = { loginViewModel.login(uiState.email, uiState.password, navigateToHome) }
         ) {
             Text(
                 text = "LOGIN",
