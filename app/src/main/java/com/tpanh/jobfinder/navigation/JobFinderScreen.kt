@@ -14,6 +14,7 @@ enum class JobFinderScreen {
     AddSkill,
     AddResume,
     AddWorkExperience,
+    UploadCv,
     EditProfile,
     Language,
     AddLanguage,

@@ -23,6 +23,7 @@ import com.tpanh.jobfinder.screens.OnBoarding
 import com.tpanh.jobfinder.screens.SignUp
 import com.tpanh.jobfinder.screens.Specialization
 import com.tpanh.jobfinder.screens.Success
+import com.tpanh.jobfinder.screens.UploadCv
 import com.tpanh.jobfinder.screens.Verify
 
 @Composable
@@ -111,6 +112,12 @@ fun JobFinderNavigation(
 
         composable(JobFinderScreen.Filter.name) {
             Filter(
+                navigateBack = { navController.navigateUp() }
+            )
+        }
+
+        composable(JobFinderScreen.UploadCv.name) {
+            UploadCv(
                 navigateBack = { navController.navigateUp() }
             )
         }
