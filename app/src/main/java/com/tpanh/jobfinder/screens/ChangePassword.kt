@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
@@ -41,7 +42,9 @@ fun ChangePassword(
 ) {
     Scaffold(
         topBar = {
-            changePasswordBar(onBack = onBack)
+            NavigateBackBar {
+                onBack()
+            }
         }
     ) {
         Column (
@@ -175,26 +178,6 @@ fun ChangePasswordContent(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun changePasswordBar(
-    onBack: () -> Unit = { }
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { onBack() }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
     }
 }
 

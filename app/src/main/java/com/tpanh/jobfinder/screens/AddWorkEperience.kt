@@ -1,21 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.job
 
-import android.icu.text.CaseMap.Title
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,8 +16,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -48,35 +37,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.job.ui.theme.JobTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.sp
 
-class AddWorkEperience : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            JobTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    AddWorkScreen()
-                }
-            }
-        }
-    }
-}
 @Composable
 fun AddWorkScreen(){
     Column(modifier = Modifier.padding(start=25.dp,top=50.dp)) {
@@ -103,7 +72,7 @@ fun AddWorkScreen(){
 
 @Composable
 fun GreetingText(){
-    Text(text = stringResource(id = R.string.app_name),
+    Text(text = "12345",
         color = Color.Blue,
         fontSize = 30.sp,
         fontStyle = FontStyle.Normal,
@@ -114,7 +83,7 @@ fun GreetingText(){
 }
 @Composable
 fun JobTitle(){
-    Text(text = stringResource(id = R.string.test_text),
+    Text(text = "12345",
         color = Color.Blue,
         fontSize = 20.sp,
         fontStyle = FontStyle.Normal,
@@ -165,7 +134,7 @@ fun DemoTextField(){
 }
 @Composable
 fun Company(){
-    Text(text = stringResource(id = R.string.test_text1),
+    Text(text = "12345",
         color = Color.Blue,
         fontSize = 20.sp,
         fontStyle = FontStyle.Normal,
@@ -233,7 +202,7 @@ fun DateSection1() {
 }
 @Composable
 fun StartDate(){
-    Text(text = stringResource(id = R.string.test_text2),
+    Text(text = "12345",
         color = Color.Blue,
         fontSize = 20.sp,
         fontStyle = FontStyle.Normal,
@@ -241,7 +210,7 @@ fun StartDate(){
         textAlign = TextAlign.Start,
     )
 }
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+
 @Composable
 fun DemoTextField2(){
     var startdate by remember {
@@ -278,16 +247,16 @@ fun DemoTextField2(){
 
 @Composable
 fun EndDate(){
-    Text(text = stringResource(id = R.string.test_text3),
+    Text(
+        text = "12345",
         color = Color.Blue,
         fontSize = 20.sp,
         fontStyle = FontStyle.Normal,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.End,
-
     )
 }
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+
 @Composable
 fun DemoTextField3(){
     var enddate by remember {
@@ -340,7 +309,8 @@ fun DemoCheckBox(title: String){
 }
 @Composable
 fun Description1(){
-    Text(text = stringResource(id = R.string.test_text4),
+    Text(
+        text = "12345",
         color = Color.Blue,
         fontSize = 20.sp,
         fontStyle = FontStyle.Normal,
@@ -348,7 +318,7 @@ fun Description1(){
         textAlign = TextAlign.Start,
     )
 }
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+
 @Composable
 fun DemoTextField4(){
     var description1 by remember {
@@ -410,7 +380,7 @@ fun savebutton(){
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    JobTheme {
+    Surface {
         AddWorkScreen()
     }
 }

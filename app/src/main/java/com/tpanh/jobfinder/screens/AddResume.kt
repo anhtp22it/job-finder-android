@@ -47,32 +47,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.extensions.dashedBorder
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.utils.formatBytes
 import com.tpanh.jobfinder.utils.getFileName
 import com.tpanh.jobfinder.utils.getFileSize
 import com.tpanh.jobfinder.viewmodel.AddResumeViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
-
-@Composable
-fun AddResumeTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }
-}
 
 @Composable
 fun AddResumeContent(
@@ -239,8 +220,8 @@ fun AddResume(
 ) {
     Scaffold(
         topBar = {
-            AddResumeTopBar(
-                onBackClick = { onBackClick() }
+            NavigateBackBar (
+                navigateBack = { onBackClick() }
             )
         }
     ) { innerPadding ->

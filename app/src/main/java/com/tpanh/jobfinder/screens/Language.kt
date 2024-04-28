@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,25 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.model.Language
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.LanguageViewModel
-
-@Composable
-fun LanguageTopBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }
-}
 
 @Composable
 fun LanguageContent(
@@ -166,12 +148,15 @@ fun LanguageItem(
 }
 
 @Composable
-fun LanguageScreen(
-    navigateToAddLanguageScreen: () -> Unit
+fun Language(
+    navigateToAddLanguageScreen: () -> Unit,
+    navigateBack: () -> Unit = { }
 ) {
     Scaffold(
         topBar = {
-            LanguageTopBar()
+            NavigateBackBar (
+                navigateBack = { navigateBack() },
+            )
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -189,8 +174,9 @@ fun LanguageScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        LanguageScreen(
-            navigateToAddLanguageScreen = { }
+        Language(
+            navigateToAddLanguageScreen = { },
+            navigateBack = { }
         )
     }
 }

@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.screens.components.BottomAppBar
 import com.tpanh.jobfinder.screens.components.JobItem
 
@@ -48,6 +49,7 @@ fun Home(
     navigateToProfile: () -> Unit = {},
     navigateToPostJob: () -> Unit = {},
     navigateToSetting: () -> Unit = {},
+    currentScreen: JobFinderScreen
 ) {
     Scaffold (
         bottomBar = {
@@ -56,7 +58,8 @@ fun Home(
                     navigateToSaveJob = { navigateToSaveJob() },
                     navigateToProfile = { navigateToProfile() },
                     navigateToPostJob = { navigateToPostJob() },
-                    navigateToSetting = { navigateToSetting() }
+                    navigateToSetting = { navigateToSetting() },
+                    currentScreen = currentScreen
              )
         },
     ) {
@@ -289,6 +292,8 @@ fun HomeContent() {
 @Composable
 fun HomeScreenPreview() {
     Surface {
-        Home()
+        Home(
+            currentScreen = JobFinderScreen.Home
+        )
     }
 }

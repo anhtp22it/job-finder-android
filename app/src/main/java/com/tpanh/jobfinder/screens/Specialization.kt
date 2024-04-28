@@ -51,12 +51,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.model.CategoryData
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 
 @Composable
-fun Specialization() {
+fun Specialization(
+    navigateBack: () -> Unit = { }
+) {
     Scaffold(
         topBar = {
-            SpecializationTop()
+            NavigateBackBar(
+                navigateBack = { navigateBack() },
+            )
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
@@ -64,26 +69,6 @@ fun Specialization() {
         }
     }
 }
-
-
-@Composable
-fun SpecializationTop() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }
-}
-
 
 @Composable
 fun SpecializationContent() {

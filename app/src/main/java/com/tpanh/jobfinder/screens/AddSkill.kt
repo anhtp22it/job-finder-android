@@ -43,27 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.AddSkillViewModel
-
-@Composable
-fun AddSkillTopBar(
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { onBackClick() }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -211,8 +192,8 @@ fun AddSkill(
 ) {
     Scaffold(
         topBar = {
-            AddSkillTopBar(
-                onBackClick = { onBackClick() }
+            NavigateBackBar (
+                navigateBack = { onBackClick() }
             )
         }
     ) { innerPadding ->

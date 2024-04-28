@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.tpanh.jobfinder.navigation.JobFinderScreen
 
 @Composable
 fun BottomAppBar(
@@ -27,6 +28,7 @@ fun BottomAppBar(
     navigateToProfile: () -> Unit = {},
     navigateToPostJob: () -> Unit = {},
     navigateToSetting: () -> Unit = {},
+    currentScreen: JobFinderScreen
 ) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
@@ -39,14 +41,22 @@ fun BottomAppBar(
             Icon(
                 Icons.Outlined.Home,
                 contentDescription = "Home",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                tint = if (currentScreen == JobFinderScreen.Home) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                }
             )
         }
         IconButton(onClick = { navigateToSaveJob() }) {
             Icon(
                 Icons.Outlined.BookmarkBorder,
                 contentDescription = "Bookmark",
-                tint = MaterialTheme.colorScheme.surfaceContainer
+                tint = if (currentScreen == JobFinderScreen.SaveJob) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                }
             )
         }
         IconButton(
@@ -58,22 +68,29 @@ fun BottomAppBar(
         ) {
             Icon(
                 Icons.Outlined.Add,
-                contentDescription = "Home",
-                tint = MaterialTheme.colorScheme.surfaceContainer
+                contentDescription = "Home"
             )
         }
         IconButton(onClick = { navigateToProfile() }) {
             Icon(
                 Icons.Outlined.AccountCircle,
                 contentDescription = "Profile",
-                tint = MaterialTheme.colorScheme.surfaceContainer
+                tint = if (currentScreen == JobFinderScreen.EditProfile) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                }
             )
         }
         IconButton(onClick = { navigateToSetting() }) {
             Icon(
                 Icons.Outlined.Settings,
                 contentDescription = "Setting",
-                tint = MaterialTheme.colorScheme.surfaceContainer
+                tint = if (currentScreen == JobFinderScreen.Setting) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainer
+                }
             )
         }
     }
@@ -82,5 +99,12 @@ fun BottomAppBar(
 @Preview
 @Composable
 fun BottomAppBarPreview() {
-    BottomAppBar()
+    BottomAppBar(
+        navigateToHome = {},
+        navigateToSaveJob = {},
+        navigateToProfile = {},
+        navigateToPostJob = {},
+        navigateToSetting = {},
+        currentScreen = JobFinderScreen.Home
+    )
 }

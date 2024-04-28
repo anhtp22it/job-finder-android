@@ -49,27 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.AddEducationViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
-
-@Composable
-fun AddEducationTopBar() {
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = Icons.Filled .ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -327,10 +310,14 @@ fun AddEducationContent(
 }
 
 @Composable
-fun AddEducation() {
+fun AddEducation(
+    navigateBack: () -> Unit = {  }
+) {
     Scaffold (
         topBar = {
-            AddEducationTopBar()
+            NavigateBackBar(
+                navigateBack = { navigateBack() },
+            )
         }
     ) { innerPadding ->
         Column (modifier = Modifier.padding(innerPadding)) {

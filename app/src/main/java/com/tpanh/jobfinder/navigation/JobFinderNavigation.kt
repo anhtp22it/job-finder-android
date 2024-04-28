@@ -11,13 +11,16 @@ import com.tpanh.jobfinder.screens.AddEducation
 import com.tpanh.jobfinder.screens.AddLanguage
 import com.tpanh.jobfinder.screens.AddResume
 import com.tpanh.jobfinder.screens.AddSkill
+import com.tpanh.jobfinder.screens.ChangePassword
 import com.tpanh.jobfinder.screens.EditProfile
+import com.tpanh.jobfinder.screens.Filter
 import com.tpanh.jobfinder.screens.ForgotPassword
 import com.tpanh.jobfinder.screens.Home
-import com.tpanh.jobfinder.screens.LanguageScreen
+import com.tpanh.jobfinder.screens.Language
 import com.tpanh.jobfinder.screens.Login
 import com.tpanh.jobfinder.screens.OnBoarding
 import com.tpanh.jobfinder.screens.SignUp
+import com.tpanh.jobfinder.screens.Specialization
 import com.tpanh.jobfinder.screens.Success
 import com.tpanh.jobfinder.screens.Verify
 
@@ -69,6 +72,12 @@ fun JobFinderNavigation(
             )
         }
 
+        composable(JobFinderScreen.ChangePassword.name) {
+            ChangePassword (
+                onBack = { navController.navigateUp() }
+            )
+        }
+
         composable(JobFinderScreen.Success.name) {
             Success(
                 navigateToLogin = {
@@ -89,19 +98,38 @@ fun JobFinderNavigation(
         }
 
         composable(JobFinderScreen.Home.name) {
-             Home()
+            Home(
+                navigateToHome = { navController.navigate(JobFinderScreen.Home.name) },
+                navigateToSaveJob = { navController.navigate(JobFinderScreen.Home.name) },
+                navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.name) },
+                navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.name) },
+                navigateToSetting = { navController.navigate(JobFinderScreen.Setting.name) },
+                currentScreen = currentScreen
+            )
+        }
+
+        composable(JobFinderScreen.Filter.name) {
+            Filter(
+                navigateBack = { navController.navigateUp() }
+            )
         }
 
         composable(JobFinderScreen.AddEducation.name) {
-            AddEducation()
+            AddEducation(
+                navigateBack = { navController.navigateUp() }
+            )
         }
 
         composable(JobFinderScreen.AddSkill.name) {
-            AddSkill()
+            AddSkill(
+                onBackClick = { navController.navigateUp() }
+            )
         }
 
         composable(JobFinderScreen.AddResume.name) {
-            AddResume()
+            AddResume(
+                onBackClick = { navController.navigateUp() }
+            )
         }
 
         composable(JobFinderScreen.EditProfile.name) {
@@ -111,16 +139,23 @@ fun JobFinderNavigation(
         }
 
         composable(JobFinderScreen.Language.name) {
-            LanguageScreen(
+            Language(
                 navigateToAddLanguageScreen = {
                     navController.navigate(JobFinderScreen.AddLanguage.name)
-                }
+                },
+                navigateBack = { navController.navigateUp() }
             )
         }
 
         composable(JobFinderScreen.AddLanguage.name) {
             AddLanguage(
                 onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(JobFinderScreen.Specialization.name) {
+            Specialization (
+                navigateBack = { navController.navigateUp() }
             )
         }
     }
