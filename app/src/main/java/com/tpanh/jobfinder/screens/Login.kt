@@ -50,6 +50,7 @@ import com.tpanh.jobfinder.viewmodel.LoginViewModel
 fun Login(
     navigateToSignUp: () -> Unit = { },
     navigateToForgotPassword: () -> Unit = { },
+    navigateToHome: () -> Unit = { },
     loginViewModel: LoginViewModel = viewModel()
 ) {
 
@@ -186,7 +187,7 @@ fun Login(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
             shape = RoundedCornerShape(5.dp),
-            onClick = { /*TODO*/ }
+            onClick = { navigateToHome() }
         ) {
             Text(
                 text = "LOGIN",
