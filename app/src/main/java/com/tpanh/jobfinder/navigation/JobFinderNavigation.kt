@@ -11,6 +11,7 @@ import com.tpanh.jobfinder.screens.AddEducation
 import com.tpanh.jobfinder.screens.AddLanguage
 import com.tpanh.jobfinder.screens.AddResume
 import com.tpanh.jobfinder.screens.AddSkill
+import com.tpanh.jobfinder.screens.AddWorkExperience
 import com.tpanh.jobfinder.screens.ChangePassword
 import com.tpanh.jobfinder.screens.EditProfile
 import com.tpanh.jobfinder.screens.Filter
@@ -150,6 +151,12 @@ fun JobFinderNavigation(
         composable(JobFinderScreen.AddLanguage.name) {
             AddLanguage(
                 onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(JobFinderScreen.AddWorkExperience.name) {
+            AddWorkExperience(
+                navigateBack = { navController.navigateUp() }
             )
         }
 

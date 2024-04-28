@@ -1,7 +1,7 @@
 package com.tpanh.jobfinder.model
 
 data class Education(
-    val id: Int,
+    val id: String = "",
     val levelOfEducation: String = "",
     val institutionName: String = "",
     val fieldOfStudy: String = "",

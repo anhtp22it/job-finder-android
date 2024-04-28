@@ -13,6 +13,7 @@ enum class JobFinderScreen {
     AddEducation,
     AddSkill,
     AddResume,
+    AddWorkExperience,
     EditProfile,
     Language,
     AddLanguage,

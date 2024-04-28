@@ -22,4 +22,5 @@ data class User(
     var educations: List<Education> = emptyList(),
     var skills: Set<String> = emptySet(),
     var languages: Set<Language> = emptySet(),
+    var experiences: List<WorkExperience> = emptyList(),
 )

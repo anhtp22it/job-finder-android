@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class AddEducationViewModel: ViewModel() {
-    private val _uiState = MutableStateFlow(Education(1))
+    private val _uiState = MutableStateFlow(Education("1"))
     val uiState: StateFlow<Education> = _uiState.asStateFlow()
 
     fun updateLevelOfEducation(levelOfEducation: String) {
