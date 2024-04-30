@@ -1,9 +1,7 @@
 package com.tpanh.jobfinder.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,19 +9,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -40,20 +35,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.tpanh.jobfinder.viewmodel.AddAJobViewModel
+import com.tpanh.jobfinder.model.JobType
+import com.tpanh.jobfinder.model.Workplace
+import com.tpanh.jobfinder.screens.components.RadioDialog
+import com.tpanh.jobfinder.utils.normalizeString
+import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 
 @Composable
 fun AddJobTopBar(
-    onBackClick: () -> Unit
+    navigateToHome: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(start = 8.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        IconButton(onClick = { onBackClick() }) {
+        IconButton(onClick = { navigateToHome() }) {
             Icon(
                 imageVector = Icons.Filled.Close,
                 contentDescription = "Close"
@@ -62,7 +61,7 @@ fun AddJobTopBar(
         Text(
             text = "Post",
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFFFA500),
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
             fontSize = 18.sp
         )
 
@@ -71,16 +70,15 @@ fun AddJobTopBar(
 
 @Composable
 fun AddJobContent(
-    addajobViewModel: AddAJobViewModel = viewModel()
+    postJobViewModel: PostJobViewModel = viewModel()
 ) {
-    val uiState by addajobViewModel.JobInfor.collectAsState()
+    val uiState by postJobViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.Start,
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = "Add a job",
@@ -89,75 +87,281 @@ fun AddJobContent(
             fontSize = 18.sp
         )
         Spacer(modifier = Modifier.height(24.dp))
-
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 3.dp, horizontal = 3.dp)
-    ) {
-        items(uiState) { job ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column (
+                verticalArrangement = Arrangement.Center
             ) {
-
-                Spacer(modifier = Modifier.width(16.dp))
-                Box(
-                    modifier = Modifier
-                        .width(350.dp)
-                        .height(60.dp)
-                        .border(
-                            width = 2.dp,
-                            color = Color.White,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(color = Color.White)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.width(350.dp)
-                    ) {
-                        Text(
-                            text = "${job.name}",
-                            modifier = Modifier.padding(20.dp)
-                                .width(160.dp)
-                        )
-                        Spacer(modifier = Modifier.width(100.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFFFFA500).copy(0.3f), CircleShape)
-                        )  {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add",
-                                tint = Color(0xFFFFA500),
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
-                    }
+                Text(
+                    text = "Job position",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.title.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = uiState.title,
+                        fontSize = 14.sp
+                    )
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Type of workplace",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.workplace != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = normalizeString(uiState.workplace!!.name),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { postJobViewModel.workplaceDialog = true },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Job location",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.location.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = uiState.location,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Company",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.company.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = uiState.company,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Employment type",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.type != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = normalizeString(uiState.type!!.name),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { postJobViewModel.jobTypeDialog = true },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = "Description",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.type != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(0.5.dp),
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = uiState.description,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
+                )
+            ) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add Title"
+                )
+            }
         }
     }
+
+    if (postJobViewModel.workplaceDialog) {
+        RadioDialog(
+            title = "Choose the type of workplace",
+            description = "Decide and choose the type of place to work according to what you want ",
+            options = Workplace.values().toList(),
+            onOptionSelected = {
+                postJobViewModel.updateWorkplace(it)
+                postJobViewModel.workplaceDialog = false
+            },
+            onDismissRequest = { postJobViewModel.workplaceDialog = false },
+            selectedOption = uiState.workplace
+        )
+    }
+
+    if (postJobViewModel.jobTypeDialog) {
+        RadioDialog(
+            title = "Choose Job Type",
+            description = "Determine and choose the type of work according to what you want",
+            options = JobType.values().toList(),
+            onOptionSelected = {
+                postJobViewModel.updateJobType(it)
+                postJobViewModel.jobTypeDialog = false
+            },
+            onDismissRequest = { postJobViewModel.jobTypeDialog = false },
+            selectedOption = uiState.type
+        )
+    }
+
 }
 
 @Composable
 fun AddAJob(
-    onBackClick: () -> Unit = { }
+    navigateToHome: () -> Unit = { }
 ) {
     Scaffold(
         topBar = {
             AddJobTopBar(
-                onBackClick = { onBackClick() }
+                navigateToHome = { navigateToHome() }
             )
         }
     ) { innerPadding ->

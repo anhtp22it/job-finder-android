@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.tpanh.jobfinder.screens.AddAJob
 import com.tpanh.jobfinder.screens.AddEducation
 import com.tpanh.jobfinder.screens.AddLanguage
 import com.tpanh.jobfinder.screens.AddResume
@@ -107,6 +108,12 @@ fun JobFinderNavigation(
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.name) },
                 navigateToSetting = { navController.navigate(JobFinderScreen.Setting.name) },
                 currentScreen = currentScreen
+            )
+        }
+
+        composable(JobFinderScreen.PostJob.name) {
+            AddAJob(
+                navigateToHome = { navController.navigate(JobFinderScreen.Home.name) }
             )
         }
 

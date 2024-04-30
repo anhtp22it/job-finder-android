@@ -69,3 +69,9 @@ fun formatBytes(bytes: Long): String {
     }
     return "${Math.round(formattedBytes)} ${units[unitIndex]}"
 }
+
+fun normalizeString(input: String): String {
+    return input.toLowerCase()
+        .split("_")
+        .joinToString(" ") { it.capitalize() }
+}

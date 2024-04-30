@@ -5,6 +5,7 @@ data class Job (
     var title: String = "",
     var description: String = "",
     var location: String = "",
+    var company: String = "",
     var image: String = "",
     var type: JobType = JobType.FULL_TIME,
     var requirements: Set<String> = setOf(),
