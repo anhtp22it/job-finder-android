@@ -87,7 +87,7 @@ fun <T> RadioDialog(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            verticalArrangement = Arrangement.SpaceBetween,
+                            verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
                                 text = normalizeString(option.toString()),
