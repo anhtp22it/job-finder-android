@@ -31,13 +31,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.model.JobType
 import com.tpanh.jobfinder.model.Workplace
+import com.tpanh.jobfinder.screens.components.InputDialog
 import com.tpanh.jobfinder.screens.components.RadioDialog
 import com.tpanh.jobfinder.utils.normalizeString
 import com.tpanh.jobfinder.viewmodel.PostJobViewModel
@@ -114,17 +117,32 @@ fun AddJobContent(
                     )
                 }
             }
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
+            if (uiState.title == null || uiState.title.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.titleDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Title"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.titleDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Title"
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -152,17 +170,33 @@ fun AddJobContent(
                     )
                 }
             }
-            IconButton(
-                onClick = { postJobViewModel.workplaceDialog = true },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
+
+            if (uiState.workplace == null) {
+                IconButton(
+                    onClick = { postJobViewModel.workplaceDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Workplace"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.workplaceDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Workplace"
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -190,17 +224,32 @@ fun AddJobContent(
                     )
                 }
             }
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
+            if (uiState.location == null || uiState.location.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.locationDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Location"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.locationDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Location"
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -228,17 +277,32 @@ fun AddJobContent(
                     )
                 }
             }
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
+            if (uiState.company == null || uiState.company.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.companyDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Company"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.companyDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Company"
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -266,17 +330,32 @@ fun AddJobContent(
                     )
                 }
             }
-            IconButton(
-                onClick = { postJobViewModel.jobTypeDialog = true },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
+            if (uiState.type == null) {
+                IconButton(
+                    onClick = { postJobViewModel.jobTypeDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Job Type"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.jobTypeDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Job Type"
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -290,12 +369,45 @@ fun AddJobContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text(
-                    text = "Description",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Description",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    if (uiState.description.isEmpty()) {
+                        IconButton(
+                            onClick = { postJobViewModel.descDialog = true },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                            )
+                        ) {
+                            Icon(
+                                Icons.Filled.Add,
+                                contentDescription = "Add Description"
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = { postJobViewModel.descDialog = true },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                containerColor = Color.Transparent
+                            )
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.edit),
+                                contentDescription = "Edit Description"
+                            )
+                        }
+                    }
+                }
                 if (uiState.type != null) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Divider(
@@ -353,6 +465,52 @@ fun AddJobContent(
         )
     }
 
+    if (postJobViewModel.titleDialog) {
+        InputDialog(
+            title = "Add a job title",
+            value = uiState.title,
+            onDismissRequest = { postJobViewModel.titleDialog = false },
+            onConfirm = {
+                postJobViewModel.updateTitle(it)
+                postJobViewModel.titleDialog = false
+            }
+        )
+    }
+    if (postJobViewModel.locationDialog) {
+        InputDialog(
+            title = "Add a job location",
+            value = uiState.location,
+            onDismissRequest = { postJobViewModel.locationDialog = false },
+            onConfirm = {
+                postJobViewModel.updateLocation(it)
+                postJobViewModel.locationDialog = false
+            }
+        )
+    }
+
+    if (postJobViewModel.descDialog) {
+        InputDialog(
+            title = "Add a job description",
+            value = uiState.description,
+            onDismissRequest = { postJobViewModel.descDialog = false },
+            onConfirm = {
+                postJobViewModel.updateDescription(it)
+                postJobViewModel.descDialog = false
+            }
+        )
+    }
+
+    if (postJobViewModel.companyDialog) {
+        InputDialog(
+            title = "Add a company name",
+            value = uiState.company,
+            onDismissRequest = { postJobViewModel.companyDialog = false },
+            onConfirm = {
+                postJobViewModel.updateCompany(it)
+                postJobViewModel.companyDialog = false
+            }
+        )
+    }
 }
 
 @Composable

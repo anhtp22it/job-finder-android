@@ -17,9 +17,17 @@ class PostJobViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(Job(description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
     val uiState = _uiState.asStateFlow()
 
+    var titleDialog by mutableStateOf(false)
+
     var workplaceDialog by mutableStateOf(false)
 
     var jobTypeDialog by mutableStateOf(false)
+
+    var locationDialog by mutableStateOf(false)
+
+    var descDialog by mutableStateOf(false)
+
+    var companyDialog by mutableStateOf(false)
 
     fun updateTitle(title: String) {
         _uiState.update {
