@@ -51,11 +51,11 @@ import com.tpanh.jobfinder.viewmodel.SaveJobViewModel
 @Composable
 fun SaveJob(
     saveJobViewModel: SaveJobViewModel = viewModel(),
-    navigateToHome: () -> Unit = {},
-    navigateToSaveJob: () -> Unit = {},
-    navigateToProfile: () -> Unit = {},
-    navigateToPostJob: () -> Unit = {},
-    navigateToSetting: () -> Unit = {},
+    navigateToHome: () -> Unit,
+    navigateToSaveJob: () -> Unit,
+    navigateToProfile: () -> Unit,
+    navigateToPostJob: () -> Unit,
+    navigateToSearch: () -> Unit,
     currentScreen: JobFinderScreen
 ) {
     val uiState by saveJobViewModel.uiState.collectAsState()
@@ -71,7 +71,7 @@ fun SaveJob(
                     navigateToSaveJob = { navigateToSaveJob() },
                     navigateToProfile = { navigateToProfile() },
                     navigateToPostJob = { navigateToPostJob() },
-                    navigateToSetting = { navigateToSetting() },
+                    navigateToSearch = { navigateToSearch() },
                     currentScreen = currentScreen
                 )
             }
@@ -241,7 +241,12 @@ fun NoJobSave(
 fun SaveJobPreview() {
     Surface {
         SaveJob(
-            currentScreen = JobFinderScreen.SaveJob
+            currentScreen = JobFinderScreen.SaveJob,
+            navigateToHome = {},
+            navigateToSaveJob = {},
+            navigateToProfile = {},
+            navigateToPostJob = {},
+            navigateToSearch = {}
         )
     }
 }

@@ -30,8 +30,8 @@ import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun Success(
-    navigateToLogin: () -> Unit = { },
-    navigateToHome: () -> Unit = { },
+    navigateToLogin: () -> Unit,
+    navigateToHome: () -> Unit,
     forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
 ) {
     Column(
@@ -101,6 +101,9 @@ fun Success(
 @Composable
 fun SuccessPreview() {
     Surface {
-        Success()
+        Success(
+            navigateToLogin = {},
+            navigateToHome = {}
+        )
     }
 }

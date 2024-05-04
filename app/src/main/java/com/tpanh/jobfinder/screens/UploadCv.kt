@@ -61,6 +61,7 @@ import java.util.Locale
 
 @Composable
 fun UploadCv(
+    navigateToSearchJob: () -> Unit,
     navigateBack: () -> Unit
 ) {
     Scaffold (
@@ -371,7 +372,8 @@ fun UploadCvContent() {
 fun UploadCvPreview() {
     Surface {
         UploadCv(
-            navigateBack = {}
+            navigateBack = {},
+            navigateToSearchJob = {}
         )
     }
 }

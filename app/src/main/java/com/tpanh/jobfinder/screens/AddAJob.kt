@@ -515,7 +515,7 @@ fun AddJobContent(
 
 @Composable
 fun AddAJob(
-    navigateToHome: () -> Unit = { }
+    navigateToHome: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -537,6 +537,8 @@ fun AddJobPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddAJob()
+        AddAJob(
+            navigateToHome = { }
+        )
     }
 }

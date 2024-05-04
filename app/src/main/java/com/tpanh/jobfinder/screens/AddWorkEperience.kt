@@ -52,7 +52,8 @@ import java.util.Date
 
 @Composable
 fun AddWorkExperience(
-    navigateBack: () -> Unit = {}
+    navigateBack: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
     Scaffold (
         topBar = {
@@ -306,6 +307,9 @@ fun AddWorkExperienceContent(
 @Composable
 fun AddWorkExperiencePreview() {
     Surface {
-        AddWorkExperience()
+        AddWorkExperience(
+            navigateBack = {},
+            navigateToViewProfile = {}
+        )
     }
 }

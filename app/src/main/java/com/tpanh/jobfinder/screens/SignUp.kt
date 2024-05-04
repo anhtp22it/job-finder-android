@@ -47,8 +47,8 @@ import com.tpanh.jobfinder.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUp(
-    navigateToLogin: () -> Unit = { },
-    navigateToForgotPassword: () -> Unit = { },
+    navigateToLogin: () -> Unit,
+    navigateToForgotPassword: () -> Unit,
     signUpViewModel: SignUpViewModel = viewModel()
 ) {
 
@@ -275,6 +275,9 @@ fun SignUpScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        SignUp()
+        SignUp(
+            navigateToLogin = {},
+            navigateToForgotPassword = {}
+        )
     }
 }

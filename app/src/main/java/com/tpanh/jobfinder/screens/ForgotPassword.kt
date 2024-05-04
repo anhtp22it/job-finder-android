@@ -35,7 +35,8 @@ import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun ForgotPassword(
-    navigateToLogin: () -> Unit = {},
+    navigateToLogin: () -> Unit,
+    navigateToVerifyCation: () -> Unit,
     forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(),
 ) {
 
@@ -128,6 +129,9 @@ fun ForgotPassword(
 @Composable
 fun PreviewForgotPassword() {
     Surface {
-        ForgotPassword()
+        ForgotPassword(
+            navigateToLogin = {},
+            navigateToVerifyCation = {}
+        )
     }
 }

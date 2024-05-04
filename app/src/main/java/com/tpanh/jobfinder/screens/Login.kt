@@ -48,9 +48,9 @@ import com.tpanh.jobfinder.viewmodel.LoginViewModel
 
 @Composable
 fun Login(
-    navigateToSignUp: () -> Unit = { },
-    navigateToForgotPassword: () -> Unit = { },
-    navigateToHome: () -> Unit = { },
+    navigateToSignUp: () -> Unit,
+    navigateToForgotPassword: () -> Unit,
+    navigateToHome: () -> Unit,
     loginViewModel: LoginViewModel = viewModel()
 ) {
 
@@ -246,6 +246,10 @@ fun LoginScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Login()
+        Login(
+            navigateToSignUp = {},
+            navigateToForgotPassword = {},
+            navigateToHome = {}
+        )
     }
 }

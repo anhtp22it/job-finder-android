@@ -48,22 +48,22 @@ fun Home(
     navigateToSaveJob: () -> Unit = {},
     navigateToProfile: () -> Unit = {},
     navigateToPostJob: () -> Unit = {},
-    navigateToSetting: () -> Unit = {},
+    navigateToSearch: () -> Unit = {},
     currentScreen: JobFinderScreen
 ) {
-    Scaffold (
+    Scaffold(
         bottomBar = {
-             BottomAppBar(
-                    navigateToHome = { navigateToHome() },
-                    navigateToSaveJob = { navigateToSaveJob() },
-                    navigateToProfile = { navigateToProfile() },
-                    navigateToPostJob = { navigateToPostJob() },
-                    navigateToSetting = { navigateToSetting() },
-                    currentScreen = currentScreen
-             )
+            BottomAppBar(
+                navigateToHome = { navigateToHome() },
+                navigateToSaveJob = { navigateToSaveJob() },
+                navigateToProfile = { navigateToProfile() },
+                navigateToPostJob = { navigateToPostJob() },
+                navigateToSearch = { navigateToSearch() },
+                currentScreen = currentScreen
+            )
         },
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
@@ -75,7 +75,7 @@ fun Home(
 
 @Composable
 fun HomeContent() {
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
@@ -112,7 +112,7 @@ fun HomeContent() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Box (
+        Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.onPrimaryContainer)
@@ -187,7 +187,7 @@ fun HomeContent() {
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color(0xFFAFECFE))
             ) {
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
@@ -220,7 +220,7 @@ fun HomeContent() {
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box (
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(0.45f)
@@ -228,7 +228,7 @@ fun HomeContent() {
                         .background(Color(0xFFBEB1FF)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column (
+                    Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -246,7 +246,7 @@ fun HomeContent() {
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Box (
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
@@ -254,7 +254,7 @@ fun HomeContent() {
                         .background(Color(0xFFFED7AE)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column (
+                    Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(

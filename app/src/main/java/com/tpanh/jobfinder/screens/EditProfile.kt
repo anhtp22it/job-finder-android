@@ -81,7 +81,8 @@ import java.util.Date
 @Composable
 fun EditProfile(
     editProfileViewModel: EditProfileViewModel = viewModel(),
-    navigateToSetting: () -> Unit
+    navigateToSetting: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
 
     val user by editProfileViewModel.uiState.collectAsState()
@@ -509,7 +510,8 @@ fun EditProfilePreview() {
         color = MaterialTheme.colorScheme.background
     ) {
         EditProfile(
-            navigateToSetting = {  }
+            navigateToSetting = {  },
+            navigateToViewProfile = {  }
         )
     }
 }

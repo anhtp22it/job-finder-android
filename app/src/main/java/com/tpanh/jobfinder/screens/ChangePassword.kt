@@ -38,7 +38,8 @@ import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun ChangePassword(
-    onBack: () -> Unit = { }
+    onBack: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -185,6 +186,9 @@ fun ChangePasswordContent(
 @Composable
 fun ChangePasswordPreview() {
     Surface {
-        ChangePassword()
+        ChangePassword(
+            onBack = {},
+            navigateToLogin = {}
+        )
     }
 }

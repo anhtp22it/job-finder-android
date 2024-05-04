@@ -216,7 +216,8 @@ fun AddResumeContent(
 
 @Composable
 fun AddResume(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -238,6 +239,9 @@ fun PreviewAddResume() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddResume()
+        AddResume(
+            onBackClick = { },
+            navigateToViewProfile = { }
+        )
     }
 }

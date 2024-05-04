@@ -32,7 +32,8 @@ import com.tpanh.jobfinder.viewmodel.AboutMeViewModel
 
 @Composable
 fun AboutMe(
-    navigateBack: () -> Unit = {  }
+    navigateBack: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ){
     Scaffold (
         topBar = {
@@ -107,6 +108,9 @@ fun AboutMeContent(
 @Composable
 fun DefaultPreview() {
     Surface {
-        AboutMe()
+        AboutMe(
+            navigateBack = {},
+            navigateToViewProfile = {}
+        )
     }
 }

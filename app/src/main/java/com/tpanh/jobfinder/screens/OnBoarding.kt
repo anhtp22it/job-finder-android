@@ -33,7 +33,7 @@ import com.tpanh.jobfinder.R
 
 @Composable
 fun OnBoarding(
-    navigateToLoginScreen: () -> Unit = { }
+    navigateToLoginScreen: () -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -112,6 +112,8 @@ fun OnBoardingScreenPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        OnBoarding()
+        OnBoarding(
+            navigateToLoginScreen = {}
+        )
     }
 }
