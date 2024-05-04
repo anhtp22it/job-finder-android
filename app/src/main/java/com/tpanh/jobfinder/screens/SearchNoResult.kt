@@ -1,4 +1,4 @@
-package com.tpanh.jobfinder.sreens
+package com.tpanh.jobfinder.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

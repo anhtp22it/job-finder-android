@@ -73,16 +73,23 @@ fun ExpandableText(text: String, maxLength: Int = 150) {
     }
 
     Column {
-        Text(displayText)
+        Text(
+            displayText,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            lineHeight = 22.sp,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         if (text.length > maxLength) {
             TextButton(
                 onClick = { readMore.value = !readMore.value },
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = MaterialTheme.colorScheme.,
-//                ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                ),
                 content = {
                     Text(if (readMore.value) "Read Less" else "Read More")
-                }
+                },
+                shape = RoundedCornerShape(5.dp),
             )
         }
     }
@@ -90,7 +97,10 @@ fun ExpandableText(text: String, maxLength: Int = 150) {
 
 @Composable
 fun BulletPointText(text: String) {
-    Text("•   $text")
+    Text(
+        "•   $text",
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
+    )
 }
 
 @Composable
