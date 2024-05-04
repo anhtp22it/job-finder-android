@@ -109,6 +109,7 @@ fun JobFinderNavigation(
 
         composable(JobFinderScreen.JobDescription.name + "/{jobId}") {
             JobDescription(
+                navigateBack = { navController.navigateUp() },
                 navigateToUploadCv = { navController.navigate(JobFinderScreen.UploadCv.name) }
             )
         }
