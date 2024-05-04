@@ -311,7 +311,8 @@ fun AddEducationContent(
 
 @Composable
 fun AddEducation(
-    navigateBack: () -> Unit = {  }
+    navigateBack: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
     Scaffold (
         topBar = {
@@ -333,6 +334,9 @@ fun AddEducationPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddEducation()
+        AddEducation(
+            navigateBack = { },
+            navigateToViewProfile = { }
+        )
     }
 }

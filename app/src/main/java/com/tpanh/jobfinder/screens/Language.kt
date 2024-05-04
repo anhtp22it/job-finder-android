@@ -150,7 +150,8 @@ fun LanguageItem(
 @Composable
 fun Language(
     navigateToAddLanguageScreen: () -> Unit,
-    navigateBack: () -> Unit = { }
+    navigateBack: () -> Unit,
+    naviagetToViewProfile: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -176,7 +177,8 @@ fun LanguageScreenPreview() {
     ) {
         Language(
             navigateToAddLanguageScreen = { },
-            navigateBack = { }
+            navigateBack = { },
+            naviagetToViewProfile = { }
         )
     }
 }

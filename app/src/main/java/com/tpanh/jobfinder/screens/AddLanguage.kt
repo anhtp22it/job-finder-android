@@ -131,7 +131,8 @@ fun AddLanguageContent(
 
 @Composable
 fun AddLanguage(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    navigateToLanguage: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -153,6 +154,9 @@ fun AddLanguagePreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddLanguage(onBackClick = { })
+        AddLanguage(
+            onBackClick = { },
+            navigateToLanguage = { }
+        )
     }
 }

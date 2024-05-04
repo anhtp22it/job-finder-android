@@ -61,7 +61,9 @@ import java.util.Locale
 
 @Composable
 fun UploadCv(
-    navigateBack: () -> Unit
+    navigateToSearchJob: () -> Unit,
+    navigateBack: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     Scaffold (
         topBar = {
@@ -73,13 +75,19 @@ fun UploadCv(
         Column (
             modifier = Modifier.padding(it)
         ) {
-            UploadCvContent()
+            UploadCvContent(
+                navigateToSearchJob = navigateToSearchJob,
+                navigateToHome = navigateToHome
+            )
         }
     }
 }
 
 @Composable
-fun UploadCvContent() {
+fun UploadCvContent(
+    navigateToSearchJob: () -> Unit,
+    navigateToHome: () -> Unit
+) {
 
     val contentResolver = LocalContext.current.contentResolver
 
@@ -92,6 +100,10 @@ fun UploadCvContent() {
             pdfFileName = uri?.let { getFileName(it, contentResolver) }
             pdfFileSize = getFileSize(uri, contentResolver)
         }
+
+    var isSuccess by remember {
+        mutableStateOf(true)
+    }
 
     Column (
         modifier = Modifier
@@ -172,70 +184,209 @@ fun UploadCvContent() {
                 }
             }
         }
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Upload CV",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Add your CV/Resume to apply for a job",
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            if (pdfUri == null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(
-                            color = Color.Transparent,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .dashedBorder(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.2f),
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .clickable { getContent.launch("application/pdf") }
-                ) {
-                    Row(
+
+        if (isSuccess == false) {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Upload CV",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Add your CV/Resume to apply for a job",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                if (pdfUri == null) {
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(
+                                color = Color.Transparent,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .dashedBorder(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.2f),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .clickable { getContent.launch("application/pdf") }
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.upload_file),
-                            contentDescription = "Upload CV/Resume",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.upload_file),
+                                contentDescription = "Upload CV/Resume",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Upload CV/Resume",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontSize = 14.sp
+                            )
+                        }
+
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .dashedBorder(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.2f),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.Start,
+                        ) {
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.icon_pdf),
+                                    contentDescription = "PDF Icon",
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Column {
+                                    pdfFileName?.let { fileName ->
+                                        Text(
+                                            text = "$fileName",
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.Light
+                                        )
+                                    }
+
+                                    pdfFileSize?.let { size ->
+                                        val format =
+                                            SimpleDateFormat(
+                                                "dd MMM yyyy 'at' hh:mm aa",
+                                                Locale.getDefault()
+                                            )
+                                        Text(
+                                            text = "${formatBytes(size)} • ${format.format(System.currentTimeMillis())}",
+                                            color = Color.Black.copy(0.4f),
+                                            fontSize = 12.sp
+                                        )
+                                    }
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { pdfUri = null }
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Delete,
+                                    contentDescription = "Delete",
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "Remove file",
+                                    color = Color.Red,
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Light
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Information",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight(700),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    value = "",
+                    onValueChange = {  },
+                    singleLine = false,
+                    shape = RoundedCornerShape(16.dp),
+                    placeholder = {
                         Text(
-                            text = "Upload CV/Resume",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 14.sp
+                            text = "Explain why you are the right person for this job",
+                            fontSize = 12.sp
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    )
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Column (
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(bottom = 16.dp),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(horizontal = 70.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Text(
+                            text = "APPLY NOW",
+                            letterSpacing = 2.sp,
                         )
                     }
-
                 }
-            } else {
+            }
+        } else {
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .dashedBorder(
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.2f),
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(0.5f),
                             shape = RoundedCornerShape(16.dp)
                         )
                 ) {
@@ -268,97 +419,109 @@ fun UploadCvContent() {
                                     )
                                 }
 
-                                pdfFileSize?.let { size ->
-                                    val format =
-                                        SimpleDateFormat(
-                                            "dd MMM yyyy 'at' hh:mm aa",
-                                            Locale.getDefault()
+                                Row {
+                                    pdfFileSize?.let { size ->
+                                        val format =
+                                            SimpleDateFormat(
+                                                "dd MMM yyyy 'at' hh:mm aa",
+                                                Locale.getDefault()
+                                            )
+                                        Text(
+                                            text = "${formatBytes(size)} • ${format.format(System.currentTimeMillis())}",
+                                            color = Color.Black.copy(0.4f),
+                                            fontSize = 12.sp
                                         )
+                                    }
+                                    Text(text = " • ", color = Color.Black.copy(0.4f), fontSize = 12.sp)
                                     Text(
-                                        text = "${formatBytes(size)} • ${format.format(System.currentTimeMillis())}",
+                                        text = "14 Feb 2022 at 10:00 am",
                                         color = Color.Black.copy(0.4f),
                                         fontSize = 12.sp
                                     )
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { pdfUri = null }
-                        ) {
-                            Icon(
-                                Icons.Outlined.Delete,
-                                contentDescription = "Delete",
-                                tint = Color.Red,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "Remove file",
-                                color = Color.Red,
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Light
-                            )
-                        }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "Information",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight(700),
-                fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                value = "",
-                onValueChange = {  },
-                singleLine = false,
-                shape = RoundedCornerShape(16.dp),
-                placeholder = {
-                    Text(
-                        text = "Explain why you are the right person for this job",
-                        fontSize = 12.sp
+                Spacer(modifier = Modifier.height(16.dp))
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_success),
+                        contentDescription = "Success",
+                        modifier = Modifier
+                            .size(150.dp)
                     )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
-                )
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Column (
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(bottom = 16.dp),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Button(
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Successful",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontSize = 16.sp,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(55.dp)
-                        .padding(horizontal = 70.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    ),
-                    shape = RoundedCornerShape(5.dp),
-                    onClick = { /*TODO*/ }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Congratulations, your application has been sent",
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Column (
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(bottom = 16.dp),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    Text(
-                        text = "SAVE",
-                        letterSpacing = 2.sp,
-                    )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(horizontal = 70.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = { navigateToSearchJob() }
+                    ) {
+                        Text(
+                            text = "FIND A SIMILAR JOB",
+                            letterSpacing = 2.sp,
+                        )
+                    }
+                }
+                Column (
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(bottom = 16.dp),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .padding(horizontal = 70.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        onClick = { navigateToHome() }
+                    ) {
+                        Text(
+                            text = "BACK TO HOME",
+                            letterSpacing = 2.sp,
+                        )
+                    }
                 }
             }
         }
@@ -371,7 +534,9 @@ fun UploadCvContent() {
 fun UploadCvPreview() {
     Surface {
         UploadCv(
-            navigateBack = {}
+            navigateBack = {},
+            navigateToSearchJob = {},
+            navigateToHome = {}
         )
     }
 }

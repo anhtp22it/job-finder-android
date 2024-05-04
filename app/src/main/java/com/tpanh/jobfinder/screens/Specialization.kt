@@ -55,7 +55,8 @@ import com.tpanh.jobfinder.screens.components.NavigateBackBar
 
 @Composable
 fun Specialization(
-    navigateBack: () -> Unit = { }
+    navigateBack: () -> Unit,
+    navigateToFilter: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -222,7 +223,10 @@ fun CategoryComponent(
 @Preview
 @Composable
 fun SpecializationPreview() {
-    Specialization()
+    Specialization(
+        navigateBack = {},
+        navigateToFilter = {}
+    )
 }
 
 

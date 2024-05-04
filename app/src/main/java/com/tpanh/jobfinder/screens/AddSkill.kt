@@ -188,7 +188,8 @@ fun SkillItem(
 
 @Composable
 fun AddSkill(
-    onBackClick: () -> Unit = { }
+    onBackClick: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -210,6 +211,9 @@ fun AddSkillPreview() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        AddSkill()
+        AddSkill(
+            onBackClick = {},
+            navigateToViewProfile = {}
+        )
     }
 }

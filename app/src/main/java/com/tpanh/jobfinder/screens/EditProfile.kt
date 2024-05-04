@@ -72,6 +72,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.extensions.scaleDown
 import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -81,7 +82,8 @@ import java.util.Date
 @Composable
 fun EditProfile(
     editProfileViewModel: EditProfileViewModel = viewModel(),
-    navigateToSetting: () -> Unit
+    navigateToSetting: () -> Unit,
+    navigateToViewProfile: () -> Unit
 ) {
 
     val user by editProfileViewModel.uiState.collectAsState()
@@ -494,13 +496,6 @@ fun EditProfile(
     }
 }
 
-fun Bitmap.scaleDown(maxSize: Int, filter: Boolean): Bitmap {
-    val ratio = maxSize.toFloat() / maxOf(this.width, this.height)
-    val width = (this.width * ratio).toInt()
-    val height = (this.height * ratio).toInt()
-    return Bitmap.createScaledBitmap(this, width, height, filter)
-}
-
 @Preview
 @Composable
 fun EditProfilePreview() {
@@ -509,7 +504,8 @@ fun EditProfilePreview() {
         color = MaterialTheme.colorScheme.background
     ) {
         EditProfile(
-            navigateToSetting = {  }
+            navigateToSetting = {  },
+            navigateToViewProfile = {  }
         )
     }
 }
