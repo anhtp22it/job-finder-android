@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.extensions
 
+import android.graphics.Bitmap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
@@ -41,4 +42,11 @@ fun Modifier.dashedBorder(
         style = stroke,
         color = color
     )
+}
+
+fun Bitmap.scaleDown(maxSize: Int, filter: Boolean): Bitmap {
+    val ratio = maxSize.toFloat() / maxOf(this.width, this.height)
+    val width = (this.width * ratio).toInt()
+    val height = (this.height * ratio).toInt()
+    return Bitmap.createScaledBitmap(this, width, height, filter)
 }

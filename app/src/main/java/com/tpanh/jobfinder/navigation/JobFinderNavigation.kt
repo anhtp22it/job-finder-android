@@ -155,7 +155,10 @@ fun JobFinderNavigation(
         }
 
         composable(JobFinderScreen.MyApplication.name) {
-            MyApplication()
+            MyApplication(
+                navigateBack = { navController.navigateUp() },
+                navigateToSearchJob = { navController.navigate(JobFinderScreen.SearchJob.name) }
+            )
         }
 
         composable(JobFinderScreen.ViewProfile.name) {
