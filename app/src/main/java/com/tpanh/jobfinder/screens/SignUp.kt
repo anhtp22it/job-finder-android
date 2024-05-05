@@ -43,13 +43,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUp(
+
     navigateToLogin: () -> Unit,
     navigateToForgotPassword: () -> Unit,
-    signUpViewModel: SignUpViewModel = viewModel()
+    signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     val uiState by signUpViewModel.uiState.collectAsState()
@@ -85,7 +87,7 @@ fun SignUp(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = uiState.fullName,
-            onValueChange = { signUpViewModel.updateEmail(it) },
+            onValueChange = { signUpViewModel.updateFullName(it) },
             singleLine = true,
             placeholder = {
                 Text(
@@ -216,7 +218,7 @@ fun SignUp(
             ),
             shape = RoundedCornerShape(5.dp),
             onClick = {
-                signUpViewModel.register(uiState.email, uiState.password)
+                signUpViewModel.register(uiState.email, uiState.password, navigateToLogin = navigateToLogin)
             }
         ) {
             Text(

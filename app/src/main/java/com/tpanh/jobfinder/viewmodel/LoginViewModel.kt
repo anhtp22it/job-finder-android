@@ -1,16 +1,24 @@
 package com.tpanh.jobfinder.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.User
+import com.tpanh.jobfinder.repository.AuthRepository
+import com.tpanh.jobfinder.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+): ViewModel() {
     private val _uiState = MutableStateFlow(User(email = "", password = ""))
     val uiState = _uiState.asStateFlow()
 
@@ -40,8 +48,22 @@ class LoginViewModel: ViewModel() {
         passwordHidden = !passwordHidden
     }
 
-    fun login(email: String, password: String) {
-        Log.d("LoginViewModel", "login: $email, $password")
-
+    fun login(email: String, password: String, navigateToHome: () -> Unit) {
+        viewModelScope.launch {
+            authRepository.loginUser(email = email, password = password).collectLatest {
+                result ->
+                when(result) {
+                    is Resource.Loading -> {
+                        Log.d("LoginViewModel", "Loading")
+                    }
+                    is Resource.Success -> {
+                        navigateToHome()
+                    }
+                    is Resource.Error -> {
+                        Log.d("LoginViewModel", "Error: ${result.message}")
+                    }
+                }
+            }
+        }
     }
 }
