@@ -1,7 +1,7 @@
 package com.tpanh.jobfinder.model
 
 data class User(
-    val id: String = "",
+    val id: String? = "",
     val fullName: String = "",
     val gender: Int = 1,
     val email: String = "",
@@ -20,7 +20,7 @@ data class User(
     var applies: List<Job> = emptyList(),
     var saveJobs: List<Job> = emptyList(),
     var educations: List<Education> = emptyList(),
-    var skills: Set<String> = emptySet(),
-    var languages: Set<Language> = emptySet(),
+    var skills: List<String> = emptyList(),
+    var languages: List<Language> = emptyList(),
     var experiences: List<WorkExperience> = emptyList(),
 )

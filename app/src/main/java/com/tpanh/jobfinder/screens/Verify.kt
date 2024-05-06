@@ -30,12 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun Verify(
     navigateToLogin: () -> Unit = { },
-    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
+    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Column(
         modifier = Modifier
@@ -107,7 +108,7 @@ fun Verify(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(text = "You have not received the email? ", color = MaterialTheme.colorScheme.onPrimaryContainer)
-            TextButton(onClick = { forgotPasswordViewModel.sendEmailResetPassword() }) {
+            TextButton(onClick = {  }) {
                 Text(
                     text = "Resend",
                     textDecoration = TextDecoration.Underline,

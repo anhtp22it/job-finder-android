@@ -4,14 +4,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
@@ -58,7 +63,7 @@ fun ChangePassword(
 
 @Composable
 fun ChangePasswordContent(
-    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel()
+    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by forgotPasswordViewModel.uiState.collectAsState()
 
@@ -179,6 +184,30 @@ fun ChangePasswordContent(
                 }
             }
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(bottom = 16.dp),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .padding(horizontal = 70.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+                shape = RoundedCornerShape(5.dp),
+                onClick = { /*TODO*/ }
+            ) {
+                Text(
+                    text = "CHANGE PASSWORD",
+                    letterSpacing = 2.sp,
+                )
+            }
+        }
     }
 }
 

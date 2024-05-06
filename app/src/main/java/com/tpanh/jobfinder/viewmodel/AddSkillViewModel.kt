@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddSkillViewModel: ViewModel() {
@@ -58,7 +57,7 @@ class AddSkillViewModel: ViewModel() {
 
     private fun getMyLanguages() {
         viewModelScope.launch {
-            val response = setOf(
+            val response = listOf(
                 "Leadership",
                 "Teamwork",
                 "Visioner",

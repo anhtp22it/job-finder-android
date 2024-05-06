@@ -218,7 +218,7 @@ fun SignUp(
             ),
             shape = RoundedCornerShape(5.dp),
             onClick = {
-                signUpViewModel.register(uiState.email, uiState.password, navigateToLogin = navigateToLogin)
+                signUpViewModel.register(fullName = uiState.fullName, uiState.email, uiState.password, navigateToLogin = navigateToLogin)
             }
         ) {
             Text(

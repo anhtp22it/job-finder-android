@@ -2,8 +2,11 @@ package com.tpanh.jobfinder.viewmodel
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +24,9 @@ class LoginViewModel(
 ): ViewModel() {
     private val _uiState = MutableStateFlow(User(email = "", password = ""))
     val uiState = _uiState.asStateFlow()
+
+    var error by mutableStateOf("")
+        private set
 
     var rememberMe by mutableStateOf(false)
         private set
@@ -48,6 +54,10 @@ class LoginViewModel(
         passwordHidden = !passwordHidden
     }
 
+    fun resetError() {
+        error = ""
+    }
+
     fun login(email: String, password: String, navigateToHome: () -> Unit) {
         viewModelScope.launch {
             authRepository.loginUser(email = email, password = password).collectLatest {
@@ -60,7 +70,7 @@ class LoginViewModel(
                         navigateToHome()
                     }
                     is Resource.Error -> {
-                        Log.d("LoginViewModel", "Error: ${result.message}")
+                        error = result.message.toString()
                     }
                 }
             }

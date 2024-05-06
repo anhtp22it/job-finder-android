@@ -53,9 +53,9 @@ class SignUpViewModel(
         passwordHidden = !passwordHidden
     }
 
-    fun register(email: String, password: String, navigateToLogin: () -> Unit) {
+    fun register(fullName: String, email: String, password: String, navigateToLogin: () -> Unit) {
         viewModelScope.launch {
-            authRepository.registerUser(email = email, password = password).collectLatest {
+            authRepository.registerUser(fullName = fullName, email = email, password = password).collectLatest {
                 result ->
                 when(result) {
                     is Resource.Loading -> {

@@ -6,6 +6,6 @@ import com.tpanh.jobfinder.repository.impl.AuthRepositoryImpl
 
 class DefaultAppContainer(private val context: Context): AppContainer {
     override val authRepository: AuthRepository by lazy {
-        AuthRepositoryImpl(FirebaseModule.auth())
+        AuthRepositoryImpl(FirebaseModule.auth(), FirebaseModule.fireStore())
     }
 }

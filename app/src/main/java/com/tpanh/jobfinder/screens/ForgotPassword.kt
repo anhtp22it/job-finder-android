@@ -31,13 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 
 @Composable
 fun ForgotPassword(
     navigateToLogin: () -> Unit,
     navigateToVerifyCation: () -> Unit,
-    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(),
+    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     val uiState by forgotPasswordViewModel.uiState.collectAsState()
@@ -99,7 +100,7 @@ fun ForgotPassword(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
             shape = RoundedCornerShape(5.dp),
-            onClick = { forgotPasswordViewModel.sendEmailResetPassword() }
+            onClick = { forgotPasswordViewModel.sendEmailResetPassword(navigateToVerifyCation, uiState.email) }
         ) {
             Text(
                 text = "RESET PASSWORD",
