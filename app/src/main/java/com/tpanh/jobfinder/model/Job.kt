@@ -8,11 +8,11 @@ data class Job (
     var company: String = "",
     var image: String = "",
     var type: JobType = JobType.FULL_TIME,
-    var requirements: Set<String> = setOf(),
-    var category: Category? = null,
+    var requirements: List<String> = listOf(),
+    var categoryId: String = "",
     var workplace: Workplace? = null,
     var subCategory: String = "",
     var salary: Int = 0,
     var createdAt: Long = System.currentTimeMillis(),
-    var applies: List<User> = listOf()
+    var userId: String = ""
 )

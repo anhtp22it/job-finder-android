@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tpanh.jobfinder.model.Category
 import com.tpanh.jobfinder.model.JobType
 import com.tpanh.jobfinder.model.Workplace
 import com.tpanh.jobfinder.utils.normalizeString
@@ -101,6 +102,82 @@ fun <T> RadioDialog(
                                     fontSize = 12.sp,
                                 )
                             }
+                        }
+                        RadioButton(
+                            selected = (option == selectedOption),
+                            onClick = { onOptionSelected(option) }
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {}
+    )
+}
+
+@Composable
+fun CategoryRadioDialog(
+    title: String,
+    description: String,
+    options: List<Category>,
+    selectedOption: Category? = null,
+    onOptionSelected: (Category) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { onDismissRequest() },
+        title = {
+            Divider(
+                modifier = Modifier
+                    .height(5.dp)
+                    .padding(horizontal = 96.dp),
+                color = Color.DarkGray,
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = title,
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = description,
+                    textAlign = TextAlign.Center,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                options.forEach { option ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = (option == selectedOption),
+                                onClick = { onOptionSelected(option) }
+                            )
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                text = option.category,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
                         }
                         RadioButton(
                             selected = (option == selectedOption),

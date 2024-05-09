@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.tpanh.jobfinder.JobFinderApplication
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 import com.tpanh.jobfinder.viewmodel.LoginViewModel
+import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 import com.tpanh.jobfinder.viewmodel.SignUpViewModel
 
 object AppViewModelProvider {
@@ -29,6 +30,15 @@ object AppViewModelProvider {
             val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
             ForgotPasswordViewModel(
                 authRepository = application.container.authRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            PostJobViewModel(
+                jobRepository = application.container.jobRepository,
+                categoryRepository = application.container.categoryRepository,
+                imageRepository = application.container.imageRepository
             )
         }
     }

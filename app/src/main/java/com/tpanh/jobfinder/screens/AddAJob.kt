@@ -1,5 +1,10 @@
 package com.tpanh.jobfinder.screens
 
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +15,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -24,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,15 +40,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.model.JobType
 import com.tpanh.jobfinder.model.Workplace
+import com.tpanh.jobfinder.screens.components.CategoryRadioDialog
 import com.tpanh.jobfinder.screens.components.InputDialog
 import com.tpanh.jobfinder.screens.components.RadioDialog
 import com.tpanh.jobfinder.utils.normalizeString
@@ -47,7 +62,9 @@ import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 
 @Composable
 fun AddJobTopBar(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    navigateToJob: () -> Unit,
+    postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     Row(
         modifier = Modifier
@@ -62,19 +79,20 @@ fun AddJobTopBar(
                 contentDescription = "Close"
             )
         }
-        Text(
-            text = "Post",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-            fontSize = 18.sp
-        )
-
+        TextButton(onClick = { postJobViewModel.postJob(navigateToJob) }) {
+            Text(
+                text = "Post",
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                fontSize = 18.sp
+            )
+        }
     }
 }
 
 @Composable
 fun AddJobContent(
-    postJobViewModel: PostJobViewModel = viewModel()
+    postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by postJobViewModel.uiState.collectAsState()
 
@@ -141,6 +159,191 @@ fun AddJobContent(
                     Icon(
                         painter = painterResource(id = R.drawable.edit),
                         contentDescription = "Edit Title"
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent(),
+                onResult = {
+                    if (it != null) {
+                        postJobViewModel.onImageSelected(it)
+                    }
+                }
+            )
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (postJobViewModel.selectedImageUri != null) {
+                    val painter = rememberImagePainter(
+                        data = postJobViewModel.selectedImageUri,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
+                    )
+                    Image(
+                        painter = painter,
+                        contentDescription = "Job image",
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+                Text(
+                    text = "Job image",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+            if (postJobViewModel.selectedImageUri == null) {
+                IconButton(
+                    onClick = { launcher.launch("image/*") },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Title"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { launcher.launch("image/*") },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Title"
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column (
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Job category",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.categoryId.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = postJobViewModel.getCategoryName(uiState.categoryId!!),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            if (uiState.categoryId == null || uiState.categoryId.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.categoryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Category"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.categoryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Category"
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column (
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Job sub category",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.subCategory.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = uiState.subCategory,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            if (uiState.subCategory == null || uiState.subCategory.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.subCategoryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Category"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.subCategoryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Category"
                     )
                 }
             }
@@ -476,6 +679,39 @@ fun AddJobContent(
             }
         )
     }
+
+    if (postJobViewModel.categoryDialog) {
+        val categories by postJobViewModel.categories.collectAsState()
+        CategoryRadioDialog(
+            title = "Choose job category",
+            description = "Choose the category that best fits the job you're posting",
+            options = categories,
+            onOptionSelected = {
+                postJobViewModel.updateSubCategory("")
+                postJobViewModel.updateCategory(it)
+                postJobViewModel.categoryDialog = false
+            },
+            onDismissRequest = { postJobViewModel.categoryDialog = false },
+            selectedOption = postJobViewModel.categories.value.find { it.uid == uiState.categoryId }
+        )
+    }
+
+    if (postJobViewModel.subCategoryDialog) {
+        val category = postJobViewModel.categories.value.find { it.uid == uiState.categoryId }
+        val subCategories = category?.subCategories ?: emptyList()
+        RadioDialog(
+            title = "Choose job sub category",
+            description = "Choose the sub category that best fits the job you're posting",
+            options = subCategories,
+            onOptionSelected = {
+                postJobViewModel.updateSubCategory(it)
+                postJobViewModel.subCategoryDialog = false
+            },
+            onDismissRequest = { postJobViewModel.subCategoryDialog = false },
+            selectedOption = uiState.subCategory
+        )
+    }
+
     if (postJobViewModel.locationDialog) {
         InputDialog(
             title = "Add a job location",
@@ -515,12 +751,14 @@ fun AddJobContent(
 
 @Composable
 fun AddAJob(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    navigateToJob: () -> Unit
 ) {
     Scaffold(
         topBar = {
             AddJobTopBar(
-                navigateToHome = { navigateToHome() }
+                navigateToHome = { navigateToHome() },
+                navigateToJob = { navigateToJob() }
             )
         }
     ) { innerPadding ->
@@ -538,7 +776,8 @@ fun AddJobPreview() {
         color = MaterialTheme.colorScheme.background
     ) {
         AddAJob(
-            navigateToHome = { }
+            navigateToHome = { },
+            navigateToJob = { }
         )
     }
 }

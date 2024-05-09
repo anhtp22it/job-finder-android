@@ -50,7 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tpanh.jobfinder.R
-import com.tpanh.jobfinder.model.CategoryData
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 
 @Composable
@@ -147,13 +146,13 @@ fun SpecializationContent() {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxHeight()
     ) {
-        items(CategoryData.categories) { item ->
-            CategoryComponent(
-                icon = item.image,
-                title = item.category,
-                job = item.subCategories.size
-            )
-        }
+//        items(CategoryData.categories) { item ->
+//            CategoryComponent(
+//                icon = item.image,
+//                title = item.category,
+//                job = item.subCategories.size
+//            )
+//        }
     }
 }
 
