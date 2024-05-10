@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.screens.components.JobItem
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.SearchViewModel
@@ -103,7 +104,7 @@ fun SearchResultContent(
         if (false) {
             Spacer(modifier = Modifier.height(16.dp))
             repeat(10) {
-                JobItem()
+                JobItem(job = Job())
                 Spacer(modifier = Modifier.height(8.dp))
             }
         } else {

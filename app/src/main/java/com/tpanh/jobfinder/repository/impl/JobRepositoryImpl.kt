@@ -15,15 +15,74 @@ class JobRepositoryImpl(
     private val storage: FirebaseStorage
 ): JobRepository {
     override fun getAllJob(): List<Job> {
-        TODO("Not yet implemented")
+        val jobs = mutableListOf<Job>()
+        val currentUserId = auth.currentUser?.uid
+        fireStore.collection("jobs")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val job = document.toObject(Job::class.java)
+                    if (job.userId != currentUserId) {
+                        jobs.add(job)
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }
+        return jobs
+    }
+
+    override fun getJobByUserId(userId: String): List<Job> {
+        val jobs = mutableListOf<Job>()
+        fireStore.collection("jobs")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val job = document.toObject(Job::class.java)
+                    jobs.add(job)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }
+        return jobs
     }
 
     override fun getJobById(id: String): Job {
-        TODO("Not yet implemented")
+        var job = Job()
+        fireStore.collection("jobs")
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    job = document.toObject(Job::class.java) ?: Job()
+                } else {
+                    Log.d("JobRepositoryImpl", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }
+        return job
     }
 
-    override fun getJobByCategory(category: String): List<Job> {
-        TODO("Not yet implemented")
+    override fun getJobByCategory(categoryId: String): List<Job> {
+        val jobs = mutableListOf<Job>()
+        fireStore.collection("jobs")
+            .whereEqualTo("categoryId", categoryId)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val job = document.toObject(Job::class.java)
+                    jobs.add(job)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }
+        return jobs
     }
 
     override fun searchJob(title: String): List<Job> {

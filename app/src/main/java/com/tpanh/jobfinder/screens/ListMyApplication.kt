@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.screens.components.JobItem
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 
@@ -55,7 +56,7 @@ fun ListMyApplicationContent() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         repeat(10) {
-            JobItem()
+            JobItem(job = Job())
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

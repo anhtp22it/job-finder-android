@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.screens.components.BottomAppBar
 import com.tpanh.jobfinder.screens.components.JobItem
@@ -226,7 +227,7 @@ fun SearchJobContent() {
 
         Spacer(modifier = Modifier.height(16.dp))
         repeat(2) {
-            JobItem()
+            JobItem(job = Job())
             Spacer(modifier = Modifier.height(16.dp))
         }
 

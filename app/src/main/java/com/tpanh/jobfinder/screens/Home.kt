@@ -27,6 +27,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,10 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
+import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.screens.components.BottomAppBar
 import com.tpanh.jobfinder.screens.components.JobItem
+import com.tpanh.jobfinder.viewmodel.HomeViewModel
 
 @Composable
 fun Home(
@@ -74,7 +80,12 @@ fun Home(
 }
 
 @Composable
-fun HomeContent() {
+fun HomeContent(
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+
+    val jobs by homeViewModel.jobs.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -281,8 +292,8 @@ fun HomeContent() {
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.height(16.dp))
-        repeat(10) {
-            JobItem()
+        jobs.forEach {
+            JobItem(job = Job())
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
