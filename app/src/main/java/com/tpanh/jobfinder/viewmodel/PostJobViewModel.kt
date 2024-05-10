@@ -55,6 +55,10 @@ class PostJobViewModel(
 
     var companyDialog by mutableStateOf(false)
 
+    var salaryDialog by mutableStateOf(false)
+
+    var requirementsDialog by mutableStateOf(false)
+
     init {
         getCategories()
     }
@@ -109,6 +113,18 @@ class PostJobViewModel(
     fun updateJobType(jobType: JobType) {
         _uiState.update {
             it.copy(type = jobType)
+        }
+    }
+
+    fun updateSalary(salary: Int) {
+        _uiState.update {
+            it.copy(salary = salary)
+        }
+    }
+
+    fun updateRequirements(requirements: List<String>) {
+        _uiState.update {
+            it.copy(requirements = requirements)
         }
     }
 

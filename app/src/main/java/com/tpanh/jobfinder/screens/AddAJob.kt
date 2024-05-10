@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,6 +57,8 @@ import com.tpanh.jobfinder.model.JobType
 import com.tpanh.jobfinder.model.Workplace
 import com.tpanh.jobfinder.screens.components.CategoryRadioDialog
 import com.tpanh.jobfinder.screens.components.InputDialog
+import com.tpanh.jobfinder.screens.components.ListInputDialog
+import com.tpanh.jobfinder.screens.components.NumberInputDialog
 import com.tpanh.jobfinder.screens.components.RadioDialog
 import com.tpanh.jobfinder.utils.normalizeString
 import com.tpanh.jobfinder.viewmodel.PostJobViewModel
@@ -118,7 +121,7 @@ fun AddJobContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -183,7 +186,7 @@ fun AddJobContent(
                 }
             )
 
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (postJobViewModel.selectedImageUri != null) {
@@ -248,7 +251,7 @@ fun AddJobContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -303,7 +306,7 @@ fun AddJobContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -572,7 +575,58 @@ fun AddJobContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row (
+                Text(
+                    text = "Salary",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = uiState.salary.toString(),
+                    fontSize = 14.sp
+                )
+            }
+            if (uiState.salary == 0) {
+                IconButton(
+                    onClick = { postJobViewModel.salaryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Job Type"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.salaryDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Job Type"
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -588,7 +642,9 @@ fun AddJobContent(
                             onClick = { postJobViewModel.descDialog = true },
                             colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                                containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                                containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                                    0.1f
+                                )
                             )
                         ) {
                             Icon(
@@ -636,6 +692,65 @@ fun AddJobContent(
                     Icons.Filled.Add,
                     contentDescription = "Add Title"
                 )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(16.dp),
+            verticalAlignment = if (uiState.requirements.isEmpty()) Alignment.CenterVertically else Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.7f)
+            ) {
+                Text(
+                    text = "Requirements",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                if (uiState.requirements.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    uiState.requirements.forEach {
+                        Text(
+                            text = "• $it",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 14.sp,
+                        )
+                    }
+                }
+            }
+            if (uiState.requirements.isEmpty()) {
+                IconButton(
+                    onClick = { postJobViewModel.requirementsDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    )
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add Job Type"
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = { postJobViewModel.requirementsDialog = true },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = Color.Transparent
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "Edit Job Type"
+                    )
+                }
             }
         }
     }
@@ -724,6 +839,18 @@ fun AddJobContent(
         )
     }
 
+    if (postJobViewModel.salaryDialog) {
+        NumberInputDialog(
+            title = "Add a job salary",
+            value = uiState.salary,
+            onDismissRequest = { postJobViewModel.salaryDialog = false },
+            onConfirm = {
+                postJobViewModel.updateSalary(it)
+                postJobViewModel.salaryDialog = false
+            }
+        )
+    }
+
     if (postJobViewModel.descDialog) {
         InputDialog(
             title = "Add a job description",
@@ -744,6 +871,18 @@ fun AddJobContent(
             onConfirm = {
                 postJobViewModel.updateCompany(it)
                 postJobViewModel.companyDialog = false
+            }
+        )
+    }
+
+    if (postJobViewModel.requirementsDialog) {
+        ListInputDialog(
+            title = "Add job requirements",
+            initialList = uiState.requirements,
+            onDismissRequest = { postJobViewModel.requirementsDialog = false },
+            onConfirm = {
+                postJobViewModel.updateRequirements(it)
+                postJobViewModel.requirementsDialog = false
             }
         )
     }
