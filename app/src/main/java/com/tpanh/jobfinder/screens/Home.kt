@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -55,6 +56,7 @@ fun Home(
     navigateToProfile: () -> Unit = {},
     navigateToPostJob: () -> Unit = {},
     navigateToSearch: () -> Unit = {},
+    navigateToJobDesc: (String) -> Unit,
     currentScreen: JobFinderScreen
 ) {
     Scaffold(
@@ -74,14 +76,17 @@ fun Home(
                 .padding(it)
                 .fillMaxSize()
         ) {
-            HomeContent()
+            HomeContent(
+                navigateToJobDesc = navigateToJobDesc
+            )
         }
     }
 }
 
 @Composable
 fun HomeContent(
-    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToJobDesc: (String) -> Unit
 ) {
 
     val jobs by homeViewModel.jobs.collectAsState()
@@ -292,8 +297,24 @@ fun HomeContent(
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.height(16.dp))
+        val onSaveJob: (Job) -> Unit = { job ->
+            homeViewModel.saveJob(job)
+        }
+
+        val onUnSaveJob: (Job) -> Unit = { job ->
+            homeViewModel.unSaveJob(job)
+        }
         jobs.forEach {
-            JobItem(job = Job())
+            val isSaved = homeViewModel.isSaved(it)
+            Log.d("HomeContent", "isSaved: $isSaved")
+            JobItem(
+                job = it,
+                navigateToJobDesc = navigateToJobDesc,
+                saveJob = {
+                    if (isSaved) homeViewModel.unSaveJob(it) else homeViewModel.saveJob(it)
+                },
+                isJobSaved = isSaved
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
@@ -304,7 +325,8 @@ fun HomeContent(
 fun HomeScreenPreview() {
     Surface {
         Home(
-            currentScreen = JobFinderScreen.Home
+            currentScreen = JobFinderScreen.Home,
+            navigateToJobDesc = { }
         )
     }
 }

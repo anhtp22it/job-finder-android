@@ -227,7 +227,7 @@ fun SearchJobContent() {
 
         Spacer(modifier = Modifier.height(16.dp))
         repeat(2) {
-            JobItem(job = Job())
+            JobItem(job = Job(), navigateToJobDesc = {}, saveJob = {}, isJobSaved = false)
             Spacer(modifier = Modifier.height(16.dp))
         }
 

@@ -56,7 +56,7 @@ fun ListMyApplicationContent() {
         )
         Spacer(modifier = Modifier.height(16.dp))
         repeat(10) {
-            JobItem(job = Job())
+            JobItem(job = Job(), navigateToJobDesc = {}, saveJob = {}, isJobSaved = false)
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

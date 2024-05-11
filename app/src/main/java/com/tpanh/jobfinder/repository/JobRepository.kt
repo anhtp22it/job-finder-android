@@ -3,10 +3,12 @@ package com.tpanh.jobfinder.repository
 import com.tpanh.jobfinder.model.Job
 
 interface JobRepository {
-    fun getAllJob(): List<Job>
-    fun getJobByUserId(userId: String): List<Job>
-    fun getJobById(id: String): Job
-    fun getJobByCategory(categoryId: String): List<Job>
-    fun searchJob(title: String): List<Job>
-    fun postJob(job: Job)
+    suspend fun getAllJob(): List<Job>
+    suspend fun getJobByUserId(userId: String): List<Job>
+    suspend fun getJobById(id: String): Job
+    suspend fun getJobByCategory(categoryId: String): List<Job>
+    suspend fun searchJob(title: String): List<Job>
+    suspend fun postJob(job: Job)
+    suspend fun saveJob(job: Job)
+    suspend fun unSaveJob(job: Job)
 }

@@ -67,7 +67,7 @@ import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 fun AddJobTopBar(
     navigateToHome: () -> Unit,
     navigateToJob: () -> Unit,
-    postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Row(
         modifier = Modifier
@@ -891,13 +891,15 @@ fun AddJobContent(
 @Composable
 fun AddAJob(
     navigateToHome: () -> Unit,
-    navigateToJob: () -> Unit
+    navigateToJob: (String) -> Unit,
+    postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    val uiState by postJobViewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
             AddJobTopBar(
                 navigateToHome = { navigateToHome() },
-                navigateToJob = { navigateToJob() }
+                navigateToJob = { navigateToJob(uiState.toString()) }
             )
         }
     ) { innerPadding ->

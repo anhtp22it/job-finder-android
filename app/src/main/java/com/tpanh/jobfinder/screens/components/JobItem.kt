@@ -1,8 +1,10 @@
 package com.tpanh.jobfinder.screens.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +43,10 @@ import com.tpanh.jobfinder.utils.normalizeString
 
 @Composable
 fun JobItem(
-    job: Job
+    job: Job,
+    navigateToJobDesc: (String) -> Unit,
+    saveJob: (Job) -> Unit,
+    isJobSaved: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -59,12 +67,20 @@ fun JobItem(
                 AsyncImage(
                     model = job.image,
                     contentDescription = "Job Image",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.Start
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .clickable {
+                            navigateToJobDesc(job.id)
+                            Log.d("JobItem", "Navigate to job description ${job.id}")
+                        }
                 ) {
                     Text(
                         text = job.title,
@@ -90,9 +106,13 @@ fun JobItem(
                     }
                 }
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { saveJob(job) }) {
                 androidx.compose.material3.Icon(
-                    Icons.Outlined.BookmarkBorder,
+                    if (isJobSaved) {
+                        Icons.Filled.Bookmark
+                    } else {
+                        Icons.Outlined.BookmarkBorder
+                    },
                     contentDescription = "Bookmark",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -118,7 +138,7 @@ fun JobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
                     text = job.subCategory,
@@ -131,7 +151,7 @@ fun JobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
                     text = normalizeString(job.type.name),
@@ -144,7 +164,7 @@ fun JobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
                     text = normalizeString(job.workplace?.name ?: ""),
@@ -180,6 +200,9 @@ fun JobItemPreview() {
             salary = 1500,
             createdAt = 1715314717068,
             userId = "6b7PerH7TJXiPtw5TyFi0WgT1G22"
-        )
+        ),
+        navigateToJobDesc = {},
+        saveJob = {},
+        isJobSaved = false
     )
 }

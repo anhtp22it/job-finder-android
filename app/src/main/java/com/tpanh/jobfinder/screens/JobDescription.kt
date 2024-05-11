@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,25 +26,34 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
+import com.tpanh.jobfinder.screens.components.ExpandableText
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
+import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
 
 @Composable
 fun JobDescription(
     navigateBack: () -> Unit,
-    navigateToUploadCv: () -> Unit
+    navigateToUploadCv: () -> Unit,
+    jobId: String
 ) {
     Scaffold (
         topBar = {
@@ -56,40 +66,8 @@ fun JobDescription(
             modifier = Modifier.padding(it)
         ) {
             JobDescriptionContent(
-                navigateToUploadCv = navigateToUploadCv
-            )
-        }
-    }
-}
-
-@Composable
-fun ExpandableText(text: String, maxLength: Int = 150) {
-    val readMore = remember { mutableStateOf(false) }
-
-    val displayText = if (readMore.value) {
-        text
-    } else {
-        text.take(maxLength) + if (text.length > maxLength) "..." else ""
-    }
-
-    Column {
-        Text(
-            displayText,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            lineHeight = 22.sp,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        if (text.length > maxLength) {
-            TextButton(
-                onClick = { readMore.value = !readMore.value },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
-                content = {
-                    Text(if (readMore.value) "Read Less" else "Read More")
-                },
-                shape = RoundedCornerShape(5.dp),
+                navigateToUploadCv = navigateToUploadCv,
+                jobId = jobId
             )
         }
     }
@@ -105,8 +83,15 @@ fun BulletPointText(text: String) {
 
 @Composable
 fun JobDescriptionContent(
-    navigateToUploadCv: () -> Unit
+    navigateToUploadCv: () -> Unit,
+    jobId: String,
+    jobDescriptionViewModel: JobDescriptionViewModel = viewModel(
+        factory = AppViewModelProvider.Factory
+    )
 ) {
+
+    val job by jobDescriptionViewModel.job.collectAsState()
+    jobDescriptionViewModel.getJobById(jobId)
 
     Column(
         modifier = Modifier
@@ -123,15 +108,15 @@ fun JobDescriptionContent(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_google),
+            AsyncImage(
+                model = job.image,
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(75.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFAFECFE))
-                    .padding(16.dp),
+                    .background(Color(0xFFAFECFE)),
                 alignment = Alignment.Center,
+                contentScale = ContentScale.Crop
             )
         }
         Box (
@@ -147,7 +132,7 @@ fun JobDescriptionContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "UI/UX Designer",
+                    text = job.title,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -159,7 +144,7 @@ fun JobDescriptionContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text (
-                        text = "Google",
+                        text = job.company,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -170,7 +155,7 @@ fun JobDescriptionContent(
                         fontSize = 32.sp
                     )
                     Text (
-                        text = "California",
+                        text = job.location,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -181,7 +166,7 @@ fun JobDescriptionContent(
                         fontSize = 32.sp
                     )
                     Text(
-                        text = "1 day ago",
+                        text = DateUtils.getRelativeTimeSpanString(job.createdAt, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString(),
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -205,7 +190,7 @@ fun JobDescriptionContent(
 
             Spacer(modifier = Modifier.height(16.dp))
             ExpandableText(
-                text = "Google's software engineers develop the next-generation technologies that change how billions of users connect, explore, and interact with information and one another. Our products need to handle information at massive scale, and extend well beyond web search. We're looking for engineers who bring fresh ideas from all areas, including information retrieval, distributed computing, large-scale system design, networking and data storage, security, artificial intelligence, natural language processing, UI design and mobile; the list goes on and is growing every day. As a software engineer, you will work on a specific project critical to Google’s needs with opportunities to switch teams and projects as you and our fast-paced business grow and evolve. We need our engineers to be versatile, display leadership qualities and be enthusiastic to take on new problems across the full-stack as we continue to push technology forward.",
+                text = job.description,
 
             )
 
@@ -217,17 +202,10 @@ fun JobDescriptionContent(
                 fontSize = 16.sp
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            BulletPointText("Sed ut perspiciatis unde omnis iste natus error sit.")
-
-            Spacer(modifier = Modifier.height(12.dp))
-            BulletPointText("Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.")
-
-            Spacer(modifier = Modifier.height(12.dp))
-            BulletPointText("Experience with one or more general purpose programming languages.")
-
-            Spacer(modifier = Modifier.height(12.dp))
-            BulletPointText("Bachelor's degree in Computer Science, similar technical field of study or equivalent practical experience.")
+            job.requirements.forEach {
+                Spacer(modifier = Modifier.height(12.dp))
+                BulletPointText(it)
+            }
 
             Spacer(modifier = Modifier.height(40.dp))
             Button(
@@ -258,7 +236,8 @@ fun JobDescriptionPreview() {
     Surface {
         JobDescription(
             navigateBack = {},
-            navigateToUploadCv = {}
+            navigateToUploadCv = {},
+            jobId = "7m6d7h4hw5OAcTrDODpl"
         )
     }
 }
