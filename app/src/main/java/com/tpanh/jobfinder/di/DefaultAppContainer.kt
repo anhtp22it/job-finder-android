@@ -4,11 +4,13 @@ import android.content.Context
 import com.tpanh.jobfinder.repository.AuthRepository
 import com.tpanh.jobfinder.repository.CategoryRepository
 import com.tpanh.jobfinder.repository.ImageRepository
+import com.tpanh.jobfinder.repository.JobApplyRepository
 import com.tpanh.jobfinder.repository.JobRepository
 import com.tpanh.jobfinder.repository.UserRepository
 import com.tpanh.jobfinder.repository.impl.AuthRepositoryImpl
 import com.tpanh.jobfinder.repository.impl.CategoryRepositoryImpl
 import com.tpanh.jobfinder.repository.impl.ImageRepositoryImpl
+import com.tpanh.jobfinder.repository.impl.JobApplyRepositoryImpl
 import com.tpanh.jobfinder.repository.impl.JobRepositoryImpl
 import com.tpanh.jobfinder.repository.impl.UserRepositoryImpl
 
@@ -30,7 +32,9 @@ class DefaultAppContainer(private val context: Context): AppContainer {
     override val userRepository: UserRepository by lazy {
         UserRepositoryImpl(FirebaseModule.fireStore(), FirebaseModule.auth())
     }
-
+    override val jobApplyRepository: JobApplyRepository by lazy {
+        JobApplyRepositoryImpl(FirebaseModule.fireStore(), FirebaseModule.auth())
+    }
 
 
 }

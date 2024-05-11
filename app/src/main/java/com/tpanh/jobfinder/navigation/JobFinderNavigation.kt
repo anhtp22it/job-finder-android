@@ -112,7 +112,7 @@ fun JobFinderNavigation(
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 currentScreen = currentScreen,
-                navigateToUploadCv = { navController.navigate(JobFinderScreen.UploadCv.route) },
+                navigateToUploadCv = { jobId -> navController.navigate("${JobFinderScreen.UploadCv.route}/${jobId}") },
                 navigateBack = { navController.navigateUp() }
             )
         }
@@ -121,16 +121,18 @@ fun JobFinderNavigation(
             val jobId = backStackEntry.arguments?.getString("jobId")
             JobDescription(
                 navigateBack = { navController.navigateUp() },
-                navigateToUploadCv = { navController.navigate(JobFinderScreen.UploadCv.route) },
+                navigateToUploadCv = { jobId -> navController.navigate("${JobFinderScreen.UploadCv.route}/${jobId}") },
                 jobId = jobId ?: ""
             )
         }
 
-        composable(JobFinderScreen.UploadCv.route) {
+        composable("${JobFinderScreen.UploadCv.route}/{jobId}") { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId")
             UploadCv(
                 navigateBack = { navController.navigateUp() },
                 navigateToSearchJob = { navController.navigate(JobFinderScreen.SearchJob.route) },
-                navigateToHome = { navController.navigate(JobFinderScreen.Home.route) }
+                navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
+                jobId = jobId ?: ""
             )
         }
 

@@ -52,7 +52,7 @@ import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
 @Composable
 fun JobDescription(
     navigateBack: () -> Unit,
-    navigateToUploadCv: () -> Unit,
+    navigateToUploadCv: (String) -> Unit,
     jobId: String
 ) {
     Scaffold (
@@ -83,7 +83,7 @@ fun BulletPointText(text: String) {
 
 @Composable
 fun JobDescriptionContent(
-    navigateToUploadCv: () -> Unit,
+    navigateToUploadCv: (String) -> Unit,
     jobId: String,
     jobDescriptionViewModel: JobDescriptionViewModel = viewModel(
         factory = AppViewModelProvider.Factory
@@ -217,7 +217,7 @@ fun JobDescriptionContent(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { /*TODO*/ }
+                onClick = { navigateToUploadCv(job.id) }
             ) {
                 Text(
                     "APPLY NOW",

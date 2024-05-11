@@ -52,7 +52,7 @@ import com.tpanh.jobfinder.screens.components.NavigateBackBar
 @Composable
 fun SearchJob(
     navigateBack: () -> Unit,
-    navigateToUploadCv: () -> Unit,
+    navigateToUploadCv: (Any?) -> Unit,
     navigateToHome: () -> Unit = {},
     navigateToSaveJob: () -> Unit = {},
     navigateToProfile: () -> Unit = {},

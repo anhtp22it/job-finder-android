@@ -1,6 +1,7 @@
 package com.tpanh.jobfinder.screens
 
 import android.net.Uri
+import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -35,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,12 +53,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.extensions.dashedBorder
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.utils.formatBytes
 import com.tpanh.jobfinder.utils.getFileName
 import com.tpanh.jobfinder.utils.getFileSize
+import com.tpanh.jobfinder.viewmodel.UploadCvViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -63,7 +70,8 @@ import java.util.Locale
 fun UploadCv(
     navigateToSearchJob: () -> Unit,
     navigateBack: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    jobId: String
 ) {
     Scaffold (
         topBar = {
@@ -77,7 +85,8 @@ fun UploadCv(
         ) {
             UploadCvContent(
                 navigateToSearchJob = navigateToSearchJob,
-                navigateToHome = navigateToHome
+                navigateToHome = navigateToHome,
+                jobId = jobId
             )
         }
     }
@@ -86,24 +95,29 @@ fun UploadCv(
 @Composable
 fun UploadCvContent(
     navigateToSearchJob: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    jobId: String,
+    uploadCvViewModel: UploadCvViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    uploadCvViewModel.getJob(jobId)
+
+    val job by uploadCvViewModel.job.collectAsState()
+    
+    val jobApply by uploadCvViewModel.applyJob.collectAsState()
 
     val contentResolver = LocalContext.current.contentResolver
 
-    var pdfUri by remember { mutableStateOf<Uri?>(null) }
     var pdfFileName by remember { mutableStateOf<String?>(null) }
     var pdfFileSize by remember { mutableStateOf<Long?>(null) }
     val getContent =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            pdfUri = uri
+            if (uri != null) {
+                uploadCvViewModel.onCvSelected(uri)
+            }
             pdfFileName = uri?.let { getFileName(it, contentResolver) }
             pdfFileSize = getFileSize(uri, contentResolver)
         }
 
-    var isSuccess by remember {
-        mutableStateOf(true)
-    }
 
     Column (
         modifier = Modifier
@@ -119,15 +133,15 @@ fun UploadCvContent(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_google),
+            AsyncImage(
+                model = job.image,
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(75.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFAFECFE))
-                    .padding(16.dp),
+                    .background(Color(0xFFAFECFE)),
                 alignment = Alignment.Center,
+                contentScale = ContentScale.Crop
             )
         }
         Box (
@@ -143,7 +157,7 @@ fun UploadCvContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "UI/UX Designer",
+                    text = job.title,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -155,7 +169,7 @@ fun UploadCvContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text (
-                        text = "Google",
+                        text = job.company,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -166,7 +180,7 @@ fun UploadCvContent(
                         fontSize = 32.sp
                     )
                     Text (
-                        text = "California",
+                        text = job.location,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -177,7 +191,7 @@ fun UploadCvContent(
                         fontSize = 32.sp
                     )
                     Text(
-                        text = "1 day ago",
+                        text = DateUtils.getRelativeTimeSpanString(job.createdAt, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString(),
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 18.sp
                     )
@@ -185,7 +199,7 @@ fun UploadCvContent(
             }
         }
 
-        if (isSuccess == false) {
+        if (uploadCvViewModel.isSuccess == false) {
             Column (
                 modifier = Modifier
                     .fillMaxSize()
@@ -203,7 +217,7 @@ fun UploadCvContent(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                if (pdfUri == null) {
+                if (uploadCvViewModel.pdfUri == null) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -302,7 +316,7 @@ fun UploadCvContent(
                                 horizontalArrangement = Arrangement.Start,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { pdfUri = null }
+                                    .clickable { uploadCvViewModel.pdfUri = null }
                             ) {
                                 Icon(
                                     Icons.Outlined.Delete,
@@ -334,8 +348,8 @@ fun UploadCvContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp),
-                    value = "",
-                    onValueChange = {  },
+                    value = jobApply.description,
+                    onValueChange = { uploadCvViewModel.onDescriptionChanged(it) },
                     singleLine = false,
                     shape = RoundedCornerShape(16.dp),
                     placeholder = {
@@ -367,7 +381,7 @@ fun UploadCvContent(
                             containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         ),
                         shape = RoundedCornerShape(5.dp),
-                        onClick = { /*TODO*/ }
+                        onClick = { uploadCvViewModel.applyJob() }
                     ) {
                         Text(
                             text = "APPLY NOW",
@@ -536,7 +550,8 @@ fun UploadCvPreview() {
         UploadCv(
             navigateBack = {},
             navigateToSearchJob = {},
-            navigateToHome = {}
+            navigateToHome = {},
+            jobId = "6b7PerH7TJXiPtw5TyFi0WgT1G22"
         )
     }
 }
