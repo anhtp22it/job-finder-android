@@ -102,6 +102,7 @@ fun JobFinderNavigation(
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 navigateToJobDesc = { jobId -> navController.navigate("${JobFinderScreen.JobDescription.route}/${jobId}") },
+                navigateToChangePassword = { navController.navigate(JobFinderScreen.ChangePassword.route) },
                 currentScreen = currentScreen
             )
         }

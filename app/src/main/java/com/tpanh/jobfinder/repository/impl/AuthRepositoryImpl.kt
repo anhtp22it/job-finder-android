@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.repository.impl
 
+import android.util.Log
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -43,24 +44,31 @@ class AuthRepositoryImpl(
     override fun changePassword(
         oldPassword: String,
         newPassword: String
-    ): Flow<Resource<AuthResult>> {
-        return flow {
-            emit(value = Resource.Loading())
-            val user = auth.currentUser
-            user?.updatePassword(newPassword)?.await()
-            emit(value = Resource.Success(data = AuthResult::class.java.newInstance()))
-        }.catch {
-            emit(value = Resource.Error(it.message.toString()))
-        }
+    ) {
+        val user = auth.currentUser
+        val credential = EmailAuthProvider.getCredential(user?.email.toString(), oldPassword)
+        user?.reauthenticate(credential)
+            ?.addOnSuccessListener {
+                user.updatePassword(newPassword)
+                    .addOnSuccessListener {
+                        Log.d("AuthRepositoryImpl", "Password updated.")
+                    }
+                    .addOnFailureListener {
+                        Log.d("AuthRepositoryImpl", "Error password not updated.")
+                    }
+            }
+            ?.addOnFailureListener {
+                Log.d("AuthRepositoryImpl", "Error re-authenticate.")
+            }
     }
 
-    override fun sendEmailResetPassword(email: String): Flow<Resource<AuthResult>> {
-        return flow {
-            emit(value = Resource.Loading())
-            auth.sendPasswordResetEmail(email).await()
-            emit(value = Resource.Success(data = AuthResult::class.java.newInstance()))
-        }.catch {
-            emit(value = Resource.Error(it.message.toString()))
-        }
+    override fun sendEmailResetPassword(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                Log.d("AuthRepositoryImpl", "Email sent.")
+            }
+            .addOnFailureListener {
+                Log.d("AuthRepositoryImpl", "Error email not sent.")
+            }
     }
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.update
 class ForgotPasswordViewModel(
     private val authRepository: AuthRepository
 ): ViewModel() {
-    private val TAG = ForgotPasswordViewModel::class.simpleName
     private val _uiState = MutableStateFlow(User(email = ""))
     val uiState = _uiState.asStateFlow()
 
@@ -73,12 +72,18 @@ class ForgotPasswordViewModel(
 
     }
 
-    fun changePassword(oldPassword: String, newPassword: String, confirmPassword: String) {
+    fun changePassword(
+        oldPassword: String,
+        newPassword: String,
+        confirmPassword: String,
+        navigateToLogin: () -> Unit
+    ) {
         if (newPassword != confirmPassword) {
             Toast.makeText(null, "New password and confirm password must be the same", Toast.LENGTH_SHORT).show()
             return
         } else {
             authRepository.changePassword(oldPassword, newPassword)
+            navigateToLogin()
         }
     }
 }

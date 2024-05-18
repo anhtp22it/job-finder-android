@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,12 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.model.Job
@@ -57,6 +60,7 @@ fun Home(
     navigateToPostJob: () -> Unit = {},
     navigateToSearch: () -> Unit = {},
     navigateToJobDesc: (String) -> Unit,
+    navigateToChangePassword: () -> Unit,
     currentScreen: JobFinderScreen
 ) {
     Scaffold(
@@ -77,7 +81,8 @@ fun Home(
                 .fillMaxSize()
         ) {
             HomeContent(
-                navigateToJobDesc = navigateToJobDesc
+                navigateToJobDesc = navigateToJobDesc,
+                navigateToChangePassword = navigateToChangePassword
             )
         }
     }
@@ -86,10 +91,12 @@ fun Home(
 @Composable
 fun HomeContent(
     homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    navigateToJobDesc: (String) -> Unit
+    navigateToJobDesc: (String) -> Unit,
+    navigateToChangePassword: () -> Unit
 ) {
 
     val jobs by homeViewModel.jobs.collectAsState()
+    val user by homeViewModel.user.collectAsState()
 
     Column(
         modifier = Modifier
@@ -117,12 +124,14 @@ fun HomeContent(
                     fontWeight = FontWeight.Bold
                 )
             }
-            Image(
-                painter = painterResource(id = R.drawable.avatar),
+            AsyncImage(
+                model = user.avatar,
                 contentDescription = "avatar",
                 modifier = Modifier
                     .size(35.dp)
                     .clip(CircleShape)
+                    .clickable { navigateToChangePassword() },
+                contentScale = ContentScale.Crop
             )
         }
 
@@ -319,7 +328,8 @@ fun HomeScreenPreview() {
     Surface {
         Home(
             currentScreen = JobFinderScreen.Home,
-            navigateToJobDesc = { }
+            navigateToJobDesc = { },
+            navigateToChangePassword = {}
         )
     }
 }
