@@ -16,6 +16,7 @@ import com.tpanh.jobfinder.screens.AddLanguage
 import com.tpanh.jobfinder.screens.AddResume
 import com.tpanh.jobfinder.screens.AddSkill
 import com.tpanh.jobfinder.screens.AddWorkExperience
+import com.tpanh.jobfinder.screens.ApplyJobDesc
 import com.tpanh.jobfinder.screens.ChangePassword
 import com.tpanh.jobfinder.screens.EditProfile
 import com.tpanh.jobfinder.screens.Filter
@@ -26,6 +27,7 @@ import com.tpanh.jobfinder.screens.Language
 import com.tpanh.jobfinder.screens.ListMyApplication
 import com.tpanh.jobfinder.screens.Login
 import com.tpanh.jobfinder.screens.MyApplication
+import com.tpanh.jobfinder.screens.MyJobs
 import com.tpanh.jobfinder.screens.OnBoarding
 import com.tpanh.jobfinder.screens.SaveJob
 import com.tpanh.jobfinder.screens.SearchJob
@@ -98,7 +100,7 @@ fun JobFinderNavigation(
             Home(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
                 navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
-                navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
+                navigateToProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 navigateToJobDesc = { jobId -> navController.navigate("${JobFinderScreen.JobDescription.route}/${jobId}") },
@@ -107,11 +109,11 @@ fun JobFinderNavigation(
             )
         }
 
-        composable(JobFinderScreen.SearchJob.route) {backStackEntry ->
+        composable(JobFinderScreen.SearchJob.route) {
             SearchJob(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
                 navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
-                navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
+                navigateToProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 currentScreen = currentScreen,
@@ -193,7 +195,7 @@ fun JobFinderNavigation(
             ViewProfile(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
                 navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
-                navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
+                navigateToProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 currentScreen = currentScreen,
@@ -204,6 +206,7 @@ fun JobFinderNavigation(
                 navigateToLanguage = { navController.navigate(JobFinderScreen.Language.route) },
                 navigateToEditProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
                 navigateToMyApplications = { navController.navigate(JobFinderScreen.MyApplications.route) },
+                navigateToMyJobs = { navController.navigate(JobFinderScreen.MyJobs.route) }
             )
         }
 
@@ -262,6 +265,21 @@ fun JobFinderNavigation(
                 navigateToMyApplications = { navController.navigate(JobFinderScreen.MyApplications.route) },
                 navigateToViewProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
                 navigateToLogin = { navController.navigate(JobFinderScreen.Login.route) }
+            )
+        }
+
+        composable(JobFinderScreen.MyJobs.route) {
+            MyJobs(
+                navigateBack = { navController.navigateUp() },
+                navigateToApplyJobDesc = { jobId -> navController.navigate("${JobFinderScreen.ApplyJobDesc.route}/${jobId}") }
+            )
+        }
+
+        composable("${JobFinderScreen.ApplyJobDesc.route}/{jobId}") { backStackEntry ->
+            val jobId = backStackEntry.arguments?.getString("jobId")
+            ApplyJobDesc(
+                navigateBack = { navController.navigateUp() },
+                jobId = jobId ?: ""
             )
         }
     }

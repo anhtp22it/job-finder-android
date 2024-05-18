@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Class
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Button
@@ -211,7 +212,7 @@ fun EditProfile(
 
                     IconButton(onClick = { navigateToMyApplications() }) {
                         Icon(
-                            Icons.Outlined.Settings,
+                            Icons.Outlined.Class,
                             contentDescription = "Share",
                             tint = Color.White
                         )

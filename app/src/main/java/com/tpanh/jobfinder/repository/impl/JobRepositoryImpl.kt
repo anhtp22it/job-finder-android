@@ -17,7 +17,6 @@ class JobRepositoryImpl(
 ) : JobRepository {
     override suspend fun getAllJob(): List<Job> {
         val jobs = mutableListOf<Job>()
-        val currentUserId = auth.currentUser?.uid
         fireStore.collection("jobs")
             .get()
             .addOnSuccessListener { result ->
@@ -33,8 +32,9 @@ class JobRepositoryImpl(
         return jobs
     }
 
-    override suspend fun getJobByUserId(userId: String): List<Job> {
+    override suspend fun getJobByCurrentUser(): List<Job> {
         val jobs = mutableListOf<Job>()
+        val userId = auth.currentUser?.uid ?: ""
         fireStore.collection("jobs")
             .whereEqualTo("userId", userId)
             .get()

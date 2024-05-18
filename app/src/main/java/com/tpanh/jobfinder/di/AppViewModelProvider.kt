@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.tpanh.jobfinder.JobFinderApplication
+import com.tpanh.jobfinder.viewmodel.ApplyJobDescriptionViewModel
 import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 import com.tpanh.jobfinder.viewmodel.HomeViewModel
@@ -13,6 +14,7 @@ import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
 import com.tpanh.jobfinder.viewmodel.ListMyApplicationViewModel
 import com.tpanh.jobfinder.viewmodel.LoginViewModel
 import com.tpanh.jobfinder.viewmodel.MyApplicationViewModel
+import com.tpanh.jobfinder.viewmodel.MyJobsViewModel
 import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 import com.tpanh.jobfinder.viewmodel.SaveJobViewModel
 import com.tpanh.jobfinder.viewmodel.SearchJobViewModel
@@ -120,6 +122,21 @@ object AppViewModelProvider {
             MyApplicationViewModel(
                 jobApplyRepository = application.container.jobApplyRepository,
                 imageRepository = application.container.imageRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            MyJobsViewModel(
+                jobRepository = application.container.jobRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            ApplyJobDescriptionViewModel(
+                jobApplyRepository = application.container.jobApplyRepository,
+                userRepository = application.container.userRepository
             )
         }
     }

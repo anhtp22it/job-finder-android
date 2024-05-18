@@ -44,6 +44,20 @@ class UserRepositoryImpl(
         return savedJobs
     }
 
+    override suspend fun getUserById(userId: String): User {
+        var user = User()
+        fireStore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener {
+                user = it.toObject(User::class.java)!!
+            }
+            .addOnFailureListener {
+                Log.e("UserRepositoryImpl", "Error getting documents.", it)
+            }.await()
+        return user
+    }
+
     override suspend fun saveJob(jobId: String) {
         val userId = auth.currentUser?.uid
         fireStore.collection("users")
