@@ -308,7 +308,6 @@ fun HomeContent(
         Spacer(modifier = Modifier.height(16.dp))
         jobs.forEach {
             val isSaved = homeViewModel.isSaved(it)
-            Log.d("HomeContent", "isSaved: $isSaved")
             JobItem(
                 job = it,
                 navigateToJobDesc = navigateToJobDesc,

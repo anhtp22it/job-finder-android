@@ -2,7 +2,7 @@ package com.tpanh.jobfinder.model
 
 data class JobApply(
     var id: String = "",
-    val jobId: String = "",
+    val job: Job = Job(),
     var userId: String = "",
     val cv: String = "",
     val description: String = "",

@@ -84,7 +84,7 @@ import java.util.Date
 @Composable
 fun EditProfile(
     editProfileViewModel: EditProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    navigateToSetting: () -> Unit,
+    navigateToMyApplications: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToViewProfile: () -> Unit
 ) {
@@ -209,7 +209,7 @@ fun EditProfile(
                         )
                     }
 
-                    IconButton(onClick = { navigateToSetting() }) {
+                    IconButton(onClick = { navigateToMyApplications() }) {
                         Icon(
                             Icons.Outlined.Settings,
                             contentDescription = "Share",
@@ -508,7 +508,7 @@ fun EditProfilePreview() {
         color = MaterialTheme.colorScheme.background
     ) {
         EditProfile(
-            navigateToSetting = {  },
+            navigateToMyApplications = {  },
             navigateToViewProfile = {  },
             navigateToLogin = {  }
         )

@@ -52,7 +52,7 @@ class UploadCvViewModel(
 
     fun applyJob() {
         _applyJob.update {
-            it.copy(jobId = job.value.id)
+            it.copy(job = job.value)
         }
         viewModelScope.launch {
             pdfUri?.let { uri ->

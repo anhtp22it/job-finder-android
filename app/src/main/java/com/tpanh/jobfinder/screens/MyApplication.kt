@@ -1,5 +1,7 @@
 package com.tpanh.jobfinder.screens
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
@@ -28,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,12 +49,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.extensions.dashedBorder
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.utils.formatBytes
 import com.tpanh.jobfinder.utils.getFileName
 import com.tpanh.jobfinder.utils.getFileSize
+import com.tpanh.jobfinder.utils.normalizeString
 import com.tpanh.jobfinder.viewmodel.MyApplicationViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -58,7 +66,7 @@ import java.util.Locale
 fun MyApplication(
     navigateBack: () -> Unit,
     navigateToSearchJob: () -> Unit,
-    myApplicationViewModel: MyApplicationViewModel = viewModel()
+    applyId: String
 ) {
     Scaffold (
         topBar = {
@@ -71,7 +79,8 @@ fun MyApplication(
             modifier = Modifier.padding(it)
         ) {
             MyApplicationContent(
-                navigateToSearchJob = navigateToSearchJob
+                navigateToSearchJob = navigateToSearchJob,
+                applyId = applyId
             )
         }
     }
@@ -80,18 +89,23 @@ fun MyApplication(
 @Composable
 fun MyApplicationContent(
     navigateToSearchJob: () -> Unit,
+    applyId: String,
+    myApplicationViewModel: MyApplicationViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    myApplicationViewModel.getMyApplies(applyId)
+    val apply by myApplicationViewModel.apply.collectAsState()
+
     val contentResolver = LocalContext.current.contentResolver
 
-    var pdfUri by remember { mutableStateOf<Uri?>(null) }
-    var pdfFileName by remember { mutableStateOf<String?>(null) }
-    var pdfFileSize by remember { mutableStateOf<Long?>(null) }
-    val getContent =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            pdfUri = uri
-            pdfFileName = uri?.let { getFileName(it, contentResolver) }
-            pdfFileSize = getFileSize(uri, contentResolver)
+    var pdfUri = myApplicationViewModel.pdfUri
+    var pdfFileName = pdfUri?.let { getFileName(it, contentResolver) }
+    var pdfFileSize = pdfUri?.let { getFileSize(it, contentResolver) }
+
+    val openFile = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+
         }
+    }
 
     Column (
         modifier = Modifier
@@ -118,21 +132,24 @@ fun MyApplicationContent(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Image(painter = painterResource(
-                    id = R.drawable.ic_google),
+                AsyncImage(
+                    model = apply.job.image,
                     contentDescription = "Job image",
                     modifier = Modifier
                         .size(45.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "UI/UX Designer",
+                Text(
+                    text = apply.job.title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Google inc • California, USA",
+                    text = "${apply.job.company} • ${apply.job.location}",
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
@@ -150,15 +167,15 @@ fun MyApplicationContent(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "•    Senior designer",
+                    text = "•    ${apply.job.subCategory}",
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "•    Full time",
+                    text = "•    ${normalizeString(apply.job.type.name)}",
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "•    1-3 Years work experience",
+                    text = "•    ${normalizeString(apply.job.workplace.name)}",
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(text = "Application details",
@@ -182,6 +199,15 @@ fun MyApplicationContent(
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(0.2f),
                             shape = RoundedCornerShape(16.dp)
                         )
+                        .clickable {
+                            pdfUri?.let { uri ->
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    data = uri
+                                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                }
+                                openFile.launch(Intent.createChooser(intent, "Open file with"))
+                            }
+                        }
                 ) {
                     Column(
                         modifier = Modifier
@@ -202,15 +228,6 @@ fun MyApplicationContent(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Column {
-                                pdfFileName?.let { fileName ->
-                                    Text(
-                                        text = "$fileName",
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Light
-                                    )
-                                }
-
                                 Row {
                                     pdfFileSize?.let { size ->
                                         val format =
@@ -266,7 +283,8 @@ fun PreviewMyApplication() {
     Surface {
         MyApplication(
             navigateBack = {},
-            navigateToSearchJob = {}
+            navigateToSearchJob = {},
+            applyId = "1"
         )
     }
 }

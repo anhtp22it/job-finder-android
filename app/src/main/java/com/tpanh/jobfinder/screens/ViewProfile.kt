@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cases
+import androidx.compose.material.icons.outlined.Class
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
@@ -70,7 +71,8 @@ fun ViewProfile(
     navigateToWorkExperience: () -> Unit,
     navigateToEducation: () -> Unit,
     navigateToSkill: () -> Unit,
-    navigateToLanguage: () -> Unit
+    navigateToLanguage: () -> Unit,
+    navigateToMyApplications: () -> Unit,
 ) {
     Scaffold (
         bottomBar = {
@@ -96,7 +98,8 @@ fun ViewProfile(
                 navigateToWorkExperience = navigateToWorkExperience,
                 navigateToEducation = navigateToEducation,
                 navigateToSkill = navigateToSkill,
-                navigateToLanguage = navigateToLanguage
+                navigateToLanguage = navigateToLanguage,
+                navigateToMyApplications = navigateToMyApplications
             )
         }
     }
@@ -112,6 +115,7 @@ fun ViewProfileContent(
     navigateToEducation: () -> Unit,
     navigateToSkill: () -> Unit,
     navigateToLanguage: () -> Unit,
+    navigateToMyApplications: () -> Unit
 ) {
 
     val uiState by viewProfileViewModel.uiState.collectAsState()
@@ -207,7 +211,6 @@ fun ViewProfileContent(
                             }
                         }
                     }
-
                 }
                 Row {
                     IconButton(onClick = { /*TODO*/ }) {
@@ -218,10 +221,10 @@ fun ViewProfileContent(
                         )
                     }
 
-                    IconButton(onClick = { navigateToSearch() }) {
+                    IconButton(onClick = { navigateToMyApplications() }) {
                         Icon(
-                            Icons.Outlined.Settings,
-                            contentDescription = "Share",
+                            Icons.Outlined.Class,
+                            contentDescription = "Search",
                             tint = Color.White
                         )
                     }
@@ -452,7 +455,8 @@ fun PreviewViewProfile() {
             navigateToWorkExperience = {},
             navigateToEducation = {},
             navigateToSkill = {},
-            navigateToLanguage = {}
+            navigateToLanguage = {},
+            navigateToMyApplications = {}
         )
     }
 }

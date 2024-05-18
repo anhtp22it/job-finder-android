@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tpanh.jobfinder.model.JobApply
 import com.tpanh.jobfinder.repository.JobApplyRepository
+import kotlinx.coroutines.tasks.await
 
 class JobApplyRepositoryImpl(
     private val fireStore: FirebaseFirestore,
@@ -26,5 +27,39 @@ class JobApplyRepositoryImpl(
                     Log.e("JobApplyRepository", "Job apply failed", it)
                 }
         }
+    }
+
+    override suspend fun getMyApplies(): List<JobApply> {
+        val user = auth.currentUser
+        val applies = mutableListOf<JobApply>()
+        if (user != null) {
+            fireStore.collection("jobApplies")
+                .whereEqualTo("userId", user.uid)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val apply = document.toObject(JobApply::class.java)
+                        applies.add(apply)
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e("JobApplyRepository", "Get my applies failed", it)
+                }.await()
+        }
+        return applies
+    }
+
+    override suspend fun getApplyById(id: String): JobApply {
+        var apply = JobApply()
+        fireStore.collection("jobApplies")
+            .document(id)
+            .get()
+            .addOnSuccessListener {
+                apply = it.toObject(JobApply::class.java)!!
+            }
+            .addOnFailureListener {
+                Log.e("JobApplyRepository", "Get apply by id failed", it)
+            }.await()
+        return apply
     }
 }
