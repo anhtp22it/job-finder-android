@@ -257,6 +257,7 @@ fun JobFinderNavigation(
             EditProfile(
                 navigateToSetting = { },
                 navigateToViewProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
+                navigateToLogin = { navController.navigate(JobFinderScreen.Login.route) }
             )
         }
     }

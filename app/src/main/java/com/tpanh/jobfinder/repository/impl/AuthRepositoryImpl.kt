@@ -71,4 +71,8 @@ class AuthRepositoryImpl(
                 Log.d("AuthRepositoryImpl", "Error email not sent.")
             }
     }
+
+    override fun logout() {
+        auth.signOut()
+    }
 }

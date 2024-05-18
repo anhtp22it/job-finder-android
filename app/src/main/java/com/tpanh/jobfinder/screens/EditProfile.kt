@@ -59,7 +59,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -72,17 +74,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.extensions.scaleDown
 import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfile(
-    editProfileViewModel: EditProfileViewModel = viewModel(),
+    editProfileViewModel: EditProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToSetting: () -> Unit,
+    navigateToLogin: () -> Unit,
     navigateToViewProfile: () -> Unit
 ) {
 
@@ -197,11 +200,12 @@ fun EditProfile(
 
                 }
                 Row {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { editProfileViewModel.logout(navigateToLogin) }) {
                         Icon(
-                            Icons.Outlined.Share,
-                            contentDescription = "Share",
-                            tint = Color.White
+                            painter = painterResource(id = R.drawable.outline_reply_24),
+                            contentDescription = "Logout",
+                            tint = Color.White,
+                            modifier = Modifier.rotate(180f)
                         )
                     }
 
@@ -505,7 +509,8 @@ fun EditProfilePreview() {
     ) {
         EditProfile(
             navigateToSetting = {  },
-            navigateToViewProfile = {  }
+            navigateToViewProfile = {  },
+            navigateToLogin = {  }
         )
     }
 }

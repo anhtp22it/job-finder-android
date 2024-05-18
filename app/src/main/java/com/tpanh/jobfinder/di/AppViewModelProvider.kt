@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.tpanh.jobfinder.JobFinderApplication
+import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 import com.tpanh.jobfinder.viewmodel.HomeViewModel
 import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
@@ -94,6 +95,13 @@ object AppViewModelProvider {
             val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
             SpecializationViewModel(
                 categoryRepository = application.container.categoryRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            EditProfileViewModel(
+                authRepository = application.container.authRepository
             )
         }
     }
