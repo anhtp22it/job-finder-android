@@ -148,7 +148,7 @@ class PostJobViewModel(
 
     private fun getCategories() {
         viewModelScope.launch {
-            _categories.value = categoryRepository.getCategories().first()
+            _categories.value = categoryRepository.getCategories()
             println(categories)
         }
     }

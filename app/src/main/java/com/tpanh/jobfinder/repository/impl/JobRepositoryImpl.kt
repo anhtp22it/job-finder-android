@@ -90,7 +90,21 @@ class JobRepositoryImpl(
     }
 
     override suspend fun searchJob(title: String): List<Job> {
-        TODO("Not yet implemented")
+        val jobs = mutableListOf<Job>()
+        fireStore.collection("jobs")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val job = document.toObject(Job::class.java)
+                    if (job.title.contains(title, ignoreCase = true) || job.subCategory.contains(title, ignoreCase = true)) {
+                        jobs.add(job)
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }.await()
+        return jobs
     }
 
     override suspend fun postJob(job: Job) {
@@ -105,5 +119,19 @@ class JobRepositoryImpl(
             .addOnFailureListener {
                 Log.e("JobRepositoryImpl", "Error adding document", it)
             }.await()
+    }
+
+    override suspend fun countJobByCategory(categoryId: String): Int {
+        var count = 0
+        fireStore.collection("jobs")
+            .whereEqualTo("categoryId", categoryId)
+            .get()
+            .addOnSuccessListener { result ->
+                count = result.size()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }.await()
+        return count
     }
 }

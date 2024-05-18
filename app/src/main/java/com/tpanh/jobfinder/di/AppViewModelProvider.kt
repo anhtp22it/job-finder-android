@@ -12,7 +12,9 @@ import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
 import com.tpanh.jobfinder.viewmodel.LoginViewModel
 import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 import com.tpanh.jobfinder.viewmodel.SaveJobViewModel
+import com.tpanh.jobfinder.viewmodel.SearchJobViewModel
 import com.tpanh.jobfinder.viewmodel.SignUpViewModel
+import com.tpanh.jobfinder.viewmodel.SpecializationViewModel
 import com.tpanh.jobfinder.viewmodel.UploadCvViewModel
 
 object AppViewModelProvider {
@@ -77,6 +79,21 @@ object AppViewModelProvider {
             SaveJobViewModel(
                 userRepository = application.container.userRepository,
                 jobRepository = application.container.jobRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            SearchJobViewModel(
+                jobRepository = application.container.jobRepository,
+                userRepository = application.container.userRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            SpecializationViewModel(
+                categoryRepository = application.container.categoryRepository
             )
         }
     }

@@ -1,6 +1,5 @@
 package com.tpanh.jobfinder.screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,6 +32,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,13 +48,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
+import com.tpanh.jobfinder.viewmodel.SpecializationViewModel
 
 @Composable
 fun Specialization(
     navigateBack: () -> Unit,
-    navigateToFilter: () -> Unit
+    navigateToFilter: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -65,15 +69,20 @@ fun Specialization(
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            SpecializationContent()
+            SpecializationContent(
+                navigateToFilter = navigateToFilter,
+                navigateToSearch = navigateToSearch
+            )
         }
     }
 }
 
 @Composable
-fun SpecializationContent() {
-
-    var query by remember { mutableStateOf("") }
+fun SpecializationContent(
+    specializationViewModel: SpecializationViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToFilter: () -> Unit,
+    navigateToSearch: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -90,8 +99,8 @@ fun SpecializationContent() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
+                value = specializationViewModel.query,
+                onValueChange = { specializationViewModel.onQueryChange(it) },
                 label = { Text("Search") },
                 leadingIcon = {
                     Icon(
@@ -115,7 +124,7 @@ fun SpecializationContent() {
             )
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { navigateToFilter() },
                 shape = RoundedCornerShape(5.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFFA500)
@@ -139,6 +148,8 @@ fun SpecializationContent() {
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
+
+    val categories by specializationViewModel.categories.collectAsState()
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
@@ -146,27 +157,31 @@ fun SpecializationContent() {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxHeight()
     ) {
-//        items(CategoryData.categories) { item ->
-//            CategoryComponent(
-//                icon = item.image,
-//                title = item.category,
-//                job = item.subCategories.size
-//            )
-//        }
+        items(categories) { item ->
+            CategoryComponent(
+                icon = item.image,
+                title = item.category,
+                job = 0,
+                onClick = {
+                    navigateToSearch()
+                }
+            )
+        }
     }
 }
 
 @Composable
 fun CategoryComponent(
-    @DrawableRes icon: Int,
+    icon: String,
     title: String,
-    job: Int
+    job: Int,
+    onClick: () -> Unit
 ) {
 
     var isPressed by remember { mutableStateOf(false) }
 
     Button(
-        onClick = {},
+        onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
         ),
@@ -197,8 +212,8 @@ fun CategoryComponent(
                 modifier = Modifier
                     .size(70.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = icon),
+                AsyncImage(
+                    model = icon,
                     contentDescription = title,
                     modifier = Modifier.size(40.dp),
                 )
@@ -224,7 +239,8 @@ fun CategoryComponent(
 fun SpecializationPreview() {
     Specialization(
         navigateBack = {},
-        navigateToFilter = {}
+        navigateToFilter = {},
+        navigateToSearch = {}
     )
 }
 

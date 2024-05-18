@@ -297,13 +297,6 @@ fun HomeContent(
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.height(16.dp))
-        val onSaveJob: (Job) -> Unit = { job ->
-            homeViewModel.saveJob(job)
-        }
-
-        val onUnSaveJob: (Job) -> Unit = { job ->
-            homeViewModel.unSaveJob(job)
-        }
         jobs.forEach {
             val isSaved = homeViewModel.isSaved(it)
             Log.d("HomeContent", "isSaved: $isSaved")

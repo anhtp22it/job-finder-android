@@ -2,11 +2,13 @@ package com.tpanh.jobfinder.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.tpanh.jobfinder.model.JobFilter
 import com.tpanh.jobfinder.screens.AboutMe
 import com.tpanh.jobfinder.screens.AddAJob
 import com.tpanh.jobfinder.screens.AddEducation
@@ -104,7 +106,7 @@ fun JobFinderNavigation(
             )
         }
 
-        composable(JobFinderScreen.SearchJob.route) {
+        composable(JobFinderScreen.SearchJob.route) {backStackEntry ->
             SearchJob(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
                 navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
@@ -112,7 +114,8 @@ fun JobFinderNavigation(
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
                 currentScreen = currentScreen,
-                navigateToUploadCv = { jobId -> navController.navigate("${JobFinderScreen.UploadCv.route}/${jobId}") },
+                navigateToSpecialization = { navController.navigate(JobFinderScreen.Specialization.route) },
+                navigateToJobDesc = { jobId -> navController.navigate("${JobFinderScreen.JobDescription.route}/${jobId}") },
                 navigateBack = { navController.navigateUp() }
             )
         }
@@ -139,7 +142,8 @@ fun JobFinderNavigation(
         composable(JobFinderScreen.Specialization.route) {
             Specialization(
                 navigateBack = { navController.navigateUp() },
-                navigateToFilter = { navController.navigate(JobFinderScreen.Filter.route) }
+                navigateToFilter = { navController.navigate(JobFinderScreen.Filter.route) },
+                navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) }
             )
         }
 
