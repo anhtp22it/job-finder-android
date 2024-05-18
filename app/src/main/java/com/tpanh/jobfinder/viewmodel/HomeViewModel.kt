@@ -36,13 +36,13 @@ class HomeViewModel(
 
     fun saveJob(job: Job) {
         viewModelScope.launch {
-            jobRepository.saveJob(job)
+            userRepository.saveJob(job.id)
         }
     }
 
     fun unSaveJob(job: Job) {
         viewModelScope.launch {
-            jobRepository.unSaveJob(job)
+            userRepository.removeSavedJob(job.id)
         }
     }
 

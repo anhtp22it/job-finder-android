@@ -106,48 +106,4 @@ class JobRepositoryImpl(
                 Log.e("JobRepositoryImpl", "Error adding document", it)
             }.await()
     }
-
-    override suspend fun saveJob(job: Job) {
-        val currentUserId = auth.currentUser?.uid
-        if (currentUserId != null) {
-            val userRef = fireStore.collection("users").document(currentUserId)
-            fireStore.runTransaction { transaction ->
-                val snapshot = transaction.get(userRef)
-                val user = snapshot.toObject(User::class.java)
-                if (user != null) {
-                    val savedJobs = user.saveJobs.toMutableList()
-                    savedJobs.add(job.id)
-                    transaction.update(userRef, "saveJobs", savedJobs)
-                }
-            }.addOnSuccessListener {
-                Log.d("JobRepositoryImpl", "Job saved successfully.")
-            }.addOnFailureListener { e ->
-                Log.e("JobRepositoryImpl", "Error saving job", e)
-            }.await()
-        } else {
-            Log.e("JobRepositoryImpl", "No user is currently logged in.")
-        }
-    }
-
-    override suspend fun unSaveJob(job: Job) {
-        val currentUserId = auth.currentUser?.uid
-        if (currentUserId != null) {
-            val userRef = fireStore.collection("users").document(currentUserId)
-            fireStore.runTransaction { transaction ->
-                val snapshot = transaction.get(userRef)
-                val user = snapshot.toObject(User::class.java)
-                if (user != null) {
-                    val savedJobs = user.saveJobs.toMutableList()
-                    savedJobs.remove(job.id)
-                    transaction.update(userRef, "saveJobs", savedJobs)
-                }
-            }.addOnSuccessListener {
-                Log.d("JobRepositoryImpl", "Job unsaved successfully.")
-            }.addOnFailureListener { e ->
-                Log.e("JobRepositoryImpl", "Error unsaving job", e)
-            }.await()
-        } else {
-            Log.e("JobRepositoryImpl", "No user is currently logged in.")
-        }
-    }
 }

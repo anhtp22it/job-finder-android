@@ -14,8 +14,11 @@ class JobApplyRepositoryImpl(
         val user = auth.currentUser
         apply.userId = user?.uid.toString()
         if (user != null) {
+            val newJobApplyId = fireStore.collection("jobApplies").document().id
+            apply.id = newJobApplyId
             fireStore.collection("jobApplies")
-                .add(apply)
+                .document(newJobApplyId)
+                .set(apply)
                 .addOnSuccessListener {
                     Log.d("JobApplyRepository", "Job apply success")
                 }

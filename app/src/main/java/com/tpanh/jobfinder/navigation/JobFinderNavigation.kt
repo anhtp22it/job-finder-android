@@ -95,7 +95,7 @@ fun JobFinderNavigation(
         composable(JobFinderScreen.Home.route) {
             Home(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
-                navigateToSaveJob = { navController.navigate(JobFinderScreen.Home.route) },
+                navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
                 navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
@@ -107,7 +107,7 @@ fun JobFinderNavigation(
         composable(JobFinderScreen.SearchJob.route) {
             SearchJob(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
-                navigateToSaveJob = { navController.navigate(JobFinderScreen.Home.route) },
+                navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
                 navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
@@ -160,10 +160,11 @@ fun JobFinderNavigation(
             SaveJob(
                 currentScreen = currentScreen,
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
-                navigateToSaveJob = { },
+                navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
                 navigateToProfile = { navController.navigate(JobFinderScreen.ViewProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
-                navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) }
+                navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },
+                navigateToUploadCv = { jobId -> navController.navigate("${JobFinderScreen.UploadCv.route}/${jobId}") }
             )
         }
 
@@ -183,7 +184,7 @@ fun JobFinderNavigation(
         composable(JobFinderScreen.ViewProfile.route) {
             ViewProfile(
                 navigateToHome = { navController.navigate(JobFinderScreen.Home.route) },
-                navigateToSaveJob = { navController.navigate(JobFinderScreen.Home.route) },
+                navigateToSaveJob = { navController.navigate(JobFinderScreen.SaveJob.route) },
                 navigateToProfile = { navController.navigate(JobFinderScreen.EditProfile.route) },
                 navigateToPostJob = { navController.navigate(JobFinderScreen.PostJob.route) },
                 navigateToSearch = { navController.navigate(JobFinderScreen.SearchJob.route) },

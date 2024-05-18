@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollable
@@ -45,23 +46,29 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
+import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.viewmodel.SaveJobViewModel
 
 @Composable
 fun SaveJob(
-    saveJobViewModel: SaveJobViewModel = viewModel(),
+    saveJobViewModel: SaveJobViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToHome: () -> Unit,
     navigateToSaveJob: () -> Unit,
     navigateToProfile: () -> Unit,
     navigateToPostJob: () -> Unit,
     navigateToSearch: () -> Unit,
+    navigateToUploadCv: (String) -> Unit,
     currentScreen: JobFinderScreen
 ) {
-    val uiState by saveJobViewModel.uiState.collectAsState()
-    if (uiState.isEmpty()) {
+
+    val jobsSaved by saveJobViewModel.jobList.collectAsState()
+    Log.d("SaveJob", "jobsSaved: $jobsSaved")
+
+    if (jobsSaved.isEmpty()) {
         NoJobSave(
-            navigateToSearchJob = {}
+            navigateToSearchJob = { navigateToSearch() }
         )
     } else {
         Scaffold (
@@ -80,7 +87,8 @@ fun SaveJob(
                 modifier = Modifier.padding(it)
             ) {
                 SaveJobContent(
-                    saveJobViewModel = saveJobViewModel
+                    saveJobViewModel = saveJobViewModel,
+                    navigateToUploadCv = navigateToUploadCv
                 )
             }
         }
@@ -89,7 +97,8 @@ fun SaveJob(
 
 @Composable
 fun SaveJobContent(
-    saveJobViewModel: SaveJobViewModel
+    saveJobViewModel: SaveJobViewModel,
+    navigateToUploadCv: (String) -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -106,27 +115,44 @@ fun SaveJobContent(
             fontSize = 18.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
-        saveJobViewModel.uiState.value.forEach { job ->
+        saveJobViewModel.jobList.value.forEach { job ->
             com.tpanh.jobfinder.screens.components.SaveJobItem(
-                openMoreOption = {}
+                openMoreOption = {
+                    saveJobViewModel.openDialog = true
+                    saveJobViewModel.selectedJob = job
+                },
+                job = job
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
 
-    OptionDialog(
-        onApplyJob = {},
-        onDeleteJobSaved = {}
-    )
+    if (saveJobViewModel.openDialog && saveJobViewModel.selectedJob != null) {
+        OptionDialog(
+            job = saveJobViewModel.selectedJob!!,
+            onApplyJob = { navigateToUploadCv(saveJobViewModel.selectedJob!!.id) },
+            onDeleteJobSaved = {
+                saveJobViewModel.removeJobSaved(saveJobViewModel.selectedJob!!.id)
+                saveJobViewModel.openDialog = false
+                saveJobViewModel.selectedJob = null
+            },
+            onDismissRequest = {
+                saveJobViewModel.openDialog = false
+                saveJobViewModel.selectedJob = null
+            }
+        )
+    }
 }
 
 @Composable
 fun OptionDialog(
+    job: Job,
     onApplyJob: () -> Unit,
-    onDeleteJobSaved: () -> Unit
+    onDeleteJobSaved: () -> Unit,
+    onDismissRequest: () -> Unit
 ) {
     AlertDialog(
-        onDismissRequest = { /*TODO*/ },
+        onDismissRequest = { onDismissRequest() },
         confirmButton = { /*TODO*/ },
         title = {
             Divider(
@@ -142,7 +168,7 @@ fun OptionDialog(
                     .fillMaxWidth()
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { onDeleteJobSaved() },
                     shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
@@ -162,7 +188,7 @@ fun OptionDialog(
                     }
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { onApplyJob() },
                     shape = RoundedCornerShape(5.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
@@ -246,7 +272,8 @@ fun SaveJobPreview() {
             navigateToSaveJob = {},
             navigateToProfile = {},
             navigateToPostJob = {},
-            navigateToSearch = {}
+            navigateToSearch = {},
+            navigateToUploadCv = { }
         )
     }
 }

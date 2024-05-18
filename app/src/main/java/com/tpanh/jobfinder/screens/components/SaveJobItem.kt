@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens.components
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -25,16 +27,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.model.Job
+import com.tpanh.jobfinder.model.JobType
+import com.tpanh.jobfinder.model.Workplace
+import com.tpanh.jobfinder.utils.normalizeString
 
 @Composable
 fun SaveJobItem(
-    openMoreOption: () -> Unit = {}
+    openMoreOption: () -> Unit,
+    job: Job
 ) {
     Column (
         modifier = Modifier
@@ -56,21 +65,24 @@ fun SaveJobItem(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.company_logo),
+                    AsyncImage(
+                        model = job.image,
                         contentDescription = "Job Image",
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Product Designer",
+                        text = job.title,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Row {
                         Text(
-                            text = "Google inc",
+                            text = job.company,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -80,7 +92,7 @@ fun SaveJobItem(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "California, USA",
+                            text = job.location,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
@@ -105,10 +117,10 @@ fun SaveJobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Senior Designer",
+                    text = job.subCategory,
                     fontSize = 12.sp,
                     maxLines = 1
                 )
@@ -118,10 +130,10 @@ fun SaveJobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Full Time",
+                    text = normalizeString(job.type.name),
                     fontSize = 12.sp,
                     maxLines = 1
                 )
@@ -131,10 +143,10 @@ fun SaveJobItem(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .padding(vertical = 8.dp, horizontal = 24.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
             ) {
                 Text(
-                    text = "Apply",
+                    text = normalizeString(job.workplace?.name ?: ""),
                     fontSize = 12.sp,
                     maxLines = 1
                 )
@@ -147,13 +159,13 @@ fun SaveJobItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "25 minute ago",
+                text = DateUtils.getRelativeTimeSpanString(job.createdAt, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString(),
                 color = Color.Gray,
                 fontSize = 12.sp
             )
             Row {
                 Text(
-                    text = "$15K",
+                    text = "$${job.salary}",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
@@ -166,5 +178,28 @@ fun SaveJobItem(
 @Preview
 @Composable
 fun SaveJobItemPreview() {
-    SaveJobItem()
+    SaveJobItem(
+        openMoreOption = {},
+        job = Job(
+            id = "7m6d7h4hw5OAcTrDODpl",
+            title = "Android Developer",
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            location = "DN",
+            company = "VKU",
+            image = "https://firebasestorage.googleapis.com/v0/b/jobfinder-4e0c0.appspot.com/o/jobs%2F5e87fc15-01b2-4766-acd5-8f6b74b47e49.jpg?alt=media&token=d75a0749-a874-4329-9e25-f64cb8512349",
+            type = JobType.FULL_TIME,
+            requirements = listOf(
+                "Hỗ trợ cơm trưa cho các lớp fulltime",
+                "Cho mượn trang thiết bị học tập trong quá trình đào tạo",
+                "Hỗ trợ thông dịch khi phỏng vấn cùng Doanh nghiệp",
+                "Hỗ trợ tư vấn chuẩn bị hồ sơ xin VISA (sau khi đậu tuyển dụng)"
+            ),
+            categoryId = "3dCfQTrtldyE3XUgxLLc",
+            workplace = Workplace.ON_SITE,
+            subCategory = "Mobile Development",
+            salary = 1500,
+            createdAt = 1715314717068,
+            userId = "6b7PerH7TJXiPtw5TyFi0WgT1G22"
+        )
+    )
 }

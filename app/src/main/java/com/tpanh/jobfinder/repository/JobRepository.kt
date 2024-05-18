@@ -9,6 +9,4 @@ interface JobRepository {
     suspend fun getJobByCategory(categoryId: String): List<Job>
     suspend fun searchJob(title: String): List<Job>
     suspend fun postJob(job: Job)
-    suspend fun saveJob(job: Job)
-    suspend fun unSaveJob(job: Job)
 }
