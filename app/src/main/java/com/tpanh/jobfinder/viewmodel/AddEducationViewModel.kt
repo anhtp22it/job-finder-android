@@ -1,13 +1,21 @@
 package com.tpanh.jobfinder.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.tpanh.jobfinder.di.AppContainer
 import com.tpanh.jobfinder.model.Education
+import com.tpanh.jobfinder.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class AddEducationViewModel: ViewModel() {
+class AddEducationViewModel(
+    private val userRepository: UserRepository
+): ViewModel() {
+
+
     private val _uiState = MutableStateFlow(Education("1"))
     val uiState: StateFlow<Education> = _uiState.asStateFlow()
 
@@ -50,6 +58,13 @@ class AddEducationViewModel: ViewModel() {
     fun updateEndDate(endDate: Long) {
         _uiState.update { currentState ->
             currentState.copy(endDate = endDate)
+        }
+    }
+
+
+    fun addEducation(userId: String) {
+        viewModelScope.launch {
+            userRepository.addEducation(userId, _uiState.value)
         }
     }
 }

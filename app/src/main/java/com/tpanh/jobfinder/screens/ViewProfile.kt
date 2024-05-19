@@ -53,6 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.tpanh.jobfinder.R
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.screens.components.BottomAppBar
 import com.tpanh.jobfinder.viewmodel.ViewProfileViewModel
@@ -104,7 +105,7 @@ fun ViewProfile(
 
 @Composable
 fun ViewProfileContent(
-    viewProfileViewModel: ViewProfileViewModel = viewModel(),
+    viewProfileViewModel: ViewProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToSearch: () -> Unit,
     navigateToEditProfile: () -> Unit,
     navigateToAboutMe: () -> Unit,
@@ -115,6 +116,9 @@ fun ViewProfileContent(
 ) {
 
     val uiState by viewProfileViewModel.uiState.collectAsState()
+
+    val user by viewProfileViewModel.uiState.collectAsState()
+    viewProfileViewModel.getCurrentUser()
 
     Column(
         modifier = Modifier

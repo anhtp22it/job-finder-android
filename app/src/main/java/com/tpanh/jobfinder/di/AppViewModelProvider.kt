@@ -13,6 +13,7 @@ import com.tpanh.jobfinder.viewmodel.LoginViewModel
 import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 import com.tpanh.jobfinder.viewmodel.SignUpViewModel
 import com.tpanh.jobfinder.viewmodel.UploadCvViewModel
+import com.tpanh.jobfinder.viewmodel.ViewProfileViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -68,6 +69,13 @@ object AppViewModelProvider {
                 jobApplyRepository = application.container.jobApplyRepository,
                 imageRepository = application.container.imageRepository,
                 jobRepository = application.container.jobRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            ViewProfileViewModel(
+                userRepository = application.container.userRepository
             )
         }
     }

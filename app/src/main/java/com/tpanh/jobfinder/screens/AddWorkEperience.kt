@@ -292,7 +292,10 @@ fun AddWorkExperienceContent(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    workExperienceViewModel.addWorkExperience()
+                    navigateToViewProfile()
+                }
             ) {
                 Text(
                     text = "SAVE",

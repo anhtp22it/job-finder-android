@@ -417,7 +417,9 @@ fun EditProfile(
                         containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     ),
                     shape = RoundedCornerShape(5.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        editProfileViewModel.updateUser()
+                        navigateToViewProfile() }
                 ) {
                     Text(
                         text = "SAVE",
