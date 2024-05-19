@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -93,6 +94,7 @@ fun AddJobTopBar(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AddJobContent(
     postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory)

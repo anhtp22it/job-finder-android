@@ -52,7 +52,7 @@ fun BottomAppBar(
             Icon(
                 Icons.Outlined.Search,
                 contentDescription = "Setting",
-                tint = if (currentScreen == JobFinderScreen.Setting) {
+                tint = if (currentScreen == JobFinderScreen.SearchJob) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.surfaceContainer

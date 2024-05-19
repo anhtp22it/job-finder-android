@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,11 +21,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cases
+import androidx.compose.material.icons.outlined.Class
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -71,7 +73,9 @@ fun ViewProfile(
     navigateToWorkExperience: () -> Unit,
     navigateToEducation: () -> Unit,
     navigateToSkill: () -> Unit,
-    navigateToLanguage: () -> Unit
+    navigateToLanguage: () -> Unit,
+    navigateToMyApplications: () -> Unit,
+    navigateToMyJobs: () -> Unit
 ) {
     Scaffold (
         bottomBar = {
@@ -97,7 +101,9 @@ fun ViewProfile(
                 navigateToWorkExperience = navigateToWorkExperience,
                 navigateToEducation = navigateToEducation,
                 navigateToSkill = navigateToSkill,
-                navigateToLanguage = navigateToLanguage
+                navigateToLanguage = navigateToLanguage,
+                navigateToMyApplications = navigateToMyApplications,
+                navigateToMyJobs = navigateToMyJobs
             )
         }
     }
@@ -113,6 +119,8 @@ fun ViewProfileContent(
     navigateToEducation: () -> Unit,
     navigateToSkill: () -> Unit,
     navigateToLanguage: () -> Unit,
+    navigateToMyApplications: () -> Unit,
+    navigateToMyJobs: () -> Unit
 ) {
 
     val uiState by viewProfileViewModel.uiState.collectAsState()
@@ -144,16 +152,6 @@ fun ViewProfileContent(
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
-//                    Image(
-//                        bitmap = scaledBitmap.asImageBitmap(),
-//                        contentDescription = "avatar",
-//                        contentScale = ContentScale.Crop,
-//                        modifier = Modifier
-//                            .width(60.dp)
-//                            .height(60.dp)
-//                            .clip(CircleShape)
-//                            .background(Color.White)
-//                    )
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(uiState.avatar)
@@ -211,7 +209,6 @@ fun ViewProfileContent(
                             }
                         }
                     }
-
                 }
                 Row {
                     IconButton(onClick = { /*TODO*/ }) {
@@ -222,10 +219,10 @@ fun ViewProfileContent(
                         )
                     }
 
-                    IconButton(onClick = { navigateToSearch() }) {
+                    IconButton(onClick = { navigateToMyApplications() }) {
                         Icon(
-                            Icons.Outlined.Settings,
-                            contentDescription = "Share",
+                            Icons.Outlined.Class,
+                            contentDescription = "Search",
                             tint = Color.White
                         )
                     }
@@ -236,6 +233,47 @@ fun ViewProfileContent(
         Column (
             modifier = Modifier.padding(16.dp)
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.White)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Outlined.Class,
+                        contentDescription = "My jobs",
+                        tint = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "My jobs",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+                IconButton(
+                    onClick = { navigateToMyJobs() },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
+                    ),
+                    modifier = Modifier.fillMaxHeight()
+                ) {
+                    Icon(
+                        Icons.Filled.ChevronRight,
+                        contentDescription = "Add Title"
+                    )
+                }
+
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -332,6 +370,7 @@ fun ViewProfileContent(
                         painter = painterResource(id = R.drawable.ic_graduation_cap),
                         contentDescription = "education",
                         modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.onTertiaryContainer
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
@@ -456,7 +495,9 @@ fun PreviewViewProfile() {
             navigateToWorkExperience = {},
             navigateToEducation = {},
             navigateToSkill = {},
-            navigateToLanguage = {}
+            navigateToLanguage = {},
+            navigateToMyApplications = {},
+            navigateToMyJobs = {}
         )
     }
 }

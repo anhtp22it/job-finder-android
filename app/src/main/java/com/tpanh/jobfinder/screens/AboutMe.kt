@@ -94,7 +94,9 @@ fun AboutMeContent(
                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ),
             shape = RoundedCornerShape(5.dp),
-            onClick = { /*TODO*/ }
+            onClick = {
+                aboutMeViewModel.updateAboutMe(uiState.about)
+            }
         ) {
             Text(
                 text = "SAVE",

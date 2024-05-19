@@ -56,14 +56,17 @@ fun ChangePassword(
         Column (
             modifier = Modifier.padding(it)
         ) {
-            ChangePasswordContent()
+            ChangePasswordContent(
+                navigateToLogin = navigateToLogin
+            )
         }
     }
 }
 
 @Composable
 fun ChangePasswordContent(
-    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    forgotPasswordViewModel: ForgotPasswordViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToLogin: () -> Unit
 ) {
     val uiState by forgotPasswordViewModel.uiState.collectAsState()
 
@@ -88,7 +91,7 @@ fun ChangePasswordContent(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = uiState.password,
+            value = forgotPasswordViewModel.oldPassword,
             onValueChange = { forgotPasswordViewModel.onOldPasswordChanged(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
@@ -123,7 +126,7 @@ fun ChangePasswordContent(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = uiState.password,
+            value = forgotPasswordViewModel.newPassword,
             onValueChange = { forgotPasswordViewModel.onNewPasswordChanged(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
@@ -158,7 +161,7 @@ fun ChangePasswordContent(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = uiState.password,
+            value = forgotPasswordViewModel.confirmPassword,
             onValueChange = { forgotPasswordViewModel.onConfirmPasswordChanged(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
@@ -195,12 +198,17 @@ fun ChangePasswordContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
-                    .padding(horizontal = 70.dp),
+                    .padding(horizontal = 48.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { /*TODO*/ }
+                onClick = { forgotPasswordViewModel.changePassword(
+                    forgotPasswordViewModel.oldPassword,
+                    forgotPasswordViewModel.newPassword,
+                    forgotPasswordViewModel.confirmPassword,
+                    navigateToLogin = { navigateToLogin() }
+                ) }
             ) {
                 Text(
                     text = "CHANGE PASSWORD",

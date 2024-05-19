@@ -17,7 +17,6 @@ class JobRepositoryImpl(
 ) : JobRepository {
     override suspend fun getAllJob(): List<Job> {
         val jobs = mutableListOf<Job>()
-        val currentUserId = auth.currentUser?.uid
         fireStore.collection("jobs")
             .get()
             .addOnSuccessListener { result ->
@@ -33,8 +32,9 @@ class JobRepositoryImpl(
         return jobs
     }
 
-    override suspend fun getJobByUserId(userId: String): List<Job> {
+    override suspend fun getJobByCurrentUser(): List<Job> {
         val jobs = mutableListOf<Job>()
+        val userId = auth.currentUser?.uid ?: ""
         fireStore.collection("jobs")
             .whereEqualTo("userId", userId)
             .get()
@@ -90,7 +90,21 @@ class JobRepositoryImpl(
     }
 
     override suspend fun searchJob(title: String): List<Job> {
-        TODO("Not yet implemented")
+        val jobs = mutableListOf<Job>()
+        fireStore.collection("jobs")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val job = document.toObject(Job::class.java)
+                    if (job.title.contains(title, ignoreCase = true) || job.subCategory.contains(title, ignoreCase = true)) {
+                        jobs.add(job)
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
+            }.await()
+        return jobs
     }
 
     override suspend fun postJob(job: Job) {
@@ -107,47 +121,17 @@ class JobRepositoryImpl(
             }.await()
     }
 
-    override suspend fun saveJob(job: Job) {
-        val currentUserId = auth.currentUser?.uid
-        if (currentUserId != null) {
-            val userRef = fireStore.collection("users").document(currentUserId)
-            fireStore.runTransaction { transaction ->
-                val snapshot = transaction.get(userRef)
-                val user = snapshot.toObject(User::class.java)
-                if (user != null) {
-                    val savedJobs = user.saveJobs.toMutableList()
-                    savedJobs.add(job.id)
-                    transaction.update(userRef, "saveJobs", savedJobs)
-                }
-            }.addOnSuccessListener {
-                Log.d("JobRepositoryImpl", "Job saved successfully.")
-            }.addOnFailureListener { e ->
-                Log.e("JobRepositoryImpl", "Error saving job", e)
+    override suspend fun countJobByCategory(categoryId: String): Int {
+        var count = 0
+        fireStore.collection("jobs")
+            .whereEqualTo("categoryId", categoryId)
+            .get()
+            .addOnSuccessListener { result ->
+                count = result.size()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("JobRepositoryImpl", "Error getting documents.", exception)
             }.await()
-        } else {
-            Log.e("JobRepositoryImpl", "No user is currently logged in.")
-        }
-    }
-
-    override suspend fun unSaveJob(job: Job) {
-        val currentUserId = auth.currentUser?.uid
-        if (currentUserId != null) {
-            val userRef = fireStore.collection("users").document(currentUserId)
-            fireStore.runTransaction { transaction ->
-                val snapshot = transaction.get(userRef)
-                val user = snapshot.toObject(User::class.java)
-                if (user != null) {
-                    val savedJobs = user.saveJobs.toMutableList()
-                    savedJobs.remove(job.id)
-                    transaction.update(userRef, "saveJobs", savedJobs)
-                }
-            }.addOnSuccessListener {
-                Log.d("JobRepositoryImpl", "Job unsaved successfully.")
-            }.addOnFailureListener { e ->
-                Log.e("JobRepositoryImpl", "Error unsaving job", e)
-            }.await()
-        } else {
-            Log.e("JobRepositoryImpl", "No user is currently logged in.")
-        }
+        return count
     }
 }

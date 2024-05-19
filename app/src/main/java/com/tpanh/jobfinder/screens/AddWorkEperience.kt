@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -70,6 +71,7 @@ fun AddWorkExperience(
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkExperienceContent(
@@ -293,8 +295,7 @@ fun AddWorkExperienceContent(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 onClick = {
-                    workExperienceViewModel.addWorkExperience()
-                    navigateToViewProfile()
+                    workExperienceViewModel.addWorkExperience("userId")
                 }
             ) {
                 Text(

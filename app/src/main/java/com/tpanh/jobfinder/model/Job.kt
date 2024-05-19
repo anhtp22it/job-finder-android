@@ -10,7 +10,7 @@ data class Job (
     var type: JobType = JobType.FULL_TIME,
     var requirements: List<String> = listOf(),
     var categoryId: String = "",
-    var workplace: Workplace? = null,
+    var workplace: Workplace = Workplace.ON_SITE,
     var subCategory: String = "",
     var salary: Int = 0,
     var createdAt: Long = System.currentTimeMillis(),

@@ -10,19 +10,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.model.Job
+import com.tpanh.jobfinder.screens.components.ApplyJobItem
 import com.tpanh.jobfinder.screens.components.JobItem
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
+import com.tpanh.jobfinder.viewmodel.ListMyApplicationViewModel
+import com.tpanh.jobfinder.viewmodel.MyApplicationViewModel
 
 @Composable
 fun ListMyApplication(
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToApplyJobDesc: (String) -> Unit
 ) {
     Scaffold (
         topBar = {
@@ -34,13 +42,21 @@ fun ListMyApplication(
         Column (
             modifier = Modifier.padding(it)
         ) {
-            ListMyApplicationContent()
+            ListMyApplicationContent(
+                navigateToApplyJobDesc = navigateToApplyJobDesc
+            )
         }
     }
 }
 
 @Composable
-fun ListMyApplicationContent() {
+fun ListMyApplicationContent(
+    listMyApplicationViewModel: ListMyApplicationViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToApplyJobDesc: (String) -> Unit
+) {
+
+    val appliesList by listMyApplicationViewModel.myApplies.collectAsState()
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -55,8 +71,16 @@ fun ListMyApplicationContent() {
                 .fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        repeat(10) {
-            JobItem(job = Job(), navigateToJobDesc = {}, saveJob = {}, isJobSaved = false)
+        appliesList.forEach { apply ->
+            val isSaved = listMyApplicationViewModel.isSaved(apply.job)
+            ApplyJobItem(
+                apply = apply,
+                navigateToApplyJobDesc = { navigateToApplyJobDesc(apply.id) },
+                saveJob = {
+                    if (isSaved) listMyApplicationViewModel.unSaveJob(it) else listMyApplicationViewModel.saveJob(it)
+                },
+                isJobSaved = false
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
@@ -67,7 +91,8 @@ fun ListMyApplicationContent() {
 fun PreviewListMyApplication() {
     Surface {
         ListMyApplication(
-            navigateBack = {}
+            navigateBack = {},
+            navigateToApplyJobDesc = {}
         )
     }
 }

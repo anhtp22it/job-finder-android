@@ -27,7 +27,9 @@ enum class JobFinderScreen(val route: String) {
     SaveJob("SaveJob"),
     MyApplications("MyApplications"),
     MyApplication("MyApplication"),
-    Specialization("Specialization");
+    Specialization("Specialization"),
+    MyJobs("MyJobs"),
+    ApplyJobDesc("ApplyJobDesc");
 
     companion object {
         fun fromRoute(route: String): JobFinderScreen? {

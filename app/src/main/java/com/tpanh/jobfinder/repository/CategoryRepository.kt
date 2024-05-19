@@ -4,5 +4,6 @@ import com.tpanh.jobfinder.model.Category
 import kotlinx.coroutines.flow.Flow
 
 interface CategoryRepository {
-    suspend fun getCategories(): Flow<List<Category>>
+    suspend fun getCategories(): List<Category>
+    suspend fun searchCategory(category: String): List<Category>
 }

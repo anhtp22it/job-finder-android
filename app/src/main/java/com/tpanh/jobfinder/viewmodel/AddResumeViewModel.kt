@@ -15,4 +15,5 @@ class AddResumeViewModel: ViewModel() {
             currentState.copy(resume = resume)
         }
     }
+
 }

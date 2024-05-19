@@ -53,6 +53,7 @@ fun AddSkillContent(
 ) {
     val mySkill by addSkillViewModel.mySkills.collectAsState()
     val searchSkill by addSkillViewModel.searchResults.collectAsState()
+    val skill = addSkillViewModel.search
 
     Column(
         modifier = Modifier
@@ -122,7 +123,9 @@ fun AddSkillContent(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    addSkillViewModel.addSkill(skill)
+                }
             ) {
                 Text(
                     text = "SAVE",

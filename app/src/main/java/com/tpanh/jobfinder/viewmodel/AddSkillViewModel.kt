@@ -110,4 +110,5 @@ class AddSkillViewModel: ViewModel() {
             _searchResults.value = response
         }
     }
+    
 }

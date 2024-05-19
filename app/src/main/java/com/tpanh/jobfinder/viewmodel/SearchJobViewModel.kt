@@ -1,37 +1,37 @@
 package com.tpanh.jobfinder.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tpanh.jobfinder.model.Category
 import com.tpanh.jobfinder.model.Job
+import com.tpanh.jobfinder.model.JobFilter
 import com.tpanh.jobfinder.model.User
+import com.tpanh.jobfinder.repository.CategoryRepository
 import com.tpanh.jobfinder.repository.JobRepository
 import com.tpanh.jobfinder.repository.UserRepository
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class SearchJobViewModel(
     private val jobRepository: JobRepository,
     private val userRepository: UserRepository
 ): ViewModel() {
-
-    private val _jobs = MutableStateFlow(emptyList<Job>())
+    private val _jobs = MutableStateFlow<List<Job>>(emptyList())
     val jobs = _jobs.asStateFlow()
 
     private val _user = MutableStateFlow(User())
     val user = _user.asStateFlow()
 
-    init {
-        getJobs()
-        getUser()
-    }
+    var query by mutableStateOf("")
 
-    private fun getJobs() {
-        viewModelScope.launch {
-            val jobs = jobRepository.getAllJob()
-            _jobs.value = jobs
-        }
+    init {
+        searchJob()
+        getUser()
     }
 
     fun saveJob(job: Job) {
@@ -48,6 +48,13 @@ class HomeViewModel(
 
     fun isSaved(job: Job): Boolean {
         return user.value.saveJobs.contains(job.id)
+    }
+
+     fun searchJob() {
+        viewModelScope.launch {
+            val jobs = jobRepository.searchJob(query)
+            _jobs.value = jobs
+        }
     }
 
     private fun getUser() {
