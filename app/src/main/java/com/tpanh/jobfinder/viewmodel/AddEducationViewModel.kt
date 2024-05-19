@@ -14,10 +14,12 @@ import kotlinx.coroutines.launch
 class AddEducationViewModel(
     private val userRepository: UserRepository
 ): ViewModel() {
-
-
-    private val _uiState = MutableStateFlow(Education("1"))
+    private val _uiState = MutableStateFlow(Education())
     val uiState: StateFlow<Education> = _uiState.asStateFlow()
+
+    init {
+        getCurrentEducation()
+    }
 
     fun updateLevelOfEducation(levelOfEducation: String) {
         _uiState.update { currentState ->
@@ -45,7 +47,7 @@ class AddEducationViewModel(
 
     fun updateIsCurrentlyStudying(isCurrentlyStudying: Boolean) {
         _uiState.update { currentState ->
-            currentState.copy(isCurrentlyStudying = isCurrentlyStudying)
+            currentState.copy(currentlyStudying = isCurrentlyStudying)
         }
     }
 
@@ -58,6 +60,19 @@ class AddEducationViewModel(
     fun updateEndDate(endDate: Long) {
         _uiState.update { currentState ->
             currentState.copy(endDate = endDate)
+        }
+    }
+
+    fun saveEducation(navigateToViewProfile: () -> Unit) {
+        viewModelScope.launch {
+            userRepository.updateEducation(_uiState.value)
+        }
+        navigateToViewProfile()
+    }
+
+    private fun getCurrentEducation() {
+        viewModelScope.launch {
+            _uiState.value = userRepository.getCurrentUser().education
         }
     }
 }

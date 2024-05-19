@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.tpanh.jobfinder.JobFinderApplication
 import com.tpanh.jobfinder.viewmodel.AboutMeViewModel
+import com.tpanh.jobfinder.viewmodel.AddEducationViewModel
 import com.tpanh.jobfinder.viewmodel.ApplyJobDescriptionViewModel
 import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
@@ -163,6 +164,13 @@ object AppViewModelProvider {
         initializer {
             val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
             WorkExperienceViewModel(
+                userRepository = application.container.userRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            AddEducationViewModel(
                 userRepository = application.container.userRepository
             )
         }

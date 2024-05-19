@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,15 +50,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.AddEducationViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEducationContent(
-    addEducationViewModel: AddEducationViewModel = viewModel()
+    addEducationViewModel: AddEducationViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToViewProfile: () -> Unit
 ) {
     val uiState by addEducationViewModel.uiState.collectAsState()
 
@@ -250,7 +254,7 @@ fun AddEducationContent(
             horizontalArrangement = Arrangement.Start,
         ) {
             Checkbox(
-                checked = uiState.isCurrentlyStudying,
+                checked = uiState.currentlyStudying,
                 onCheckedChange = { addEducationViewModel.updateIsCurrentlyStudying(it) })
             Text(text = "I am currently studying here", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
@@ -298,7 +302,7 @@ fun AddEducationContent(
                     containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { /*TODO*/ }
+                onClick = { addEducationViewModel.saveEducation(navigateToViewProfile) }
             ) {
                 Text(
                     text = "SAVE",
@@ -322,7 +326,9 @@ fun AddEducation(
         }
     ) { innerPadding ->
         Column (modifier = Modifier.padding(innerPadding)) {
-            AddEducationContent()
+            AddEducationContent(
+                navigateToViewProfile = navigateToViewProfile
+            )
         }
     }
 }

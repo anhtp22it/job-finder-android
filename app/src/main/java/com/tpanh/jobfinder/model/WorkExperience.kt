@@ -6,5 +6,5 @@ data class WorkExperience(
     val startDay: Long = System.currentTimeMillis(),
     val endDay: Long = System.currentTimeMillis(),
     val description: String = "",
-    val isCurrentWorking: Boolean = false
+    val currentWorking: Boolean = false
 )

@@ -246,7 +246,7 @@ fun AddWorkExperienceContent(
             horizontalArrangement = Arrangement.Start,
         ) {
             Checkbox(
-                checked = uiState.isCurrentWorking,
+                checked = uiState.currentWorking,
                 onCheckedChange = { workExperienceViewModel.updateIsCurrentWorking(it) })
             Text(text = "I am currently working here", color = MaterialTheme.colorScheme.onPrimaryContainer)
         }

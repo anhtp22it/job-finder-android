@@ -60,7 +60,7 @@ class WorkExperienceViewModel(
 
     fun updateIsCurrentWorking(isCurrentWorking: Boolean) {
         _uiState.update {
-            it.copy(isCurrentWorking = isCurrentWorking)
+            it.copy(currentWorking = isCurrentWorking)
         }
     }
 
