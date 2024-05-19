@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -73,7 +75,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.extensions.scaleDown
@@ -94,35 +98,16 @@ fun EditProfile(
     val user by editProfileViewModel.uiState.collectAsState()
 
     val format = SimpleDateFormat("dd MMM yyyy")
-    var isDateOfBirthPicker by remember { mutableStateOf(false) }
-    var isChooseImage by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val img: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.avatar)
-    val bitmap = remember { mutableStateOf(img) }
-
-    val scaledBitmap = bitmap.value.scaleDown(1024, true)
-
-    val laucher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicturePreview(),
-    ) {
-        if (it != null) {
-            bitmap.value = it
-        }
-    }
-
-    val launchImage = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) {
-        if (Build.VERSION.SDK_INT < 28) {
-            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-        } else {
-            val source = it?.let { it1 ->
-                ImageDecoder.createSource(context.contentResolver, it1)
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            if (it != null) {
+                editProfileViewModel.onImageSelected(it)
             }
-            bitmap.value = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }!!
         }
-    }
+    )
 
     Column(
         modifier = Modifier
@@ -148,28 +133,37 @@ fun EditProfile(
             ) {
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
-//                    Image(
-//                        bitmap = scaledBitmap.asImageBitmap(),
-//                        contentDescription = "avatar",
-//                        contentScale = ContentScale.Crop,
-//                        modifier = Modifier
-//                            .width(60.dp)
-//                            .height(60.dp)
-//                            .clip(CircleShape)
-//                            .background(Color.White)
-//                    )
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(user.avatar)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Avatar",
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp)
-                            .clip(CircleShape)
-                            .background(Color.White)
-                    )
+                    if (editProfileViewModel.selectedImageUri != null) {
+                        val painter = rememberImagePainter(
+                            data = editProfileViewModel.selectedImageUri,
+                            builder = {
+                                transformations(CircleCropTransformation())
+                            }
+                        )
+                        Image(
+                            painter = painter,
+                            contentDescription = "Job image",
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    } else {
+                        AsyncImage(
+                            model = user.avatar,
+                            contentDescription = "Job image",
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = user.fullName,
@@ -186,7 +180,7 @@ fun EditProfile(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { isChooseImage = true },
+                        onClick = { launcher.launch("image/*") },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Transparent.copy(alpha = 0.2f),
@@ -259,7 +253,7 @@ fun EditProfile(
             OutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = { isDateOfBirthPicker = true },
+                onClick = { editProfileViewModel.isDateOfBirthPicker = true },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black
@@ -274,16 +268,16 @@ fun EditProfile(
                     fontWeight = FontWeight.Normal
                 )
             }
-            if (isDateOfBirthPicker) {
+            if (editProfileViewModel.isDateOfBirthPicker) {
                 val datePickerState = rememberDatePickerState()
                 val confirmEnable = derivedStateOf { datePickerState.selectedDateMillis != null }
 
                 DatePickerDialog(
-                    onDismissRequest = { isDateOfBirthPicker = false },
+                    onDismissRequest = { editProfileViewModel.isDateOfBirthPicker = false },
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                isDateOfBirthPicker = false
+                                editProfileViewModel.isDateOfBirthPicker = false
                                 var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                                 editProfileViewModel.updateDateOfBirth(date)
                             },
@@ -425,79 +419,13 @@ fun EditProfile(
                     shape = RoundedCornerShape(5.dp),
                     onClick = {
                         editProfileViewModel.updateUser()
+                        Toast.makeText(context, "Update successfully", Toast.LENGTH_SHORT).show()
                     }
                 ) {
                     Text(
                         text = "SAVE",
                         letterSpacing = 2.sp,
                     )
-                }
-            }
-        }
-    }
-    if (isChooseImage) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-                .clickable {
-                    isChooseImage = false
-                }
-        ) {
-            Column (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color.White)
-                        .padding(vertical = 24.dp)
-                ) {
-                    Column (
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        IconButton(onClick = {
-                            laucher.launch()
-                            isChooseImage = false
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.camera_icon),
-                                contentDescription = "Camera",
-                                modifier = Modifier.size(50.dp)
-                            )
-                        }
-                        Text(
-                            text = "Camera",
-                            fontSize = 24.sp
-                        )
-                    }
-                    Column (
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        IconButton(onClick = {
-                            launchImage.launch("image/*")
-                            isChooseImage = false
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.image_icon),
-                                contentDescription = "Gallery",
-                                modifier = Modifier.size(50.dp)
-                            )
-                        }
-                        Text(
-                            text = "Gallery",
-                            fontSize = 24.sp
-                        )
-                    }
                 }
             }
         }

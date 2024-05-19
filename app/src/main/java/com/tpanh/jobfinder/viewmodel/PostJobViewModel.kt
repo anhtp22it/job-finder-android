@@ -1,7 +1,6 @@
 package com.tpanh.jobfinder.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.Category
 import com.tpanh.jobfinder.model.Job
-import com.tpanh.jobfinder.model.JobInfor
 import com.tpanh.jobfinder.model.JobType
 import com.tpanh.jobfinder.model.Workplace
 import com.tpanh.jobfinder.repository.CategoryRepository
@@ -17,8 +15,6 @@ import com.tpanh.jobfinder.repository.ImageRepository
 import com.tpanh.jobfinder.repository.JobRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 

@@ -3,14 +3,10 @@ package com.tpanh.jobfinder.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tpanh.jobfinder.model.Category
 import com.tpanh.jobfinder.model.Job
-import com.tpanh.jobfinder.model.JobFilter
 import com.tpanh.jobfinder.model.User
-import com.tpanh.jobfinder.repository.CategoryRepository
 import com.tpanh.jobfinder.repository.JobRepository
 import com.tpanh.jobfinder.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow

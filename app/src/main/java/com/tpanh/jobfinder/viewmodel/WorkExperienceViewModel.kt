@@ -51,10 +51,4 @@ class WorkExperienceViewModel(
             it.copy(isCurrentWorking = isCurrentWorking)
         }
     }
-
-    fun addWorkExperience(userId: String) {
-        viewModelScope.launch {
-            userRepository.addWorkExperience(userId, _uiState.value)
-        }
-    }
 }

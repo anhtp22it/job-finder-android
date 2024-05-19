@@ -9,9 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ViewProfileViewModel(
-private val userRepository: UserRepository
-
-): ViewModel() {
+    private val userRepository: UserRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(User())
     val uiState = _uiState.asStateFlow()
 

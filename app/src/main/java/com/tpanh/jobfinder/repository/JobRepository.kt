@@ -1,8 +1,6 @@
 package com.tpanh.jobfinder.repository
 
 import com.tpanh.jobfinder.model.Job
-import com.tpanh.jobfinder.model.JobFilter
-import kotlinx.coroutines.flow.Flow
 
 interface JobRepository {
     suspend fun getAllJob(): List<Job>

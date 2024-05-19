@@ -60,11 +60,4 @@ class AddEducationViewModel(
             currentState.copy(endDate = endDate)
         }
     }
-
-
-    fun addEducation(userId: String) {
-        viewModelScope.launch {
-            userRepository.addEducation(userId, _uiState.value)
-        }
-    }
 }

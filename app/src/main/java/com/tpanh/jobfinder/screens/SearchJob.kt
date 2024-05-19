@@ -40,8 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.R
 import com.tpanh.jobfinder.di.AppViewModelProvider
-import com.tpanh.jobfinder.model.Job
-import com.tpanh.jobfinder.model.JobFilter
 import com.tpanh.jobfinder.navigation.JobFinderScreen
 import com.tpanh.jobfinder.screens.components.BottomAppBar
 import com.tpanh.jobfinder.screens.components.FilterItem

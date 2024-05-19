@@ -295,7 +295,7 @@ fun AddWorkExperienceContent(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 onClick = {
-                    workExperienceViewModel.addWorkExperience("userId")
+                    /*  */
                 }
             ) {
                 Text(

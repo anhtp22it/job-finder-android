@@ -44,32 +44,6 @@ class UserRepositoryImpl(
             }.await()
     }
 
-    override suspend fun addEducation(userId: String, education: Education) {
-        fireStore.collection("users")
-            .document(userId)
-            .collection("education")
-            .add(education)
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully written!")
-            }
-            .addOnFailureListener {
-                Log.e("UserRepositoryImpl", "Error writing document", it)
-            }.await()
-    }
-
-    override suspend fun addWorkExperience(userId: String, workExperience: WorkExperience) {
-        fireStore.collection("users")
-            .document(userId!!)
-            .collection("workExperience")
-            .add(workExperience)
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully written!")
-            }
-            .addOnFailureListener {
-                Log.e("UserRepositoryImpl", "Error writing document", it)
-            }.await()
-    }
-
     override suspend fun getSavedJobs(): List<String> {
         val userId = auth.currentUser?.uid
         var savedJobs = listOf<String>()
@@ -118,54 +92,6 @@ class UserRepositoryImpl(
         fireStore.collection("users")
             .document(userId!!)
             .update("saveJobs", FieldValue.arrayRemove(jobId))
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("UserRepositoryImpl", "Error updating document", e)
-            }.await()
-    }
-
-    override suspend fun updateResume(userId: String, resume: String) {
-        fireStore.collection("users")
-            .document(userId)
-            .update("resume", resume)
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("UserRepositoryImpl", "Error updating document", e)
-            }.await()
-    }
-
-    override suspend fun updateAboutMe(userId: String, aboutme: String) {
-        fireStore.collection("users")
-            .document(userId)
-            .update("aboutme", aboutme)
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("UserRepositoryImpl", "Error updating document", e)
-            }.await()
-    }
-
-    override suspend fun addSkill(userId: String, skill: String) {
-        fireStore.collection("users")
-            .document(userId)
-            .update("skills", FieldValue.arrayUnion(skill))
-            .addOnSuccessListener {
-                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("UserRepositoryImpl", "Error updating document", e)
-            }.await()
-    }
-
-    override suspend fun addLanguage(userId: String, language: String) {
-        fireStore.collection("users")
-            .document(userId)
-            .update("languages", FieldValue.arrayUnion(language))
             .addOnSuccessListener {
                 Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
             }

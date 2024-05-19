@@ -48,7 +48,6 @@ import com.tpanh.jobfinder.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUp(
-
     navigateToLogin: () -> Unit,
     navigateToForgotPassword: () -> Unit,
     signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
