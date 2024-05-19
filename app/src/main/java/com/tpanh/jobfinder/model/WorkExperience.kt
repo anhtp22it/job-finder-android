@@ -1,7 +1,6 @@
 package com.tpanh.jobfinder.model
 
 data class WorkExperience(
-    val id: String = "",
     val jobTitle: String = "",
     val company: String = "",
     val startDay: Long = System.currentTimeMillis(),

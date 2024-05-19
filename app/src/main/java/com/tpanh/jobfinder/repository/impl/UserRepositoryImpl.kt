@@ -44,6 +44,19 @@ class UserRepositoryImpl(
             }.await()
     }
 
+    override suspend fun updateWorkExperience(workExperience: WorkExperience) {
+        val userId = auth.currentUser?.uid
+        fireStore.collection("users")
+            .document(userId!!)
+            .update("experience", workExperience)
+            .addOnSuccessListener {
+                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e ->
+                Log.e("UserRepositoryImpl", "Error updating document", e)
+            }.await()
+    }
+
     override suspend fun getSavedJobs(): List<String> {
         val userId = auth.currentUser?.uid
         var savedJobs = listOf<String>()

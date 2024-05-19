@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.WorkExperienceViewModel
 import java.text.SimpleDateFormat
@@ -66,7 +67,9 @@ fun AddWorkExperience(
         Column (
             modifier = Modifier.padding(it)
         ) {
-            AddWorkExperienceContent()
+            AddWorkExperienceContent(
+                navigateToViewProfile = navigateToViewProfile
+            )
         }
     }
 }
@@ -75,15 +78,12 @@ fun AddWorkExperience(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWorkExperienceContent(
-    workExperienceViewModel: WorkExperienceViewModel = viewModel()
+    workExperienceViewModel: WorkExperienceViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToViewProfile: () -> Unit
 ) {
     val uiState by workExperienceViewModel.uiState.collectAsState()
 
     val format = SimpleDateFormat("dd MMM yyyy")
-
-    var isStartDatePickerVisible by remember { mutableStateOf(false) }
-
-    var isEndDatePickerVisible by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
@@ -162,7 +162,7 @@ fun AddWorkExperienceContent(
                 OutlinedButton(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    onClick = { isStartDatePickerVisible = true },
+                    onClick = { workExperienceViewModel.isStartDatePickerVisible = true },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         containerColor = Color.White,
@@ -171,15 +171,15 @@ fun AddWorkExperienceContent(
                 ) {
                     Text(text = format.format(Date(uiState.startDay)))
                 }
-                if (isStartDatePickerVisible) {
+                if (workExperienceViewModel.isStartDatePickerVisible) {
                     val datePickerState = rememberDatePickerState()
                     val confirmEnable = derivedStateOf { datePickerState.selectedDateMillis != null }
 
                     DatePickerDialog(
-                        onDismissRequest = { isStartDatePickerVisible = false },
+                        onDismissRequest = { workExperienceViewModel.isStartDatePickerVisible = false },
                         confirmButton = {
                             TextButton(onClick = {
-                                isStartDatePickerVisible = false
+                                workExperienceViewModel.isStartDatePickerVisible = false
                                 var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                                 workExperienceViewModel.updateStartDay(date)
                             },
@@ -205,7 +205,7 @@ fun AddWorkExperienceContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { isEndDatePickerVisible = true },
+                    onClick = { workExperienceViewModel.isEndDatePickerVisible = true },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         containerColor = Color.White,
@@ -214,16 +214,16 @@ fun AddWorkExperienceContent(
                 ) {
                     Text(text = format.format(Date(uiState.endDay)))
                 }
-                if (isEndDatePickerVisible) {
+                if (workExperienceViewModel.isEndDatePickerVisible) {
                     val datePickerState = rememberDatePickerState()
                     val confirmEnable = derivedStateOf { datePickerState.selectedDateMillis != null }
 
                     DatePickerDialog(
                         properties = DialogProperties(),
-                        onDismissRequest = { isEndDatePickerVisible = false },
+                        onDismissRequest = { workExperienceViewModel.isEndDatePickerVisible = false },
                         confirmButton = {
                             TextButton(onClick = {
-                                isEndDatePickerVisible = false
+                                workExperienceViewModel.isEndDatePickerVisible = false
                                 var date = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                                 workExperienceViewModel.updateEndDay(date)
                             },
@@ -295,7 +295,7 @@ fun AddWorkExperienceContent(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 onClick = {
-                    /*  */
+                    workExperienceViewModel.saveWorkExperience(navigateToViewProfile)
                 }
             ) {
                 Text(

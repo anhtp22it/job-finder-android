@@ -20,5 +20,4 @@ class ViewProfileViewModel(
             _uiState.value = result
         }
     }
-
 }

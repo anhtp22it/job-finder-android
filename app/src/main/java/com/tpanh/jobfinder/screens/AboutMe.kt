@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.AboutMeViewModel
 
@@ -45,14 +46,17 @@ fun AboutMe(
         Column (
             modifier = Modifier.padding(it)
         ) {
-            AboutMeContent()
+            AboutMeContent(
+                navigateToViewProfile = navigateToViewProfile
+            )
         }
     }
 }
 
 @Composable
 fun AboutMeContent(
-    aboutMeViewModel: AboutMeViewModel = viewModel()
+    aboutMeViewModel: AboutMeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToViewProfile: () -> Unit
 ) {
     val uiState by aboutMeViewModel.uiState.collectAsState()
 
@@ -70,7 +74,7 @@ fun AboutMeContent(
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = uiState.about,
-            onValueChange = { aboutMeViewModel.updateAboutMe(it) },
+            onValueChange = { aboutMeViewModel.onAboutMeChange(it) },
             placeholder = { Text("Tell me about you.") },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
@@ -95,7 +99,7 @@ fun AboutMeContent(
             ),
             shape = RoundedCornerShape(5.dp),
             onClick = {
-                aboutMeViewModel.updateAboutMe(uiState.about)
+                aboutMeViewModel.updateAboutMe(navigateToViewProfile)
             }
         ) {
             Text(

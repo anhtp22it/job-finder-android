@@ -16,10 +16,9 @@ data class User(
     var emailVerifyToken: String = "",
     var forgotPasswordToken: String = "",
     var verify: UserVerifyStatus = UserVerifyStatus.NOT_VERIFY,
-    var jobs: List<String> = emptyList(),
     var saveJobs: List<String> = emptyList(),
-    var educations: List<Education> = emptyList(),
+    var education: Education = Education(),
     var skills: List<String> = emptyList(),
     var languages: List<Language> = emptyList(),
-    var experiences: List<WorkExperience> = emptyList(),
+    var experience: WorkExperience = WorkExperience(),
 )

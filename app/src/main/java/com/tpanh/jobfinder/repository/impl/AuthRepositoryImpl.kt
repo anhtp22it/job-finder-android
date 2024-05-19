@@ -32,7 +32,12 @@ class AuthRepositoryImpl(
             emit(value = Resource.Loading())
             val result = auth.createUserWithEmailAndPassword(email, password).await()
 
-            val user = User(id = result.user?.uid, fullName = fullName, email = email)
+            val user = User(
+                id = result.user?.uid,
+                fullName = fullName,
+                email = email,
+                avatar = "https://firebasestorage.googleapis.com/v0/b/jobfinder-4e0c0.appspot.com/o/users%2Fdefault_avatar.jpg?alt=media&token=a6159124-4c3a-4da9-b082-6ae9240bf31e"
+            )
             fireStore.collection("users").document(result.user?.uid.toString()).set(user).await()
 
             emit(value = Resource.Success(data = result))

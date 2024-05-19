@@ -122,11 +122,8 @@ fun ViewProfileContent(
     navigateToMyApplications: () -> Unit,
     navigateToMyJobs: () -> Unit
 ) {
-
-    val uiState by viewProfileViewModel.uiState.collectAsState()
-
-    val user by viewProfileViewModel.uiState.collectAsState()
     viewProfileViewModel.getCurrentUser()
+    val user by viewProfileViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -154,7 +151,7 @@ fun ViewProfileContent(
                     Spacer(modifier = Modifier.height(16.dp))
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(uiState.avatar)
+                            .data(user.avatar)
                             .crossfade(true)
                             .build(),
                         contentDescription = "Avatar",
@@ -166,14 +163,14 @@ fun ViewProfileContent(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = uiState.fullName,
+                        text = user.fullName,
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.White,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = uiState.location,
+                        text = user.location,
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White,
                         fontSize = 12.sp
