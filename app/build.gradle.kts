@@ -79,6 +79,10 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.4")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    // Retrofit
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     // Declare the dependency for the Firebase Authentication library
@@ -87,5 +91,4 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore-ktx")
     // Icon
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
-
 }

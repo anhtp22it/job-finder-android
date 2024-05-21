@@ -6,12 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.Language
+import com.tpanh.jobfinder.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LanguageViewModel: ViewModel() {
+class LanguageViewModel(
+    private val userRepository: UserRepository
+): ViewModel() {
     private val _myLanguages = MutableStateFlow<List<Language>>(emptyList())
     val myLanguages =  _myLanguages.asStateFlow()
 

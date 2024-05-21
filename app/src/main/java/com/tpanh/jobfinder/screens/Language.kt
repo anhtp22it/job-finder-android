@@ -39,13 +39,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpanh.jobfinder.model.Language
+import com.tpanh.jobfinder.screens.components.LanguageItem
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.LanguageViewModel
 
 @Composable
+fun Language(
+    navigateToAddLanguageScreen: () -> Unit,
+    navigateBack: () -> Unit,
+    naviagetToViewProfile: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            NavigateBackBar (
+                navigateBack = { navigateBack() },
+            )
+        }
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            LanguageContent(
+                navigateToAddLanguageScreen = navigateToAddLanguageScreen,
+                navigateToViewProfile = naviagetToViewProfile
+            )
+        }
+    }
+}
+
+@Composable
 fun LanguageContent(
     navigateToAddLanguageScreen: () -> Unit,
-    languageViewModel: LanguageViewModel = viewModel()
+    languageViewModel: LanguageViewModel = viewModel(),
+    navigateToViewProfile: () -> Unit
 ) {
     val uiState by languageViewModel.myLanguages.collectAsState()
 
@@ -105,65 +129,6 @@ fun LanguageContent(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-@Composable
-fun LanguageItem(
-    language: Language,
-    deleteItem: () -> Unit
-) {
-    Row (
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            Text(
-                text = "${language.flag}",
-                fontSize = 32.sp,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "${language.name}",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-
-        IconButton(onClick = { deleteItem() }) {
-            Icon(
-                Icons.Outlined.Delete,
-                contentDescription = "Delete",
-                tint = Color.Red
-            )
-        }
-    }
-}
-
-@Composable
-fun Language(
-    navigateToAddLanguageScreen: () -> Unit,
-    navigateBack: () -> Unit,
-    naviagetToViewProfile: () -> Unit
-) {
-    Scaffold(
-        topBar = {
-            NavigateBackBar (
-                navigateBack = { navigateBack() },
-            )
-        }
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            LanguageContent(
-                navigateToAddLanguageScreen = navigateToAddLanguageScreen
-            )
         }
     }
 }

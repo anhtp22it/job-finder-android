@@ -1,5 +1,6 @@
 package com.tpanh.jobfinder.di
 
+import com.tpanh.jobfinder.network.LanguageRepository
 import com.tpanh.jobfinder.repository.AuthRepository
 import com.tpanh.jobfinder.repository.CategoryRepository
 import com.tpanh.jobfinder.repository.ImageRepository

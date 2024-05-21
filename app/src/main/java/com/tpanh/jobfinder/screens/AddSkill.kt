@@ -43,13 +43,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
+import com.tpanh.jobfinder.screens.components.SkillItem
 import com.tpanh.jobfinder.viewmodel.AddSkillViewModel
+
+@Composable
+fun AddSkill(
+    onBackClick: () -> Unit,
+    navigateToViewProfile: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            NavigateBackBar (
+                navigateBack = { onBackClick() }
+            )
+        }
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            AddSkillContent(
+                navigateToViewProfile = navigateToViewProfile
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AddSkillContent(
-    addSkillViewModel: AddSkillViewModel = viewModel()
+    addSkillViewModel: AddSkillViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToViewProfile: () -> Unit
 ) {
     val mySkill by addSkillViewModel.mySkills.collectAsState()
     val searchSkill by addSkillViewModel.searchResults.collectAsState()
@@ -104,7 +127,7 @@ fun AddSkillContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (searchSkill.isEmpty()) {
             FlowRow() {
-                mySkill.skills.forEach { skill ->
+                mySkill.forEach { skill ->
                     SkillItem(
                         skill,
                         onClick = {
@@ -124,7 +147,7 @@ fun AddSkillContent(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 onClick = {
-                    addSkillViewModel.addSkill(skill)
+                    addSkillViewModel.saveSkills(navigateToViewProfile)
                 }
             ) {
                 Text(
@@ -147,62 +170,6 @@ fun AddSkillContent(
                     Spacer(modifier =  Modifier.height(32.dp))
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun SkillItem(
-    s: String,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .background(Color.Transparent)
-            .padding(4.dp)
-            .clip(RoundedCornerShape(8.dp)),
-    ) {
-        Row(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = s,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontSize = 12.sp
-            )
-            IconButton(
-                modifier = Modifier
-                    .size(24.dp)
-                    .padding(4.dp),
-                onClick = { onClick() }
-            ) {
-                Icon(
-                    Icons.Filled.Close,
-                    contentDescription = "Delete",
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun AddSkill(
-    onBackClick: () -> Unit,
-    navigateToViewProfile: () -> Unit
-) {
-    Scaffold(
-        topBar = {
-            NavigateBackBar (
-                navigateBack = { onBackClick() }
-            )
-        }
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            AddSkillContent()
         }
     }
 }

@@ -35,6 +35,4 @@ class DefaultAppContainer(private val context: Context): AppContainer {
     override val jobApplyRepository: JobApplyRepository by lazy {
         JobApplyRepositoryImpl(FirebaseModule.fireStore(), FirebaseModule.auth())
     }
-
-
 }

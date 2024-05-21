@@ -86,7 +86,7 @@ fun BottomAppBar(
             Icon(
                 Icons.Outlined.AccountCircle,
                 contentDescription = "Profile",
-                tint = if (currentScreen == JobFinderScreen.EditProfile) {
+                tint = if (currentScreen == JobFinderScreen.ViewProfile) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.surfaceContainer
