@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.model.Language
 import com.tpanh.jobfinder.screens.components.LanguageItem
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
@@ -68,7 +69,7 @@ fun Language(
 @Composable
 fun LanguageContent(
     navigateToAddLanguageScreen: () -> Unit,
-    languageViewModel: LanguageViewModel = viewModel(),
+    languageViewModel: LanguageViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navigateToViewProfile: () -> Unit
 ) {
     val uiState by languageViewModel.myLanguages.collectAsState()

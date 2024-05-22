@@ -110,6 +110,9 @@ class AddSkillViewModel(
                 "Lua",
                 "R",
                 "Matlab",
+                "Assembly",
+                "Kotlin",
+                "Swift",
             )
             _allSkills.value = response
             _searchResults.value = response

@@ -14,6 +14,7 @@ import com.tpanh.jobfinder.viewmodel.EditProfileViewModel
 import com.tpanh.jobfinder.viewmodel.ForgotPasswordViewModel
 import com.tpanh.jobfinder.viewmodel.HomeViewModel
 import com.tpanh.jobfinder.viewmodel.JobDescriptionViewModel
+import com.tpanh.jobfinder.viewmodel.LanguageViewModel
 import com.tpanh.jobfinder.viewmodel.ListMyApplicationViewModel
 import com.tpanh.jobfinder.viewmodel.LoginViewModel
 import com.tpanh.jobfinder.viewmodel.MyApplicationViewModel
@@ -179,6 +180,13 @@ object AppViewModelProvider {
         initializer {
             val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
             AddSkillViewModel(
+                userRepository = application.container.userRepository
+            )
+        }
+
+        initializer {
+            val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as JobFinderApplication)
+            LanguageViewModel(
                 userRepository = application.container.userRepository
             )
         }

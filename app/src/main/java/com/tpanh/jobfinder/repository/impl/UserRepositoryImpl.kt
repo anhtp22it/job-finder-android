@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tpanh.jobfinder.model.Education
-import com.tpanh.jobfinder.model.Job
+import com.tpanh.jobfinder.model.Language
 import com.tpanh.jobfinder.model.User
 import com.tpanh.jobfinder.model.WorkExperience
 import com.tpanh.jobfinder.repository.UserRepository
@@ -62,6 +62,19 @@ class UserRepositoryImpl(
         fireStore.collection("users")
             .document(userId!!)
             .update("education", education)
+            .addOnSuccessListener {
+                Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e ->
+                Log.e("UserRepositoryImpl", "Error updating document", e)
+            }.await()
+    }
+
+    override suspend fun updateLanguages(languages: List<Language>) {
+        val userId = auth.currentUser?.uid
+        fireStore.collection("users")
+            .document(userId!!)
+            .update("languages", languages)
             .addOnSuccessListener {
                 Log.d("UserRepositoryImpl", "DocumentSnapshot successfully updated!")
             }

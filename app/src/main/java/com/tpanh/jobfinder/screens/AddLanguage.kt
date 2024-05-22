@@ -39,12 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tpanh.jobfinder.di.AppViewModelProvider
 import com.tpanh.jobfinder.screens.components.NavigateBackBar
 import com.tpanh.jobfinder.viewmodel.LanguageViewModel
 
 @Composable
 fun AddLanguageContent(
-    languageViewModel: LanguageViewModel = viewModel()
+    languageViewModel: LanguageViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navigateToLanguageScreen: () -> Unit
 ) {
     val uiState by languageViewModel.searchResults.collectAsState()
 
@@ -101,13 +103,12 @@ fun AddLanguageContent(
             .fillMaxSize()
             .padding(vertical = 8.dp, horizontal = 32.dp)
     ) {
-        items(uiState) { language ->
+        items(uiState.toList()) { language ->
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        languageViewModel.addLanguage(language)
-
+                        languageViewModel.addLanguage(language, navigateToLanguageScreen = navigateToLanguageScreen)
                     },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -142,7 +143,9 @@ fun AddLanguage(
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            AddLanguageContent()
+            AddLanguageContent(
+                navigateToLanguageScreen = navigateToLanguage
+            )
         }
     }
 }

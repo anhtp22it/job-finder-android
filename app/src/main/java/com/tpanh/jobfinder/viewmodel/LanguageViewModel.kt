@@ -18,9 +18,9 @@ class LanguageViewModel(
     private val _myLanguages = MutableStateFlow<List<Language>>(emptyList())
     val myLanguages =  _myLanguages.asStateFlow()
 
-    private val _allLanguages = MutableStateFlow<List<Language>>(emptyList())
+    private val _allLanguages = MutableStateFlow<Set<Language>>(emptySet())
 
-    private val _searchResults = MutableStateFlow<List<Language>>(emptyList())
+    private val _searchResults = MutableStateFlow<Set<Language>>(emptySet())
     val searchResults = _searchResults.asStateFlow()
 
     var search by mutableStateOf("")
@@ -33,10 +33,18 @@ class LanguageViewModel(
 
     fun deleteLanguage(language: Language) {
         _myLanguages.value = _myLanguages.value.filterNot { it == language }
+        viewModelScope.launch {
+            userRepository.updateLanguages(_myLanguages.value)
+        }
+        getMyLanguages()
     }
 
-    fun addLanguage(language: Language) {
-        _myLanguages.update { it + language }
+    fun addLanguage(language: Language, navigateToLanguageScreen: () -> Unit) {
+        viewModelScope.launch {
+            _myLanguages.update { it + language }
+            userRepository.updateLanguages(_myLanguages.value)
+        }
+        navigateToLanguageScreen()
     }
 
     fun onSearchChange(search: String) {
@@ -46,43 +54,42 @@ class LanguageViewModel(
 
     private fun searchLanguage(language: String) {
         viewModelScope.launch {
-            _searchResults.value = _allLanguages.value.filter { it.name.contains(language, ignoreCase = true) }
+            _searchResults.value =
+                _allLanguages.value.filter { it.name.contains(language, ignoreCase = true) }.toSet()
         }
     }
 
     private fun getMyLanguages() {
         viewModelScope.launch {
-            val response = listOf(
-                Language("English", "🇬🇧"),
-                Language("Vietnamese", "🇻🇳"),
-                Language("Japanese", "🇯🇵"),
-            )
+            val response = userRepository.getCurrentUser().languages
             _myLanguages.value = response
         }
     }
 
     private fun getAllLanguages() {
         viewModelScope.launch {
-            val response = listOf(
-                Language(mapOf("common" to "English"), "🇬🇧"),
-                Language(mapOf("common" to "Vietnamese"), "🇻🇳"),
-                Language(mapOf("common" to "Japanese"), "🇯🇵"),
-                Language(mapOf("common" to "Chinese"), "🇨🇳"),
-                Language(mapOf("common" to "Korean"), "🇰🇷"),
-                Language(mapOf("common" to "French"), "🇫🇷"),
-                Language(mapOf("common" to "German"), "🇩🇪"),
-                Language(mapOf("common" to "Spanish"), "🇪🇸"),
-                Language(mapOf("common" to "Italian"), "🇮🇹"),
-                Language(mapOf("common" to "Russian"), "🇷🇺"),
-                Language(mapOf("common" to "Portuguese"), "🇵🇹"),
-                Language(mapOf("common" to "Arabic"), "🇸🇦"),
-                Language(mapOf("common" to "Hindi"), "🇮🇳"),
-                Language(mapOf("common" to "Bengali"), "🇧🇩"),
-                Language(mapOf("common" to "Urdu"), "🇵🇰"),
-                Language(mapOf("common" to "Turkish"), "🇹🇷"),
-                Language(mapOf("common" to "Thai"), "🇹🇭"),
-                Language(mapOf("common" to "Indonesian"), "🇮🇩"),
-                Language(mapOf("common" to "Malay"), "🇲🇾"),
+            val response = setOf(
+                Language("English", "🇬🇧"),
+                Language("Vietnamese", "🇻🇳"),
+                Language("Japanese", "🇯🇵"),
+                Language("Chinese", "🇨🇳"),
+                Language("Korean", "🇰🇷"),
+                Language("French", "🇫🇷"),
+                Language("German", "🇩🇪"),
+                Language("Spanish", "🇪🇸"),
+                Language("Italian", "🇮🇹"),
+                Language("Russian", "🇷🇺"),
+                Language("Portuguese", "🇵🇹"),
+                Language("Arabic", "🇸🇦"),
+                Language("Hindi", "🇮🇳"),
+                Language("Bengali", "🇧🇩"),
+                Language("Urdu", "🇵🇰"),
+                Language("Turkish", "🇹🇷"),
+                Language("Thai", "🇹🇭"),
+                Language("Indonesian", "🇮🇩"),
+                Language("Malay", "🇲🇾"),
+                Language("Filipino", "🇵🇭"),
+                Language("Vietnamese", "🇻🇳"),
             )
             _allLanguages.value = response
             _searchResults.value = response
