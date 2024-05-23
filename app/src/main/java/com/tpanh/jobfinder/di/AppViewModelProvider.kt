@@ -89,7 +89,8 @@ object AppViewModelProvider {
             UploadCvViewModel(
                 jobApplyRepository = application.container.jobApplyRepository,
                 imageRepository = application.container.imageRepository,
-                jobRepository = application.container.jobRepository
+                jobRepository = application.container.jobRepository,
+                userRepository = application.container.userRepository
             )
         }
 

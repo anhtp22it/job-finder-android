@@ -109,15 +109,13 @@ fun UploadCvContent(
 
     var pdfFileName by remember { mutableStateOf<String?>(null) }
     var pdfFileSize by remember { mutableStateOf<Long?>(null) }
-    val getContent =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    val getContent = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
                 uploadCvViewModel.onCvSelected(uri)
             }
             pdfFileName = uri?.let { getFileName(it, contentResolver) }
             pdfFileSize = getFileSize(uri, contentResolver)
         }
-
 
     Column (
         modifier = Modifier
@@ -336,6 +334,64 @@ fun UploadCvContent(
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Phone Number",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight(700),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = jobApply.phoneNumber,
+                    onValueChange = { uploadCvViewModel.onPhoneChanged(it) },
+                    singleLine = true,
+                    shape = RoundedCornerShape(16.dp),
+                    placeholder = {
+                        Text(
+                            text = "077xxxxxxx",
+                            fontSize = 12.sp
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    )
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Email",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight(700),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = jobApply.email,
+                    onValueChange = { uploadCvViewModel.onEmailChanged(it) },
+                    singleLine = true,
+                    shape = RoundedCornerShape(16.dp),
+                    placeholder = {
+                        Text(
+                            text = "Abcxyz@gmail.com",
+                            fontSize = 12.sp
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    )
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Information",
                     style = MaterialTheme.typography.labelSmall,

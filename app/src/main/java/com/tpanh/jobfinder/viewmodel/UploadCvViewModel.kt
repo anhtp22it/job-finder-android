@@ -1,6 +1,7 @@
 package com.tpanh.jobfinder.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,9 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.Job
 import com.tpanh.jobfinder.model.JobApply
+import com.tpanh.jobfinder.model.User
 import com.tpanh.jobfinder.repository.ImageRepository
 import com.tpanh.jobfinder.repository.JobApplyRepository
 import com.tpanh.jobfinder.repository.JobRepository
+import com.tpanh.jobfinder.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,7 +23,8 @@ import kotlinx.coroutines.launch
 class UploadCvViewModel(
     private val jobApplyRepository: JobApplyRepository,
     private val jobRepository: JobRepository,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val userRepository: UserRepository
 ): ViewModel() {
 
     var pdfUri by mutableStateOf<Uri?>(null)
@@ -32,6 +36,13 @@ class UploadCvViewModel(
 
     private val _applyJob = MutableStateFlow(JobApply())
     val applyJob = _applyJob.asStateFlow()
+
+    private val _currentUser = MutableStateFlow(User())
+    private val currentUser = _currentUser.asStateFlow()
+
+    init {
+        getCurrentUser()
+    }
 
     fun getJob(jobId: String) {
         viewModelScope.launch {
@@ -50,6 +61,18 @@ class UploadCvViewModel(
         }
     }
 
+    fun onEmailChanged(email: String) {
+        _applyJob.update {
+            it.copy(email = email)
+        }
+    }
+
+    fun onPhoneChanged(phone: String) {
+        _applyJob.update {
+            it.copy(phoneNumber = phone)
+        }
+    }
+
     fun applyJob() {
         _applyJob.update {
             it.copy(job = job.value)
@@ -63,6 +86,14 @@ class UploadCvViewModel(
             }
             jobApplyRepository.applyJob(applyJob.value)
             isSuccess = true
+        }
+    }
+
+    fun getCurrentUser() {
+        viewModelScope.launch {
+            val user = userRepository.getCurrentUser()
+            _currentUser.value = user
+            _applyJob.update { it.copy(email = user.email, phoneNumber = user.phoneNumber)}
         }
     }
 }
