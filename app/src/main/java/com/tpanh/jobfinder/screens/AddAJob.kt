@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -30,6 +31,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -114,60 +118,96 @@ fun AddJobContent(
             fontSize = 18.sp
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Row(
+        Text(
+            text = "Job position",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Job position",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                if (uiState.title.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = uiState.title,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-            if (uiState.title == null || uiState.title.isEmpty()) {
-                IconButton(
-                    onClick = { postJobViewModel.titleDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add Title"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { postJobViewModel.titleDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = Color.Transparent
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "Edit Title"
-                    )
-                }
-            }
-        }
+                .clip(RoundedCornerShape(16.dp)),
+            value = uiState.title,
+            onValueChange = { postJobViewModel.updateTitle(it) },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Job location",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp)),
+            value = uiState.location,
+            onValueChange = { postJobViewModel.updateLocation(it) },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Company",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp)),
+            value = uiState.company,
+            onValueChange = { postJobViewModel.updateCompany(it) },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Salary",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp)),
+            value = uiState.salary.toString(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+            onValueChange = { postJobViewModel.updateSalary(it.toInt()) },
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
         Spacer(modifier = Modifier.height(24.dp))
         Row(
             modifier = Modifier
@@ -419,112 +459,6 @@ fun AddJobContent(
         ) {
             Column {
                 Text(
-                    text = "Job location",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                if (uiState.location.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = uiState.location,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-            if (uiState.location == null || uiState.location.isEmpty()) {
-                IconButton(
-                    onClick = { postJobViewModel.locationDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add Location"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { postJobViewModel.locationDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = Color.Transparent
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "Edit Location"
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "Company",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                if (uiState.company.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = uiState.company,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-            if (uiState.company == null || uiState.company.isEmpty()) {
-                IconButton(
-                    onClick = { postJobViewModel.companyDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add Company"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { postJobViewModel.companyDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = Color.Transparent
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "Edit Company"
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
                     text = "Employment type",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -564,136 +498,6 @@ fun AddJobContent(
                         contentDescription = "Edit Job Type"
                     )
                 }
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "Salary",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = uiState.salary.toString(),
-                    fontSize = 14.sp
-                )
-            }
-            if (uiState.salary == 0) {
-                IconButton(
-                    onClick = { postJobViewModel.salaryDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.1f)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add Job Type"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { postJobViewModel.salaryDialog = true },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        containerColor = Color.Transparent
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "Edit Job Type"
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Description",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    if (uiState.description.isEmpty()) {
-                        IconButton(
-                            onClick = { postJobViewModel.descDialog = true },
-                            colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                                containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                                    0.1f
-                                )
-                            )
-                        ) {
-                            Icon(
-                                Icons.Filled.Add,
-                                contentDescription = "Add Description"
-                            )
-                        }
-                    } else {
-                        IconButton(
-                            onClick = { postJobViewModel.descDialog = true },
-                            colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                                containerColor = Color.Transparent
-                            )
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.edit),
-                                contentDescription = "Edit Description"
-                            )
-                        }
-                    }
-                }
-                if (uiState.type != null) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(0.5.dp),
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = uiState.description,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                    containerColor = MaterialTheme.colorScheme.onTertiaryContainer.copy(0.3f)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add Title"
-                )
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -755,6 +559,28 @@ fun AddJobContent(
                 }
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Description",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
+            value = uiState.description,
+            onValueChange = { postJobViewModel.updateDescription(it) },
+            singleLine = false,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
+        )
     }
 
     if (postJobViewModel.workplaceDialog) {
@@ -782,18 +608,6 @@ fun AddJobContent(
             },
             onDismissRequest = { postJobViewModel.jobTypeDialog = false },
             selectedOption = uiState.type
-        )
-    }
-
-    if (postJobViewModel.titleDialog) {
-        InputDialog(
-            title = "Add a job title",
-            value = uiState.title,
-            onDismissRequest = { postJobViewModel.titleDialog = false },
-            onConfirm = {
-                postJobViewModel.updateTitle(it)
-                postJobViewModel.titleDialog = false
-            }
         )
     }
 
@@ -826,54 +640,6 @@ fun AddJobContent(
             },
             onDismissRequest = { postJobViewModel.subCategoryDialog = false },
             selectedOption = uiState.subCategory
-        )
-    }
-
-    if (postJobViewModel.locationDialog) {
-        InputDialog(
-            title = "Add a job location",
-            value = uiState.location,
-            onDismissRequest = { postJobViewModel.locationDialog = false },
-            onConfirm = {
-                postJobViewModel.updateLocation(it)
-                postJobViewModel.locationDialog = false
-            }
-        )
-    }
-
-    if (postJobViewModel.salaryDialog) {
-        NumberInputDialog(
-            title = "Add a job salary",
-            value = uiState.salary,
-            onDismissRequest = { postJobViewModel.salaryDialog = false },
-            onConfirm = {
-                postJobViewModel.updateSalary(it)
-                postJobViewModel.salaryDialog = false
-            }
-        )
-    }
-
-    if (postJobViewModel.descDialog) {
-        InputDialog(
-            title = "Add a job description",
-            value = uiState.description,
-            onDismissRequest = { postJobViewModel.descDialog = false },
-            onConfirm = {
-                postJobViewModel.updateDescription(it)
-                postJobViewModel.descDialog = false
-            }
-        )
-    }
-
-    if (postJobViewModel.companyDialog) {
-        InputDialog(
-            title = "Add a company name",
-            value = uiState.company,
-            onDismissRequest = { postJobViewModel.companyDialog = false },
-            onConfirm = {
-                postJobViewModel.updateCompany(it)
-                postJobViewModel.companyDialog = false
-            }
         )
     }
 

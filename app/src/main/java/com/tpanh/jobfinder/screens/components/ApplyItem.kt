@@ -115,9 +115,18 @@ fun ApplyItem(
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row {
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Text(
-                            text = user.email,
+                            text = apply.email,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(text = "-")
+                        Text(
+                            text = apply.phoneNumber,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }

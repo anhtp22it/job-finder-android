@@ -33,8 +33,6 @@ class PostJobViewModel(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories = _categories.asStateFlow()
 
-    var titleDialog by mutableStateOf(false)
-
     var selectedImageUri by mutableStateOf<Uri?>(null)
 
     var categoryDialog by mutableStateOf(false)
@@ -44,14 +42,6 @@ class PostJobViewModel(
     var workplaceDialog by mutableStateOf(false)
 
     var jobTypeDialog by mutableStateOf(false)
-
-    var locationDialog by mutableStateOf(false)
-
-    var descDialog by mutableStateOf(false)
-
-    var companyDialog by mutableStateOf(false)
-
-    var salaryDialog by mutableStateOf(false)
 
     var requirementsDialog by mutableStateOf(false)
 

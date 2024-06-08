@@ -221,6 +221,7 @@ fun HomeContent(
                     Image(
                         painter = painterResource(id = R.drawable.ic_remote_job),
                         contentDescription = null,
+                        modifier = Modifier.size(35.dp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(

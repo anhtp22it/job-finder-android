@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
@@ -111,6 +113,7 @@ fun MyApplicationContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = "Your application",
@@ -182,6 +185,14 @@ fun MyApplicationContent(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "•    ${apply.email}",
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "•    ${apply.phoneNumber}",
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
