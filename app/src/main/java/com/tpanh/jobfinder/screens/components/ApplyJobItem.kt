@@ -192,7 +192,7 @@ fun ApplyJobItemPreview() {
                     "Bachelor's degree in Computer Science or related field, 3+ years of experience in software development, experience with Java, C++, or Python."
                 ),
                 workplace = Workplace.ON_SITE,
-                salary = 1500,
+                salary = "1500",
             ),
             status = ApplicationStatus.PENDING
         ),

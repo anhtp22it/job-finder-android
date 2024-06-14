@@ -33,6 +33,7 @@ class UserRepositoryImpl(
 
     override suspend fun updateUser(user: User) {
         val userId = auth.currentUser?.uid
+        Log.d("UserRepositoryImpl", "updateUser: $user")
         fireStore.collection("users")
             .document(userId!!)
             .set(user)

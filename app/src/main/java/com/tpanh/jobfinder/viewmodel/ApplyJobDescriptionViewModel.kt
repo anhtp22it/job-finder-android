@@ -1,5 +1,8 @@
 package com.tpanh.jobfinder.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tpanh.jobfinder.model.JobApply
@@ -19,6 +22,8 @@ class ApplyJobDescriptionViewModel(
 
     private val _users = MutableStateFlow<Set<User>>(emptySet())
     val users = _users.asStateFlow()
+
+    var currentStatus by mutableStateOf("ALL")
 
     fun getCandidates(jobId: String) {
         viewModelScope.launch {

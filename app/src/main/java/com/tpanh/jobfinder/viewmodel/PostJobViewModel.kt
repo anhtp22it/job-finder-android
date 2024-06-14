@@ -102,7 +102,7 @@ class PostJobViewModel(
         }
     }
 
-    fun updateSalary(salary: Int) {
+    fun updateSalary(salary: String) {
         _uiState.update {
             it.copy(salary = salary)
         }
@@ -114,7 +114,7 @@ class PostJobViewModel(
         }
     }
 
-    fun postJob(navigateToJob: () -> Unit) {
+    fun postJob(navigateToJob: (String) -> Unit) {
         viewModelScope.launch {
             selectedImageUri?.let { uri ->
                 val imageUrl = imageRepository.uploadImage(uri, "jobs")
@@ -122,9 +122,9 @@ class PostJobViewModel(
                     it.copy(image = imageUrl)
                 }
             }
-            jobRepository.postJob(_uiState.value)
+            val job = jobRepository.postJob(_uiState.value)
+            navigateToJob(job.id)
         }
-        navigateToJob()
     }
 
     fun getCategoryName(categoryId: String): String {

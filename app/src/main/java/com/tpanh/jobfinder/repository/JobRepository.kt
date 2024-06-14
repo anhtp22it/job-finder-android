@@ -8,6 +8,6 @@ interface JobRepository {
     suspend fun getJobById(id: String): Job
     suspend fun getJobByCategory(categoryId: String): List<Job>
     suspend fun searchJob(title: String): List<Job>
-    suspend fun postJob(job: Job)
+    suspend fun postJob(job: Job): Job
     suspend fun countJobByCategory(categoryId: String): Int
 }

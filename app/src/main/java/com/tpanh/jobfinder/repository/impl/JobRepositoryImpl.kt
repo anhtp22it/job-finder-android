@@ -107,7 +107,7 @@ class JobRepositoryImpl(
         return jobs
     }
 
-    override suspend fun postJob(job: Job) {
+    override suspend fun postJob(job: Job): Job {
         val newJobRef = fireStore.collection("jobs").document()
         job.id = newJobRef.id
         job.userId = auth.currentUser?.uid ?: ""
@@ -119,6 +119,7 @@ class JobRepositoryImpl(
             .addOnFailureListener {
                 Log.e("JobRepositoryImpl", "Error adding document", it)
             }.await()
+        return job
     }
 
     override suspend fun countJobByCategory(categoryId: String): Int {

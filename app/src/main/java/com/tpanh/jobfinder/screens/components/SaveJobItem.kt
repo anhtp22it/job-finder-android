@@ -197,7 +197,7 @@ fun SaveJobItemPreview() {
             categoryId = "3dCfQTrtldyE3XUgxLLc",
             workplace = Workplace.ON_SITE,
             subCategory = "Mobile Development",
-            salary = 1500,
+            salary = "1500",
             createdAt = 1715314717068,
             userId = "6b7PerH7TJXiPtw5TyFi0WgT1G22"
         )

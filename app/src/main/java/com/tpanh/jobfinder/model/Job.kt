@@ -12,7 +12,7 @@ data class Job (
     var categoryId: String = "",
     var workplace: Workplace = Workplace.ON_SITE,
     var subCategory: String = "",
-    var salary: Int = 0,
+    var salary: String = "",
     var createdAt: Long = System.currentTimeMillis(),
     var userId: String = ""
 )

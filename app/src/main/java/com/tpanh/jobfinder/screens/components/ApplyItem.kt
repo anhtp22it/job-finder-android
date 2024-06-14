@@ -29,6 +29,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -73,11 +75,12 @@ fun ApplyItem(
     onReject: (ApplicationStatus) -> Unit,
     user: User
 ) {
-    val openFile = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+    val openFile =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
 
+            }
         }
-    }
     var expanded by remember { mutableStateOf(true) }
     val context = LocalContext.current
     Column(
@@ -115,7 +118,7 @@ fun ApplyItem(
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row (
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -134,45 +137,60 @@ fun ApplyItem(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (apply.status == ApplicationStatus.PENDING) {
-                Row {
-                    IconButton(
-                        onClick = { onReject(ApplicationStatus.REJECT) },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = Color.Red,
-                            containerColor = Color.Red.copy(0.1f)
-                        )
-                    ) {
-                        Icon(
-                            Icons.Filled.Close,
-                            contentDescription = "reject"
-                        )
-                    }
-                    IconButton(
-                        onClick = { onAccept(ApplicationStatus.ACCEPT) },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = Color.Green,
-                            containerColor = Color.Green.copy(0.1f)
-                        )
-                    ) {
-                        Icon(
-                            Icons.Filled.Check,
-                            contentDescription = "accept"
-                        )
-                    }
-                }
-            } else {
-                Text(
-                    text = normalizeString(apply.status.name),
-                    color = if (apply.status == ApplicationStatus.ACCEPT) Color.Green else Color.Red,
-                    fontWeight = FontWeight.Bold
-                )
+            Text(
+                text = normalizeString(apply.status.name),
+                color = if (apply.status == ApplicationStatus.ACCEPT) Color.Green else Color.Red,
+                fontWeight = FontWeight.Bold
+            )
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+                modifier = Modifier.wrapContentSize()
+            ) {
+                Text(text = "Update Status")
             }
+//            if (apply.status == ApplicationStatus.PENDING) {
+//                Row {
+//                    IconButton(
+//                        onClick = { onReject(ApplicationStatus.REJECT) },
+//                        colors = IconButtonDefaults.iconButtonColors(
+//                            contentColor = Color.Red,
+//                            containerColor = Color.Red.copy(0.1f)
+//                        )
+//                    ) {
+//                        Icon(
+//                            Icons.Filled.Close,
+//                            contentDescription = "reject"
+//                        )
+//                    }
+//                    IconButton(
+//                        onClick = { onAccept(ApplicationStatus.ACCEPT) },
+//                        colors = IconButtonDefaults.iconButtonColors(
+//                            contentColor = Color.Green,
+//                            containerColor = Color.Green.copy(0.1f)
+//                        )
+//                    ) {
+//                        Icon(
+//                            Icons.Filled.Check,
+//                            contentDescription = "accept"
+//                        )
+//                    }
+//                }
+//            } else {
+//                Text(
+//                    text = normalizeString(apply.status.name),
+//                    color = if (apply.status == ApplicationStatus.ACCEPT) Color.Green else Color.Red,
+//                    fontWeight = FontWeight.Bold
+//                )
+//            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Box(
@@ -262,7 +280,7 @@ fun ApplyItemPreview() {
                     "Hỗ trợ thông dịch khi phỏng vấn cùng Doanh nghiệp",
                     "Hỗ trợ tư vấn chuẩn bị hồ sơ xin VISA (sau khi đậu tuyển dụng)"
                 ),
-                salary = 1500,
+                salary = "1500",
                 subCategory = "Mobile Development",
                 type = JobType.FULL_TIME,
                 workplace = Workplace.ON_SITE

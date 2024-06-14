@@ -71,7 +71,7 @@ import com.tpanh.jobfinder.viewmodel.PostJobViewModel
 @Composable
 fun AddJobTopBar(
     navigateToHome: () -> Unit,
-    navigateToJob: () -> Unit,
+    navigateToJob: (String) -> Unit,
     postJobViewModel: PostJobViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Row(
@@ -195,11 +195,8 @@ fun AddJobContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp)),
-            value = uiState.salary.toString(),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            onValueChange = { postJobViewModel.updateSalary(it.toInt()) },
+            value = uiState.salary,
+            onValueChange = { postJobViewModel.updateSalary(it) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
@@ -667,7 +664,7 @@ fun AddAJob(
         topBar = {
             AddJobTopBar(
                 navigateToHome = { navigateToHome() },
-                navigateToJob = { navigateToJob(uiState.toString()) }
+                navigateToJob = { navigateToJob(uiState.id) }
             )
         }
     ) { innerPadding ->

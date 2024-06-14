@@ -169,7 +169,7 @@ fun MyJobItemPreview() {
             title = "Software Engineer",
             company = "Google",
             location = "California",
-            salary = 10000,
+            salary = "10000",
             image = "https://www.google.com",
             subCategory = "Design",
             type = JobType.FULL_TIME,
